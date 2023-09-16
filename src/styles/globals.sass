@@ -1,0 +1,49 @@
+@import "@/styles/variables.module"
+
+*
+  padding: 0
+  margin: 0
+  box-sizing: border-box
+  margin-block-start: 0
+  margin-block-end: 0
+
+*, *:before, *:after
+  box-sizing: inherit
+
+html
+  scroll-behavior: smooth
+
+body
+  font-size: 16px
+  background: $main-color
+  color: white
+  button
+    border-radius: $main-radius
+    padding: $button-padding
+    background-color: $main-color
+    border: none
+    color: black
+    transition: 0.1s all
+    *
+      box-sizing: border-box
+    &:hover
+      transform: scale(1.05)
+      cursor: pointer
+      opacity: 0.9
+    &:active
+      transform: none
+  a
+    text-decoration: none
+    color: inherit
+  form
+    display: flex
+    flex-direction: column
+    margin: 1.5rem 0
+    input
+      padding: $button-padding
+      border-radius: $main-radius
+      border: 1px solid white
+      margin: 0.5rem 0
+
+h1, h2
+  color: black

@@ -1,95 +1,127 @@
-import Image from 'next/image'
-import styles from './page.module.css'
+import Image from "next/image";
+import styles from "@/styles/page.module.sass";
+import Link from "next/link";
 
 export default function Home() {
   return (
-    <main className={styles.main}>
-      <div className={styles.description}>
-        <p>
-          Get started by editing&nbsp;
-          <code className={styles.code}>src/app/page.tsx</code>
-        </p>
-        <div>
-          <a
-            href="https://vercel.com?utm_source=create-next-app&utm_medium=appdir-template&utm_campaign=create-next-app"
-            target="_blank"
-            rel="noopener noreferrer"
-          >
-            By{' '}
-            <Image
-              src="/vercel.svg"
-              alt="Vercel Logo"
-              className={styles.vercelLogo}
-              width={100}
-              height={24}
-              priority
-            />
-          </a>
+    <main id={styles.main}>
+      <h1>Linked</h1>
+      <article className={styles.profileSection}>
+        <h2>Descubre nustras redes sociales</h2>
+        <div id={styles.socialMediaContent} className={styles.sectionContent}>
+          <div>
+            <Link href="/" target="_blank">
+              <Image
+                className={styles.experienceToolImage}
+                src="/social-media/linkedin.svg"
+                alt="Linkedin Icon"
+                width="50"
+                height="50"
+              />
+            </Link>
+            <Link href="/" target="_blank">
+              <Image
+                className={styles.experienceToolImage}
+                src="/social-media/youtube.svg"
+                alt="Youtube Icon"
+                width="50"
+                height="50"
+              />
+            </Link>
+            <Link href="/" target="_blank">
+              <Image
+                className={styles.experienceToolImage}
+                src="/social-media/instagram.svg"
+                alt="Instagram Icon"
+                width="50"
+                height="50"
+              />
+            </Link>
+            <Link href="/" target="_blank">
+              <Image
+                className={styles.experienceToolImage}
+                src="/social-media/tik-tok.svg"
+                alt="TikTok Icon"
+                width="50"
+                height="50"
+              />
+            </Link>
+            <Link href="/" target="_blank">
+              <Image
+                className={styles.experienceToolImage}
+                src="/social-media/facebook.svg"
+                alt="Facebook Icon"
+                width="50"
+                height="50"
+              />
+            </Link>
+          </div>
         </div>
-      </div>
-
-      <div className={styles.center}>
-        <Image
-          className={styles.logo}
-          src="/next.svg"
-          alt="Next.js Logo"
-          width={180}
-          height={37}
-          priority
-        />
-      </div>
-
-      <div className={styles.grid}>
-        <a
-          href="https://nextjs.org/docs?utm_source=create-next-app&utm_medium=appdir-template&utm_campaign=create-next-app"
-          className={styles.card}
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          <h2>
-            Docs <span>-&gt;</span>
-          </h2>
-          <p>Find in-depth information about Next.js features and API.</p>
-        </a>
-
-        <a
-          href="https://nextjs.org/learn?utm_source=create-next-app&utm_medium=appdir-template&utm_campaign=create-next-app"
-          className={styles.card}
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          <h2>
-            Learn <span>-&gt;</span>
-          </h2>
-          <p>Learn about Next.js in an interactive course with&nbsp;quizzes!</p>
-        </a>
-
-        <a
-          href="https://vercel.com/templates?framework=next.js&utm_source=create-next-app&utm_medium=appdir-template&utm_campaign=create-next-app"
-          className={styles.card}
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          <h2>
-            Templates <span>-&gt;</span>
-          </h2>
-          <p>Explore the Next.js 13 playground.</p>
-        </a>
-
-        <a
-          href="https://vercel.com/new?utm_source=create-next-app&utm_medium=appdir-template&utm_campaign=create-next-app"
-          className={styles.card}
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          <h2>
-            Deploy <span>-&gt;</span>
-          </h2>
-          <p>
-            Instantly deploy your Next.js site to a shareable URL with Vercel.
-          </p>
-        </a>
-      </div>
+      </article>
+      <article className={styles.profileSection}>
+        <h2>Participa en nuestro sorteo</h2>
+        <div id={styles.drawSection} className={styles.sectionContent}>
+          <div></div>
+          <div>
+            <p>Acaba el 28/09, No te pierdas la oportunidad!</p>
+            <Link href="/" target="_blank">
+              <button>Participar</button>
+            </Link>
+          </div>
+        </div>
+      </article>
+      <article className={styles.profileSection}>
+        <h2>Conoce nuestra historia</h2>
+        <div id={styles.historySection} className={styles.sectionContent}>
+          <div></div>
+          <div>
+            <p>Lo que mas nos une como personas son las historias</p>
+            <Link href="/" target="_blank">
+              <button>Conoce la nuestra</button>
+            </Link>
+          </div>
+        </div>
+      </article>
+      <article className={styles.profileSection}>
+        <h2>Idoia x Enrique Tomas</h2>
+        <div id={styles.partnershipSection} className={styles.sectionContent}>
+          <div></div>
+          <div>
+            <p>Ademas de las historias, la comida tambien nos une.</p>
+            <Link href="/" target="_blank">
+              <button>Descrubre nuestro convenio con Enrique Tomas</button>
+            </Link>
+          </div>
+        </div>
+      </article>
+      <article className={styles.profileSection}>
+        <h2>Aprende de vino con nosotros</h2>
+        <div id={styles.learnSection} className={styles.sectionContent}>
+          <div></div>
+          <div>
+            <p>Participa de nuestras catas formativas!</p>
+            <Link href="/" target="_blank">
+              <button>Participar!</button>
+            </Link>
+          </div>
+        </div>
+      </article>
+      <article className={styles.profileSection}>
+        <h2>Contactanos</h2>
+        <div id={styles.contactSection} className={styles.sectionContent}>
+          <div>
+            <form>
+              <label>Nombre:</label>
+              <input type="text" />
+              <label>Empresa:</label>
+              <input type="text" />
+              <label>Mensaje:</label>
+              <input type="text" />
+              <button type="submit">Contactar</button>
+            </form>
+          </div>
+        </div>
+      </article>
     </main>
-  )
+  );
 }
