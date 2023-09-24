@@ -1,0 +1,39 @@
+@import "@/styles/variables.module"
+
+#profileSection
+    display: flex
+    flex-direction: column
+    align-items: center
+    text-align: center
+    border-radius: $main-radius
+    width: 100%
+    margin: 1rem 0.5rem
+    background: rgb(10,155,172)
+    background: linear-gradient(90deg, rgba(10,155,172,1) 0%, rgba(63,185,130,1) 55%, rgba(116,210,94,1) 100%)
+    overflow: hidden
+    h2
+        padding: 0.5rem
+
+.sectionContent
+    display: flex
+    flex-direction: column
+    background-color: $main-contrast
+    width: 100%
+    > div
+        padding: $content-padding
+
+.socialMediaSection
+    flex-direction: row !important
+    justify-content: center !important
+    flex-wrap: wrap
+    padding: 0.5rem 0
+    img
+        margin: 0 0.2rem
+
+@media screen and (min-width: 768px)
+    #profileSection
+        width: 70%
+
+@media screen and (min-width: 992px)
+    #profileSection
+        width: 60%
