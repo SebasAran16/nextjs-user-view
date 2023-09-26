@@ -1,13 +1,29 @@
 import styles from "@/styles/page.module.sass";
 import { ProfileLink } from "./components/profile-link";
+import Image from "next/image";
+import { VideoPlayer } from "./components/video-player";
 
-export default function Home() {
+export default async function Home() {
   return (
     <main id={styles.main}>
-      <h1>Linked</h1>
-      <ProfileLink text={"Conoce nuestra ficha de cata"} url="/" />
+      <Image
+        id={styles.logo}
+        src="/logo.png"
+        alt="Logo Image"
+        width="200"
+        height="200"
+      />
+      <VideoPlayer
+        text={"Conoce nuestra ficha de cata"}
+        url="/videos/ficha-cata.mp4"
+        id={0}
+      />
       <ProfileLink text="" url="" />
-      <ProfileLink text={"Conoce nuestra historia"} url="/" />
+      <VideoPlayer
+        text={"Conoce nuestra historia"}
+        url="/videos/historia.mp4"
+        id={1}
+      />
       <ProfileLink text={"IDOIA X AMÉLIE"} url="/" />
       <article className={styles.groupedLinks}>
         <ProfileLink
@@ -25,6 +41,11 @@ export default function Home() {
         url="https://www.vilaviniteca.es/es/blog/14o-premio-vila-viniteca-de-cata-por-parejas/
         "
       />
+      <div id={styles.footer}>
+        <p>
+          Made with love by: <br /> <a>BIG BANG SERVICES</a>
+        </p>
+      </div>
     </main>
   );
 }

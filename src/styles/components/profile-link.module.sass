@@ -11,6 +11,10 @@
     background: rgb(10,155,172)
     background: linear-gradient(90deg, rgba(10,155,172,1) 0%, rgba(63,185,130,1) 55%, rgba(116,210,94,1) 100%)
     overflow: hidden
+    transition: 0.5s all
+    &:hover
+        transform: scale(1.02)
+        cursor: pointer
     h2
         padding: 0.5rem
 
@@ -25,6 +29,7 @@
 .socialMediaSection
     flex-direction: row !important
     justify-content: center !important
+    width: 100%
     flex-wrap: wrap
     padding: 0.5rem 0
     img
@@ -34,6 +39,16 @@
     #profileSection
         width: 70%
 
+    .socialMediaSection
+        img
+            margin: 0 0.5rem
+
 @media screen and (min-width: 992px)
     #profileSection
         width: 60%
+
+    .socialMediaSection
+        img
+            margin: 0 1rem
+
+@media screen and (min-width: 1200px)

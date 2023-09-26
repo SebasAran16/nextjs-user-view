@@ -1,0 +1,41 @@
+@import "@/styles/variables.module"
+
+.hidden
+    display: none !important
+
+.videoPlayerSection
+    margin-bottom: 0 !important
+    z-index: 1
+
+#videoContainer
+    display: flex
+    position: relative
+    top: -20px
+    justify-content: center
+    align-items: center
+    padding: 0.5rem 0
+    background: $video-player-color
+    width: 100%
+    border-end-start-radius: 1rem
+    border-end-end-radius: 1rem
+
+@media screen and (min-width: 768px)
+    #videoContainer
+        width: 70%
+
+    #video
+        width: 380px
+        height: 300px
+
+@media screen and (min-width: 992px)
+    #videoContainer
+        width: 60%
+
+    #video
+        width: 430px
+        height: 350px
+
+@media screen and (min-width: 1200px)
+    #video
+        width: 600px
+        height: 400px
