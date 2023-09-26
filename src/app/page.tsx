@@ -2,6 +2,8 @@ import styles from "@/styles/page.module.sass";
 import { ProfileLink } from "./components/profile-link";
 import Image from "next/image";
 import { VideoPlayer } from "./components/video-player";
+import { useState } from "react";
+import { ModalImage } from "./components/modal-image";
 
 export default async function Home() {
   return (
@@ -30,7 +32,7 @@ export default async function Home() {
           text={"Productos"}
           url="https://www.vilaviniteca.es/es/catalogsearch/result/?q=CA+N%E2%80%99ESTRUC "
         />
-        <ProfileLink text={"Sorteos"} url="/" />
+        <ModalImage text="Sorteos" url="/sorteo.jpeg" id={0} />
       </article>
       <ProfileLink
         text={"Vive la experiencia vinicola con nosotros"}
