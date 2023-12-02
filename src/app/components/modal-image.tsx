@@ -4,15 +4,13 @@ import profileStyles from "@/styles/components/profile-link.module.sass";
 import { useEffect, useState } from "react";
 import Image from "next/image";
 
-export function ModalImage({
-  text,
-  url,
-  id,
-}: {
+interface props {
   text: string;
   url: string;
   id: number;
-}) {
+}
+
+export function ModalImage({ text, url, id }: props) {
   const [showModal, setShowModal] = useState(false);
 
   useEffect(() => {
