@@ -3,7 +3,7 @@ import "@/styles/variables.module.sass";
 import type { Metadata } from "next";
 
 export const metadata: Metadata = {
-  title: "Linked",
+  title: "UserView",
   description: "Stayed linked never easier",
 };
 

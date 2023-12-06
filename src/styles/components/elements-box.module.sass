@@ -1,0 +1,60 @@
+@import "@/styles/variables.module"
+
+.hidden
+    display: none !important
+
+#elementsBox, .dndElement, #headerSection
+    display: flex
+    padding: $content-padding
+    border-radius: 0.5rem
+    >hr
+        width: 90%
+        align-self: center
+        margin: 1rem 0
+
+#elementsBox
+    flex-direction: column
+    border: 1px solid white
+
+#headerSection
+    justify-content: space-between
+
+.dndElement
+    align-items: center
+    justify-content: space-between
+    transition: 0.2s
+    &:hover
+        cursor: grab
+        opacity: 0.9
+
+.elementDragHover
+    opacity: 0.5
+    transform: scale(1.01)
+
+#modalContainer
+    position: absolute
+    top: 0
+    left: 0
+    z-index: 10
+    width: 100vw
+    height: 100vh
+    background-color: rgba(0,0,0,0.3)
+    display: flex
+    justify-content: center
+    align-items: center
+    transition: 0.5
+
+#modal
+    width: 70vw
+    height: 70vh
+    border-radius: $main-radius
+    background-color: grey
+    padding: $content-padding
+    > div
+        &:first-of-type
+            display: flex
+            justify-content: space-between
+
+#modalActionContainer
+    display: flex
+    flex-direction: column

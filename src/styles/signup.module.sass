@@ -1,0 +1,119 @@
+
+$main-color: #725DFF
+$main-contrast: #4B36D2
+
+$main-radius: 0.3rem
+$button-padding: 0.6rem 1.4rem
+$input-fill: #FDFDFD
+$input-stroke: #E3E3E3
+$button-color: #725DFF
+$grayed-text: #AEAEAE
+
+$black: #000000
+$white: #FFFFFF
+
+.hidden
+    display: none !important
+
+#signUpView
+    display: grid
+    grid-template-columns: 0.85fr 1fr
+    grid-template-rows: 1fr
+    grid-template-areas: "alias-form alias-image"
+    height: 100vh
+
+// SECTIONS //
+
+#formSection
+    grid-area: alias-form
+    display: flex
+    flex-direction: column
+    padding: 1rem 2rem
+
+#imageSection
+    grid-area: alias-image
+    img
+        width: 100%
+        height: 100%
+
+// FORM SECTION //
+
+#logoAnchor
+    display: flex
+    align-items: center
+    &:hover
+        transform: scale(1.1)
+        cursor: pointer
+        opacity: 0.9
+    &:active
+        transform: none
+
+#logoPart
+    flex-grow: 0.1
+    display: flex
+    align-items: center
+
+#formPart, #mailVerificationPart, #verifiedMailPart
+    flex-grow: 1
+    padding: 5% 7%
+    display: flex
+    flex-direction: column
+    align-content: space-around
+    div
+        margin: 1rem 0
+        h2
+            margin-bottom: 1rem
+    a
+        text-decoration: underline
+        color: $main-color
+    form
+        input
+            border: 1px solid $input-stroke
+            background-color: $input-fill
+        button
+            background-color: $button-color
+            color: $white
+
+#signupForm
+    display: flex
+    flex-direction: column
+    width: 60%
+
+#alreadyMemberDiv
+    display: flex
+    p
+        margin-right: 0.3rem
+
+// MAIL VERIFICATION PART //
+
+#mailVerificationPart
+    form
+        p
+            margin-top: 1rem
+            margin-bottom: 10%
+
+// VERIFIED MAIL PART //
+
+#verifiedMailPart
+    align-items: center
+    padding-top: 25%
+    img
+        margin-bottom: 2rem
+    div
+        display: flex
+        flex-direction: column
+        align-items: center
+        margin-bottom: 5%
+
+#errorDiv
+    display: flex
+    align-items: center
+    border-radius: $main-radius
+    background-color: $grayed-text
+    padding: $button-padding
+    width: 60%
+    img
+        margin-right: 0.5rem
+
+#formErrorText
+    color: $white
