@@ -14,42 +14,18 @@ const UserSchema = new Schema({
     unique: true,
   },
   password: String,
-  rol: String,
   created_date: Date,
   image: String,
-  birthday: Date,
-  nationality: String,
   telephone: {
     type: Number,
   },
-  user_id: String,
-  representing_company: Boolean,
   company_name: {
     type: String,
-  },
-  company_tax_id: {
-    type: Number,
   },
   company_address: String,
   company_city: String,
   company_region: String,
-  company_postal_code: String,
   company_country: String,
-  company_greater_percetage: Boolean,
-  id_front_image: String,
-  id_reverse_image: String,
-  has_kyc: {
-    type: Boolean,
-    default: false,
-  },
-  has_kyc_pending: {
-    type: Boolean,
-    default: false,
-  },
-  is_admin: {
-    type: Boolean,
-    default: false,
-  },
   is_verified: {
     type: Boolean,
     default: false,

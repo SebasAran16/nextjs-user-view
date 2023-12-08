@@ -2,14 +2,16 @@
 import Link from "next/link";
 import Image from "next/image";
 import styles from "@/styles/signup.module.sass";
-import { ReactNode, useState } from "react";
+import { useState } from "react";
 import { useRouter } from "next/navigation";
 import axios from "axios";
 import { Toaster, toast } from "react-hot-toast";
+import { useGlobalState } from "@/utils/globalStates";
 
 export default function Signup() {
   const router = useRouter();
 
+  const [, setUserData] = useGlobalState("userData");
   const [isLoading, setIsLoading] = useState(false);
 
   async function handleSignupSubmit(e: React.FormEvent<HTMLFormElement>) {
@@ -42,8 +44,11 @@ export default function Signup() {
         if (response.status !== 200)
           throw new Error("HTTP error! status: " + response.status);
 
+        const user = response.data.user;
+        setUserData(user);
+
         toast.success(response.data.message);
-        router.push("/verify-email");
+        router.push("/dashboard");
       } else {
         toast.error("Passwords do not match!");
       }

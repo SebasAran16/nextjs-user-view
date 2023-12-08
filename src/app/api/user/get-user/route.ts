@@ -3,9 +3,11 @@ import User from "@/models/user";
 
 export async function POST(request: NextRequest) {
   try {
-    const { username } = await request.json();
+    const { identifier } = await request.json();
 
-    const user = await User.findOne({ username });
+    const user = await User.findOne({
+      $or: [{ username: identifier }, { email: identifier }],
+    });
 
     return NextResponse.json({
       success: true,

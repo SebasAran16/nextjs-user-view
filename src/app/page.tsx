@@ -16,7 +16,6 @@ export default async function Home() {
           </Link>
         </section>
       </header>
-      <ElementsBox />
     </main>
   );
 }

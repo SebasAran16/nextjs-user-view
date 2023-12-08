@@ -1,10 +1,11 @@
 import dbConnect from "@/lib/mongoConnection";
 import User from "@/models/user";
-import { TokenData } from "@/types/constants/token-data.interface";
+import { TokenData } from "@/types/tokenData.interface";
 import { NextRequest, NextResponse } from "next/server";
 import bcryptjs from "bcrypt";
 import { cookies } from "next/headers";
 import * as jose from "jose";
+import { getUserForVariables } from "@/utils/getUserForVariable";
 
 export async function POST(request: NextRequest) {
   try {
@@ -37,7 +38,6 @@ export async function POST(request: NextRequest) {
       id: user._id,
       username: user.username,
       email: user.email,
-      is_admin: user.is_admin,
     };
 
     const iat = Math.floor(Date.now() / 1000);
@@ -59,6 +59,7 @@ export async function POST(request: NextRequest) {
       message: "Logged in successfully!",
       success: true,
       tokenData,
+      user: getUserForVariables(user),
     });
   } catch (err: any) {
     console.error("API Error:", err);

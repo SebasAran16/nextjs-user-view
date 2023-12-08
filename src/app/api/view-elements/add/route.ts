@@ -1,41 +1,39 @@
 import dbConnect from "@/lib/mongoConnection";
 import User from "@/models/user";
-import { getUserForVariables } from "@/utils/getUserForVariable";
+import Element from "@/models/element";
 import { NextRequest, NextResponse } from "next/server";
+import ElementTypes from "@/utils/elementsStruct";
 
 export async function POST(request: NextRequest) {
   try {
     await dbConnect();
 
-    const { username, email, password } = await request.json();
+    const elementToCreate = await request.json();
 
     const dateCreated = Date.now();
 
-    const existingUser = await User.findOne({
-      $or: [{ username }, { email }],
+    const existingElement = await Element.findOne({
+      name: elementToCreate.elementName,
     });
 
-    if (existingUser)
+    if (existingElement)
       return NextResponse.json(
         {
-          message: "Username or Email already in use",
+          message: "Element name already on use",
         },
         { status: 409 }
       );
 
     const dateCreatedAsDate = new Date(dateCreated * 1000);
+    elementToCreate.created_at = dateCreatedAsDate;
+    elementToCreate.owner_id = "Will get";
 
-    const newUser = new User({
-      username,
-      password,
-      email,
-      createdDate: dateCreatedAsDate,
-    });
+    const newElement = new Element(elementToCreate);
 
-    const savedUser = await newUser.save();
+    const savedElement = await newElement.save();
 
     return NextResponse.json(
-      { message: "Signup completed!", user: getUserForVariables(savedUser) },
+      { message: "Element added successfully!", savedElement },
       { status: 200 }
     );
   } catch (err: any) {

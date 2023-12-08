@@ -1,9 +1,9 @@
 const data = [
   {
-    id: 0,
+    id: 2,
     name: "Youtube Channel",
     position: 0,
-    type: 0,
+    type: 2,
     url: "https://youtube.com",
   },
   {
@@ -17,7 +17,7 @@ const data = [
     id: 2,
     name: "Buy impulse",
     position: 1,
-    type: 1,
+    type: 4,
     text: "Buy this wine!",
   },
 ];

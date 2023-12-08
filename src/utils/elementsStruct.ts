@@ -1,8 +1,8 @@
-enum Elements {
-  text = 0,
-  video = 1,
-  image = 2,
-  link = 3,
+enum ElementTypes {
+  TEXT = 1,
+  VIDEO = 2,
+  IMAGE = 3,
+  LINK = 4,
 }
 
-export default Elements;
+export default ElementTypes;

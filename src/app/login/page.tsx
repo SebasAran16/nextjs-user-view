@@ -7,9 +7,11 @@ import User from "@/models/user";
 import { useRouter } from "next/navigation";
 import axios from "axios";
 import { Toaster, toast } from "react-hot-toast";
+import { useGlobalState } from "@/utils/globalStates";
 
 export default function Login() {
   const router = useRouter();
+  const [, setUserData] = useGlobalState("userData");
 
   async function handleSubmit(e: React.FormEvent<HTMLFormElement>) {
     try {
@@ -32,8 +34,10 @@ export default function Login() {
 
       if (response.status !== 200) throw new Error(response.data.message);
 
-      toast.success(response.data.message);
+      const user = response.data.user;
+      setUserData(user);
 
+      toast.success(response.data.message);
       router.push("/dashboard");
     } catch (err: any) {
       console.log(err.response.data);
