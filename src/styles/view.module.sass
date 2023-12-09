@@ -1,0 +1,43 @@
+@import "@/styles/variables.module"
+
+#main
+    display: flex
+    flex-direction: column
+    align-items: center
+    padding: 10%
+    > p
+        margin: 1rem 0.5rem
+
+.groupedLinks
+    display: flex
+    width: 100%
+    justify-content: space-between
+
+#logo
+    border-radius: 1rem
+
+#footer
+    margin-top: 1rem
+    display: flex
+    flex-direction: column
+    text-align: center
+
+@media screen and (min-width: 768px)
+    #main
+        padding: 5%
+
+    #logo
+        height: 320px
+        width: 320px
+
+    .groupedLinks
+        width: 70%
+
+@media screen and (min-width: 992px)
+    #main
+        padding: 70px
+
+    .groupedLinks
+        width: 60%
+
+@media screen and (min-width: 1200px)

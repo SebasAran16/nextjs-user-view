@@ -2,7 +2,6 @@
 
 #elementsBox, .dndElement, #headerSection
     display: flex
-    padding: $content-padding
     border-radius: 0.5rem
     >hr
         width: 90%
@@ -11,7 +10,14 @@
 
 #elementsBox
     flex-direction: column
-    border: 1px solid white
+    border: 1px solid $main-color
+    border-top-right-radius: 0
+    border-top-left-radius: 0
+    padding: $content-padding
+    > img
+        align-self: center
+        border-radius: $main-radius
+        margin: 1rem 0
 
 #headerSection
     justify-content: space-between
@@ -23,6 +29,7 @@
     background-color: grey
     margin: 1rem 0
     overflow: hidden
+    padding: $content-padding
     > div
         &:first-child
             display: flex
@@ -34,6 +41,7 @@
                     margin-left: 0.5rem
                     background-color: red
                     opacity: 0.8
+                    color: white
     &:hover
         cursor: grab
         opacity: 0.9

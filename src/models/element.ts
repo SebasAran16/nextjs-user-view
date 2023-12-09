@@ -13,6 +13,10 @@ const ElementSchema = new Schema({
     type: Number,
     required: [true, "Provide a type for the element"],
   },
+  position: {
+    type: Number,
+    required: [true, "Provide a position for the element"],
+  },
   text: String,
   video_link: String,
   image_link: String,

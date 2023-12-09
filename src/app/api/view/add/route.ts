@@ -9,7 +9,7 @@ export async function POST(request: NextRequest) {
   try {
     await dbConnect();
 
-    const { name, url } = await request.json();
+    const { name, url, image } = await request.json();
 
     const userToken = cookies().get("token")?.value || "";
 
@@ -49,6 +49,7 @@ export async function POST(request: NextRequest) {
       owner_id: id,
       name,
       url,
+      image,
       created_at: dateCreatedAsDate,
     });
 

@@ -24,12 +24,21 @@ export async function POST(request: NextRequest) {
         { status: 409 }
       );
 
+    const previousHighestPositionElement = await Element.findOne({
+      view_id: elementToCreate.view_id,
+    })
+      .sort({ position: -1 })
+      .limit(1);
+
+    const highestElementPosition = previousHighestPositionElement
+      ? previousHighestPositionElement.position
+      : 0;
+
     const dateCreatedAsDate = new Date(dateCreated * 1000);
+    elementToCreate.position = highestElementPosition + 1;
     elementToCreate.created_at = dateCreatedAsDate;
-    elementToCreate.owner_id = "Will get";
 
     const newElement = new Element(elementToCreate);
-
     const savedElement = await newElement.save();
 
     return NextResponse.json(

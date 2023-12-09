@@ -1,3 +1,5 @@
+@import "@/styles/variables.module"
+
 #viewsContainer
     display: flex
     flex-direction: column
@@ -5,8 +7,57 @@
         &:first-of-type
             display: flex
 
-#viewsSelectContainer
+#buttonsSelectContainer
     display: flex
     > button
         border-bottom-left-radius: 0
         border-bottom-right-radius: 0
+        &:last-of-type
+            background: none
+            color: white
+            border: 1px solid $main-color
+#modal
+    width: 80vw
+    height: 70vh
+    background: grey
+    border-radius: $main-radius
+    padding: $content-padding
+    display: flex
+    flex-direction: column
+    > div
+        &:first-child
+            margin-bottom: 2rem
+        &:last-child
+            display: flex
+            flex-direction: column
+
+.imageUpload
+    display: flex
+    flex-direction: row !important
+    align-items: center
+    padding: 1rem
+    border-radius: 1rem
+    input
+        opacity: 0
+        width: 1px
+        height: 1px !important
+        margin: 0px !important
+        padding: 0px !important
+    > div
+        &:first-of-type
+            padding: 1rem
+            border-radius: 1rem
+            border: 1px dotted $main-color
+            margin-right: 0.5rem
+            background-color: $main-contrast
+            transition: 0.1s all
+            &:hover
+                transform: scale(1.05)
+                cursor: pointer
+        &:last-of-type
+            display: flex
+            flex-direction: column !important
+            align-items: center
+            >p
+                font-size: 0.8rem
+                opacity: 0.8

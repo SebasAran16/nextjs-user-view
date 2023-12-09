@@ -43,11 +43,11 @@ export default async function CaNEstruc() {
         url="https://www.vilaviniteca.es/es/blog/14o-premio-vila-viniteca-de-cata-por-parejas/
         "
       />
-      <div id={styles.footer}>
+      <footer id={styles.footer}>
         <p>
           Made with love by: <br /> <a>BIG BANG SERVICES</a>
         </p>
-      </div>
+      </footer>
     </main>
   );
 }

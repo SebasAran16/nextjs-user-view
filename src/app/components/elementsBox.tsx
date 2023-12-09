@@ -1,27 +1,20 @@
 "use client";
-import data from "@/data";
 import styles from "@/styles/components/elements-box.module.sass";
 import modalStyles from "@/styles/components/modal.module.sass";
 import getTypeFromNumber from "@/utils/getTypeFromNumber";
 import INewElement from "@/types/newElement.interface";
 import { ModalAction } from "@/utils/structs/modals.enum";
 import axios from "axios";
-import React, { useRef, useState } from "react";
+import React, { useEffect, useRef, useState } from "react";
 import { Toaster, toast } from "react-hot-toast";
+import getSortedElements from "@/utils/getSortedElements";
+import Image from "next/image";
 
-export default function ElementsBox() {
-  const [list, setList] = useState(data);
-  const dragItem = useRef<number | undefined>(undefined);
-  const dragOverItem = useRef<number | undefined>(undefined);
+interface ElementsBoxProps {
+  view: any;
+}
 
-  const [modalPurpose, setModalPurpose] = useState<ModalPurpose | undefined>(
-    undefined
-  );
-  const [addFormType, setAddFormType] = useState<number | undefined>();
-  const [currentEditElement, setCurrentEditElement] = useState<
-    any | undefined
-  >();
-
+export default function ElementsBox({ view }: ElementsBoxProps) {
   enum DragHoverAction {
     ENTER,
     EXIT,
@@ -31,6 +24,44 @@ export default function ElementsBox() {
     ADD_ELEMENT = "ADD_ELEMENT",
     EDIT_ELEMENT = "EDIT_ELEMENT",
   }
+
+  const dragItem = useRef<number | undefined>(undefined);
+  const dragOverItem = useRef<number | undefined>(undefined);
+
+  const [currentElements, setCurrentElements] = useState<any | undefined>();
+  const [updateElements, setUpdateElements] = useState(true);
+  const [modalPurpose, setModalPurpose] = useState<ModalPurpose | undefined>(
+    undefined
+  );
+  const [addFormType, setAddFormType] = useState<number | undefined>();
+  const [currentEditElement, setCurrentEditElement] = useState<
+    any | undefined
+  >();
+
+  useEffect(() => {
+    try {
+      axios
+        .post("/api/view-elements/get-for-view", {
+          view_id: view._id,
+        })
+        .then((elementsResponse) => {
+          if (elementsResponse.status !== 200)
+            throw new Error(elementsResponse.data.message);
+
+          const elements = elementsResponse.data.elements;
+
+          setCurrentElements(getSortedElements(elements));
+        })
+        .catch((err) => {
+          console.log(err);
+          if (axios.isAxiosError(err)) toast.error(err.message);
+        });
+    } catch (err) {
+      if (axios.isAxiosError(err)) toast.error(err.message);
+    } finally {
+      setUpdateElements(false);
+    }
+  }, [updateElements]);
 
   const onDragHover = (
     e: React.DragEvent<HTMLDivElement>,
@@ -48,16 +79,48 @@ export default function ElementsBox() {
     }
   };
 
-  const handleSort = () => {
-    let _items = [...list];
+  const handleSwap = async () => {
+    let _elements = [...currentElements];
 
-    const draggedItem = _items.splice(dragItem.current!, 1)[0];
-    _items.splice(dragOverItem.current!, 0, draggedItem);
+    const movedElement = _elements[dragOverItem.current!];
+    const draggedElement = _elements.splice(dragItem.current!, 1)[0];
+    _elements.splice(dragOverItem.current!, 0, draggedElement);
 
     dragItem.current = undefined;
     dragOverItem.current = undefined;
 
-    setList(_items);
+    const movedElementObject = {
+      elementId: movedElement._id,
+      position: draggedElement.position,
+    };
+    const draggedElementObject = {
+      elementId: draggedElement._id,
+      position: movedElement.position,
+    };
+
+    const elementEditAPIPath = "/api/view-elements/edit";
+    const movedElementEditResponse = await axios.post(
+      elementEditAPIPath,
+      movedElementObject
+    );
+    const draggedElementEditResponse = await axios.post(
+      elementEditAPIPath,
+      draggedElementObject
+    );
+
+    if (
+      movedElementEditResponse.status !== 200 ||
+      draggedElementEditResponse.status !== 200
+    ) {
+      if (movedElementEditResponse.status !== 200)
+        throw new Error(movedElementEditResponse.data.message);
+
+      if (draggedElementEditResponse.status !== 200)
+        throw new Error(draggedElementEditResponse.data.message);
+    }
+
+    setUpdateElements(true);
+    toast.success("Element positions changed correctly");
   };
 
   const toggleElemenstModal = (
@@ -81,12 +144,6 @@ export default function ElementsBox() {
     }
   };
 
-  const handleAddSelectChange = (e: React.ChangeEvent<HTMLSelectElement>) => {
-    const selectedValue = e.target.value;
-
-    if (selectedValue !== "") setAddFormType(parseInt(selectedValue));
-  };
-
   const handleAddElementSubmit = async (
     e: React.FormEvent<HTMLFormElement>
   ) => {
@@ -100,19 +157,18 @@ export default function ElementsBox() {
       const elementType = parseInt(
         (form.elements.namedItem("addElementType") as HTMLSelectElement).value
       );
+      const elementText = (
+        form.elements.namedItem("addElementText") as HTMLInputElement
+      ).value;
 
       const addElementObject: INewElement = {
+        view_id: view._id,
         name: elementName,
         type: elementType,
+        text: elementText,
       };
 
       switch (elementType) {
-        case 1:
-          const elementText = (
-            form.elements.namedItem("addElementText") as HTMLInputElement
-          ).value;
-          addElementObject.text = elementText;
-          break;
         case 2:
           const elementVideoLink = (
             form.elements.namedItem("addElementVideoLink") as HTMLInputElement
@@ -144,6 +200,7 @@ export default function ElementsBox() {
 
       if (addResponse.status !== 200) throw new Error(addResponse.data.message);
 
+      setUpdateElements(true);
       toggleElemenstModal(ModalAction.CLOSE, ModalPurpose.ADD_ELEMENT);
       toast.success(addResponse.data.message);
     } catch (err) {
@@ -156,8 +213,9 @@ export default function ElementsBox() {
     <>
       <Toaster />
       <section id={styles.elementsBox}>
+        <Image src={view.image} alt="View Image" width="64" height="64" />
         <div id={styles.headerSection}>
-          <h2>Website Elements:</h2>
+          <h2>View's Elements:</h2>
           <button
             onClick={() =>
               toggleElemenstModal(ModalAction.OPEN, ModalPurpose.ADD_ELEMENT)
@@ -168,41 +226,44 @@ export default function ElementsBox() {
         </div>
         <hr />
         <div>
-          {list
-            ? list.map((element, index) => (
-                <div
-                  className={styles.dndElement}
-                  draggable
-                  onDragStart={(e) => (dragItem.current = index)}
-                  onDragEnter={(e) =>
-                    onDragHover(e, index, DragHoverAction.ENTER)
-                  }
-                  onDragLeaveCapture={(e) =>
-                    onDragHover(e, index, DragHoverAction.EXIT)
-                  }
-                  onDragEnd={handleSort}
-                  // onDragOver={(e) => e.preventDefault()}
-                >
-                  <div>
-                    <h3>{getTypeFromNumber(element.type)}</h3>
-                    <p>{element.name}</p>
+          {currentElements
+            ? currentElements.length > 0
+              ? currentElements.map((element: any, index: number) => (
+                  <div
+                    key={index}
+                    className={styles.dndElement}
+                    draggable
+                    onDragStart={(e) => (dragItem.current = index)}
+                    onDragEnter={(e) =>
+                      onDragHover(e, index, DragHoverAction.ENTER)
+                    }
+                    onDragLeaveCapture={(e) =>
+                      onDragHover(e, index, DragHoverAction.EXIT)
+                    }
+                    onDragEnd={handleSwap}
+                    // onDragOver={(e) => e.preventDefault()}
+                  >
+                    <div>
+                      <h3>{element.name}</h3>
+                      <p>{getTypeFromNumber(element.type)}</p>
+                    </div>
+                    <div>
+                      <button
+                        onClick={() =>
+                          toggleElemenstModal(
+                            ModalAction.OPEN,
+                            ModalPurpose.EDIT_ELEMENT,
+                            element
+                          )
+                        }
+                      >
+                        Edit Element
+                      </button>
+                      <button>Delete</button>
+                    </div>
                   </div>
-                  <div>
-                    <button
-                      onClick={() =>
-                        toggleElemenstModal(
-                          ModalAction.OPEN,
-                          ModalPurpose.EDIT_ELEMENT,
-                          element
-                        )
-                      }
-                    >
-                      Edit Element
-                    </button>
-                    <button>Delete</button>
-                  </div>
-                </div>
-              ))
+                ))
+              : "Your added elements will show here."
             : "Loading..."}
         </div>
       </section>
@@ -230,7 +291,12 @@ export default function ElementsBox() {
                   />
                   <label>Element Type:</label>
                   <select
-                    onChange={handleAddSelectChange}
+                    onChange={(e) => {
+                      const selectedValue = e.target.value;
+
+                      if (selectedValue !== "")
+                        setAddFormType(parseInt(selectedValue));
+                    }}
                     value={addFormType}
                     name="addElementType"
                   >
@@ -241,16 +307,15 @@ export default function ElementsBox() {
                     <option value="4">Link Button</option>
                     {/* TODO Add link button component */}
                   </select>
+                  <label>Text:</label>
+                  <input
+                    placeholder="New Offer!"
+                    type="text"
+                    name="addElementText"
+                  />
                   {addFormType ? (
                     addFormType === 1 ? (
-                      <>
-                        <label>Text:</label>
-                        <input
-                          placeholder="New Offer!"
-                          type="text"
-                          name="addElementText"
-                        />
-                      </>
+                      ""
                     ) : addFormType === 2 ? (
                       <>
                         <label>Video Link:</label>
