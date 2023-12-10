@@ -64,7 +64,6 @@ export default function ViewPage({ params }: viewPageProps) {
                     key={index}
                     text={element.text ?? "To Add"}
                     url={element.video_link}
-                    id={currentElementId}
                   />
                 );
               case 3:
@@ -73,7 +72,6 @@ export default function ViewPage({ params }: viewPageProps) {
                     key={index}
                     text={element.text ?? "To add"}
                     url={element.image_link}
-                    id={currentElementId}
                   />
                 );
               case 4:
