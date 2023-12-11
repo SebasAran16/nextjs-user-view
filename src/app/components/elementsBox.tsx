@@ -9,6 +9,8 @@ import React, { useEffect, useRef, useState } from "react";
 import { Toaster, toast } from "react-hot-toast";
 import getSortedElements from "@/utils/getSortedElements";
 import Image from "next/image";
+import IEditElement from "@/types/editElement.interface";
+import CurrentElementData from "./currentElementData";
 
 interface ElementsBoxProps {
   view: any;
@@ -37,6 +39,7 @@ export default function ElementsBox({ view }: ElementsBoxProps) {
   const [currentEditElement, setCurrentEditElement] = useState<
     any | undefined
   >();
+  const [disableEditButton, setDisableEditButton] = useState(true);
 
   useEffect(() => {
     try {
@@ -81,6 +84,8 @@ export default function ElementsBox({ view }: ElementsBoxProps) {
 
   const handleSwap = async () => {
     let _elements = [...currentElements];
+
+    // TODO Only continue if positions have been changed
 
     const movedElement = _elements[dragOverItem.current!];
     const draggedElement = _elements.splice(dragItem.current!, 1)[0];
@@ -169,6 +174,8 @@ export default function ElementsBox({ view }: ElementsBoxProps) {
       };
 
       switch (elementType) {
+        case 1:
+          break;
         case 2:
           const elementVideoLink = (
             form.elements.namedItem("addElementVideoLink") as HTMLInputElement
@@ -209,6 +216,75 @@ export default function ElementsBox({ view }: ElementsBoxProps) {
     }
   };
 
+  const handleEditElementSubmit = async (
+    e: React.FormEvent<HTMLFormElement>
+  ) => {
+    try {
+      e.preventDefault();
+      const form = e.currentTarget;
+
+      const editElementObject: IEditElement = {
+        view_id: view._id,
+        name: currentEditElement.name,
+      };
+
+      const elementType = currentEditElement.type;
+
+      const elementText = (
+        form.elements.namedItem("editElementText") as HTMLInputElement
+      ).value;
+      console.log(elementText);
+
+      if (elementText !== "") editElementObject.text = elementText;
+
+      switch (elementType) {
+        case 1:
+          break;
+        case 2:
+          const elementVideoLink = (
+            form.elements.namedItem("editElementVideoLink") as HTMLInputElement
+          ).value;
+
+          if (elementVideoLink !== "")
+            editElementObject.video_link = elementVideoLink;
+          break;
+        case 3:
+          const elementImageLink = (
+            form.elements.namedItem("editElementImageLink") as HTMLInputElement
+          ).value;
+          if (elementImageLink !== "")
+            editElementObject.image_link = elementImageLink;
+          break;
+        case 4:
+          const elementButtonLink = (
+            form.elements.namedItem("editElementButtonLink") as HTMLInputElement
+          ).value;
+          if (elementButtonLink !== "")
+            editElementObject.button_link = elementButtonLink;
+          break;
+        case 5:
+        // TODO
+        default:
+          throw new Error("Element type not valid");
+      }
+
+      const addResponse = await axios.post(
+        "/api/view-elements/edit",
+        editElementObject
+      );
+
+      if (addResponse.status !== 200) throw new Error(addResponse.data.message);
+
+      setUpdateElements(true);
+      toggleElemenstModal(ModalAction.CLOSE, ModalPurpose.ADD_ELEMENT);
+      setDisableEditButton(true);
+      toast.success(addResponse.data.message);
+    } catch (err) {
+      console.log(err);
+      toast.error("There was an issue editing the element");
+    }
+  };
+
   return (
     <>
       <Toaster />
@@ -226,45 +302,54 @@ export default function ElementsBox({ view }: ElementsBoxProps) {
         </div>
         <hr />
         <div>
-          {currentElements
-            ? currentElements.length > 0
-              ? currentElements.map((element: any, index: number) => (
-                  <div
-                    key={index}
-                    className={styles.dndElement}
-                    draggable
-                    onDragStart={(e) => (dragItem.current = index)}
-                    onDragEnter={(e) =>
-                      onDragHover(e, index, DragHoverAction.ENTER)
-                    }
-                    onDragLeaveCapture={(e) =>
-                      onDragHover(e, index, DragHoverAction.EXIT)
-                    }
-                    onDragEnd={handleSwap}
-                    // onDragOver={(e) => e.preventDefault()}
-                  >
-                    <div>
-                      <h3>{element.name}</h3>
-                      <p>{getTypeFromNumber(element.type)}</p>
-                    </div>
-                    <div>
-                      <button
-                        onClick={() =>
-                          toggleElemenstModal(
-                            ModalAction.OPEN,
-                            ModalPurpose.EDIT_ELEMENT,
-                            element
-                          )
-                        }
-                      >
-                        Edit Element
-                      </button>
-                      <button>Delete</button>
-                    </div>
+          {currentElements ? (
+            currentElements.length > 0 ? (
+              currentElements.map((element: any, index: number) => (
+                <div
+                  key={index}
+                  className={styles.dndElement}
+                  draggable
+                  onDragStart={(e) => (dragItem.current = index)}
+                  onDragEnter={(e) =>
+                    onDragHover(e, index, DragHoverAction.ENTER)
+                  }
+                  onDragLeaveCapture={(e) =>
+                    onDragHover(e, index, DragHoverAction.EXIT)
+                  }
+                  onDragEnd={handleSwap}
+                  // onDragOver={(e) => e.preventDefault()}
+                >
+                  <div>
+                    <h3>{element.name}</h3>
+                    <p>{getTypeFromNumber(element.type)}</p>
                   </div>
-                ))
-              : "Your added elements will show here."
-            : "Loading..."}
+                  <div>
+                    <button
+                      onClick={() =>
+                        toggleElemenstModal(
+                          ModalAction.OPEN,
+                          ModalPurpose.EDIT_ELEMENT,
+                          element
+                        )
+                      }
+                    >
+                      Manage
+                    </button>
+                    <button>Delete</button>
+                  </div>
+                </div>
+              ))
+            ) : (
+              "Your added elements will show here."
+            )
+          ) : (
+            <Image
+              src="/icons/loader.gif"
+              alt="Loader Icon"
+              height="28"
+              width="28"
+            />
+          )}
         </div>
       </section>
       <section id={modalStyles.modalContainer} className={modalStyles.hidden}>
@@ -288,6 +373,7 @@ export default function ElementsBox({ view }: ElementsBoxProps) {
                     placeholder="ex Restaurant Menu"
                     type="text"
                     name="addElementName"
+                    required
                   />
                   <label>Element Type:</label>
                   <select
@@ -299,6 +385,7 @@ export default function ElementsBox({ view }: ElementsBoxProps) {
                     }}
                     value={addFormType}
                     name="addElementType"
+                    required
                   >
                     <option value="">Please Choose a Type</option>
                     <option value="1">Text</option>
@@ -312,6 +399,7 @@ export default function ElementsBox({ view }: ElementsBoxProps) {
                     placeholder="New Offer!"
                     type="text"
                     name="addElementText"
+                    required
                   />
                   {addFormType ? (
                     addFormType === 1 ? (
@@ -356,28 +444,48 @@ export default function ElementsBox({ view }: ElementsBoxProps) {
               </div>
             ) : (
               <div className={styles.ModalActionContainer}>
+                <CurrentElementData element={currentEditElement} />
                 <h2>Edit Element:</h2>
-                <form onSubmit={handleAddElementSubmit}>
+                <form onSubmit={handleEditElementSubmit}>
+                  <label>New text:</label>
+                  <input
+                    type="text"
+                    name="editElementText"
+                    placeholder="New Text"
+                    onChange={() => setDisableEditButton(false)}
+                  />
                   {currentEditElement ? (
                     currentEditElement.type === 1 ? (
-                      <>
-                        <label>New text:</label>
-                        <input />
-                      </>
+                      ""
                     ) : currentEditElement.type === 2 ? (
                       <>
                         <label>New video URL:</label>
-                        <input />
+                        <input
+                          type="text"
+                          name="editElementVideoLink"
+                          placeholder="https://youtube.com/sdf..dsfsd"
+                          onChange={() => setDisableEditButton(false)}
+                        />
                       </>
                     ) : currentEditElement.type === 3 ? (
                       <>
                         <label>New image URL:</label>
-                        <input />
+                        <input
+                          type="text"
+                          name="editElementImageLink"
+                          placeholder="https://restaurant.com/gallery/1.jpg"
+                          onChange={() => setDisableEditButton(false)}
+                        />
                       </>
                     ) : currentEditElement.type === 4 ? (
                       <>
                         <label>New link URL for button:</label>
-                        <input />
+                        <input
+                          type="text"
+                          name="editElementButtonLink"
+                          placeholder="https://restaurant.com/menu"
+                          onChange={() => setDisableEditButton(false)}
+                        />
                       </>
                     ) : (
                       "Element type not allowed"
@@ -385,9 +493,10 @@ export default function ElementsBox({ view }: ElementsBoxProps) {
                   ) : (
                     ""
                   )}
-                  <button type="submit" disabled={!addFormType}>
+                  <button type="submit" disabled={disableEditButton}>
                     Edit Element
                   </button>
+                  {disableEditButton ? <p>Type some value to edit</p> : ""}
                 </form>
               </div>
             )

@@ -120,17 +120,28 @@ export default function ViewsBox() {
     <section id={styles.viewContainer}>
       <div>
         <div id={styles.buttonsSelectContainer}>
-          {views
-            ? views.length > 0
-              ? views.map((view: any, index: number) => {
-                  return (
-                    <button key={index} onClick={() => setEditingView(view)}>
-                      {view.name}
-                    </button>
-                  );
-                })
-              : "No views"
-            : "Loading"}
+          {views ? (
+            views.length > 0 ? (
+              views.map((view: any, index: number) => {
+                return (
+                  <button key={index} onClick={() => setEditingView(view)}>
+                    {view.name}
+                  </button>
+                );
+              })
+            ) : (
+              "No views"
+            )
+          ) : (
+            <div className={styles.loaderView}>
+              <Image
+                src="/icons/loader.gif"
+                alt="Loader Icon"
+                height="28"
+                width="28"
+              />
+            </div>
+          )}
           <button
             onClick={() =>
               toggleModal(ModalAction.OPEN, ModalPurpose.CREATE_VIEW)

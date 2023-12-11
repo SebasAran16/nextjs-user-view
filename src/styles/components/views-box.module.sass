@@ -61,3 +61,27 @@
             >p
                 font-size: 0.8rem
                 opacity: 0.8
+
+.loaderView
+    border-radius: $main-radius
+    border-bottom-left-radius: 0
+    border-bottom-right-radius: 0
+    border: 1px solid $main-color
+    min-width: 2.5rem
+    color: black
+    transition: 0.1s all
+    display: flex
+    align-items: center
+    justify-content: center
+    *
+        box-sizing: border-box
+    &:hover
+        transform: scale(1.05)
+        cursor: pointer
+        opacity: 0.9
+    &:active
+        transform: none
+    &:disabled
+        opacity: 0.6
+        transform: none
+        cursor: not-allowed
