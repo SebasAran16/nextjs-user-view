@@ -6,9 +6,19 @@
     > div
         &:first-of-type
             display: flex
+        &:last-of-type
+            display: flex
+            flex-direction: column
+            min-height: 200px
+            border: 1px solid $main-color
+            align-items: center
+            justify-content: center
+            border-bottom-left-radius: $main-radius
+            border-bottom-right-radius: $main-radius
 
 #buttonsSelectContainer
     display: flex
+    margin-top: 1rem
     > button
         border-bottom-left-radius: 0
         border-bottom-right-radius: 0

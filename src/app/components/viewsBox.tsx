@@ -49,7 +49,8 @@ export default function ViewsBox() {
     action: ModalAction,
     purpose: ModalPurpose | undefined = undefined
   ) => {
-    const modal = document.querySelector("#" + modalStyles.modalContainer);
+    const modal = document.querySelector(".createModal");
+    console.log(modal);
 
     if (purpose === ModalPurpose.CREATE_VIEW) {
       setViewModalPurpose(ModalPurpose.CREATE_VIEW);
@@ -117,7 +118,7 @@ export default function ViewsBox() {
   }
 
   return (
-    <section id={styles.viewContainer}>
+    <section id={styles.viewsContainer}>
       <div>
         <div id={styles.buttonsSelectContainer}>
           {views ? (
@@ -158,16 +159,21 @@ export default function ViewsBox() {
           <p>Select a view for edit it...</p>
         )}
       </div>
-      <section id={modalStyles.modalContainer} className={modalStyles.hidden}>
+      <section
+        id={modalStyles.modalContainer}
+        className={`${modalStyles.hidden} createModal`}
+      >
         <div id={styles.modal}>
           <div>
-            <button
+            <Image
+              src="icons/close-main-color.svg"
+              alt="Close Icon"
+              height="34"
+              width="34"
               onClick={() =>
                 toggleModal(ModalAction.CLOSE, ModalPurpose.CREATE_VIEW)
               }
-            >
-              Close
-            </button>
+            />
           </div>
           <div>
             {viewModalPurpose === ModalPurpose.CREATE_VIEW ? (

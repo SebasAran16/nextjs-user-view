@@ -6,7 +6,7 @@ export default async function Home() {
   return (
     <main>
       <header id={styles.header}>
-        <h1>Welcome to UserView!</h1>
+        <h1>Welcome to CustomerView!</h1>
         <section id={styles.headerButtons}>
           <Link href="/login">
             <button>Login</button>

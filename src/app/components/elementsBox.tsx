@@ -95,11 +95,11 @@ export default function ElementsBox({ view }: ElementsBoxProps) {
     dragOverItem.current = undefined;
 
     const movedElementObject = {
-      elementId: movedElement._id,
+      id: movedElement._id,
       position: draggedElement.position,
     };
     const draggedElementObject = {
-      elementId: draggedElement._id,
+      id: draggedElement._id,
       position: movedElement.position,
     };
 
@@ -224,17 +224,19 @@ export default function ElementsBox({ view }: ElementsBoxProps) {
       const form = e.currentTarget;
 
       const editElementObject: IEditElement = {
-        view_id: view._id,
-        name: currentEditElement.name,
+        id: currentEditElement._id,
       };
 
       const elementType = currentEditElement.type;
 
+      const elementName = (
+        form.elements.namedItem("editElementName") as HTMLInputElement
+      ).value;
+      if (elementName !== "") editElementObject.name = elementName;
+
       const elementText = (
         form.elements.namedItem("editElementText") as HTMLInputElement
       ).value;
-      console.log(elementText);
-
       if (elementText !== "") editElementObject.text = elementText;
 
       switch (elementType) {
@@ -290,6 +292,13 @@ export default function ElementsBox({ view }: ElementsBoxProps) {
       <Toaster />
       <section id={styles.elementsBox}>
         <Image src={view.image} alt="View Image" width="64" height="64" />
+        <p>
+          Visible at:{" "}
+          <a
+            href={`https://customerview.app/view/${view.url}`}
+            target="_blank"
+          >{`https://customerview.app/view/${view.url}`}</a>
+        </p>
         <div id={styles.headerSection}>
           <h2>View's Elements:</h2>
           <button
@@ -355,13 +364,15 @@ export default function ElementsBox({ view }: ElementsBoxProps) {
       <section id={modalStyles.modalContainer} className={modalStyles.hidden}>
         <div id={styles.modal}>
           <div>
-            <button
+            <Image
+              src="icons/close-main-color.svg"
+              alt="Close Icon"
+              height="34"
+              width="34"
               onClick={() =>
                 toggleElemenstModal(ModalAction.CLOSE, ModalPurpose.ADD_ELEMENT)
               }
-            >
-              Close
-            </button>
+            />
           </div>
           {modalPurpose ? (
             modalPurpose === ModalPurpose.ADD_ELEMENT ? (
@@ -447,6 +458,13 @@ export default function ElementsBox({ view }: ElementsBoxProps) {
                 <CurrentElementData element={currentEditElement} />
                 <h2>Edit Element:</h2>
                 <form onSubmit={handleEditElementSubmit}>
+                  <label>New name:</label>
+                  <input
+                    type="text"
+                    name="editElementName"
+                    placeholder="Modified name"
+                    onChange={() => setDisableEditButton(false)}
+                  />
                   <label>New text:</label>
                   <input
                     type="text"

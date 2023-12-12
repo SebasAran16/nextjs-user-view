@@ -57,7 +57,7 @@ export default function Login() {
               width="31"
               height="31"
             />
-            <p>UserView</p>
+            <p>CustomerView</p>
           </Link>
         </div>
         <div id={styles.formPart}>

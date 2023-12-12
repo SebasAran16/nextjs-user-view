@@ -6,16 +6,12 @@ import { NextRequest, NextResponse } from "next/server";
 export async function POST(request: NextRequest) {
   try {
     await dbConnect();
-    console.log(request);
 
     const dataToEdit = await request.json();
 
     const elementToEdit = await Element.findOne({
-      view_id: dataToEdit.view_id,
-      name: dataToEdit.name,
+      _id: dataToEdit.id,
     });
-
-    console.log(elementToEdit);
 
     // TODO Verify user calling is owner
 
@@ -27,16 +23,12 @@ export async function POST(request: NextRequest) {
         { status: 400 }
       );
 
-    const constantData = ["view_id", "name"];
-
-    console.log(dataToEdit);
     for (const key in dataToEdit) {
-      if (dataToEdit.hasOwnProperty(key) && !constantData.includes(key)) {
+      if (dataToEdit.hasOwnProperty(key) && key !== "id") {
         const value = dataToEdit[key];
         elementToEdit[key] = value;
       }
     }
-    console.log(elementToEdit);
 
     const editedElement = await elementToEdit.save();
 

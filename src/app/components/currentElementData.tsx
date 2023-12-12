@@ -6,7 +6,7 @@ interface CurrentElementInterface {
   element: any;
 }
 
-const notToInclude = ["_id", "__v"];
+const notToInclude = ["_id", "__v", "view_id"];
 
 export default function CurrentElementData({
   element,

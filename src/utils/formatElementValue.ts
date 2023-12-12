@@ -14,7 +14,8 @@ export function formatElementValue(key: string, value: any) {
       case "type":
         return getTypeFromNumber(value);
       case "created_at":
-        return value;
+        const date = new Date(value);
+        return date.toLocaleDateString();
     }
   } catch (err) {
     console.log(err);
