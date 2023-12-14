@@ -131,7 +131,7 @@ export default function ViewsBox() {
                 );
               })
             ) : (
-              "No views"
+              ""
             )
           ) : (
             <div className={styles.loaderView}>
@@ -156,7 +156,7 @@ export default function ViewsBox() {
         {editingView ? (
           <ElementsBox view={editingView} />
         ) : (
-          <p>Select a view for edit it...</p>
+          <p>Select a view to edit it...</p>
         )}
       </div>
       <section
