@@ -13,14 +13,24 @@
     border-top-right-radius: 0
     border-top-left-radius: 0
     padding: $content-padding
+    width: 90%
     > img
         align-self: center
         border-radius: $main-radius
         margin: 1rem 0
+    > div
+        &:nth-of-type(2)
+            min-height: 100px
 
 #headerSection
     margin: 1rem 0
     justify-content: space-between
+
+#defaultViewNoElements
+    display: flex
+    flex-direction: column
+    align-items: center
+    justify-content: center
 
 .dndElement
     align-items: center
@@ -67,3 +77,15 @@
 #modalActionContainer
     display: flex
     flex-direction: column
+
+@media screen and (min-width: 768px)
+    #elementsBox
+        width: 70%
+
+@media screen and (min-width: 992px)
+    #elementsBox
+        width: 60%
+
+@media screen and (min-width: 1200px)
+    #elementsBox
+        width: 50%

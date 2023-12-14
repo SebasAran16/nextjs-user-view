@@ -1,5 +1,6 @@
 "use client";
 import styles from "@/styles/components/elements-box.module.sass";
+import confirmationModalStyles from "@/styles/components/confirmation-modal.module.sass";
 import modalStyles from "@/styles/components/modal.module.sass";
 import getTypeFromNumber from "@/utils/getTypeFromNumber";
 import INewElement from "@/types/newElement.interface";
@@ -11,6 +12,7 @@ import getSortedElements from "@/utils/getSortedElements";
 import Image from "next/image";
 import IEditElement from "@/types/editElement.interface";
 import CurrentElementData from "./currentElementData";
+import { ConfirmationModal } from "./confirmationModal";
 
 interface ElementsBoxProps {
   view: any;
@@ -40,6 +42,7 @@ export default function ElementsBox({ view }: ElementsBoxProps) {
     any | undefined
   >();
   const [disableEditButton, setDisableEditButton] = useState(true);
+  const [elementToRemove, setElementToRemove] = useState<any | undefined>();
 
   useEffect(() => {
     try {
@@ -65,6 +68,20 @@ export default function ElementsBox({ view }: ElementsBoxProps) {
       setUpdateElements(false);
     }
   }, [updateElements]);
+
+  useEffect(() => {
+    const confirmationContainer = document.querySelector(
+      "#" + confirmationModalStyles.confirmationContainer
+    );
+
+    if (elementToRemove) {
+      console.log(elementToRemove);
+      console.log("Removing hidden");
+      confirmationContainer?.classList.remove(confirmationModalStyles.hidden);
+    } else {
+      confirmationContainer?.classList.add(confirmationModalStyles.hidden);
+    }
+  }, [elementToRemove]);
 
   const onDragHover = (
     e: React.DragEvent<HTMLDivElement>,
@@ -310,7 +327,7 @@ export default function ElementsBox({ view }: ElementsBoxProps) {
           </button>
         </div>
         <hr />
-        <div>
+        <div id={styles.elementsContainer}>
           {currentElements ? (
             currentElements.length > 0 ? (
               currentElements.map((element: any, index: number) => (
@@ -344,12 +361,16 @@ export default function ElementsBox({ view }: ElementsBoxProps) {
                     >
                       Manage
                     </button>
-                    <button>Delete</button>
+                    <button onClick={() => setElementToRemove(element)}>
+                      Delete
+                    </button>
                   </div>
                 </div>
               ))
             ) : (
-              "Your added elements will show here."
+              <div id={styles.defaultViewNoElements}>
+                <p>Your added elements will show here.</p>
+              </div>
             )
           ) : (
             <Image
@@ -523,6 +544,11 @@ export default function ElementsBox({ view }: ElementsBoxProps) {
           )}
         </div>
       </section>
+      <ConfirmationModal
+        element={elementToRemove}
+        setUpdateElements={setUpdateElements}
+        setElementToRemove={setElementToRemove}
+      />
     </>
   );
 }
