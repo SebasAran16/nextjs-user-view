@@ -1,0 +1,5 @@
+export enum ModalPurpose {
+  CREATE_VIEW = "CREATE_VIEW",
+  ADD_ELEMENT = "ADD_ELEMENT",
+  EDIT_ELEMENT = "EDIT_ELEMENT",
+}

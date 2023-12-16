@@ -16,7 +16,7 @@ export default function CurrentElementData({
       {Object.entries(element).map(([key, value]) => {
         if (!notToInclude.includes(key))
           return (
-            <div>
+            <div key={key}>
               <h3>{fromSerpentToReadable(key) + ":"}</h3>
               <p>{formatElementValue(key, value)}</p>
             </div>

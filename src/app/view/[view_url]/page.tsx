@@ -5,9 +5,9 @@ import React, { useEffect, useState } from "react";
 import { Toaster, toast } from "react-hot-toast";
 import getSortedElements from "@/utils/getSortedElements";
 import Image from "next/image";
-import { VideoPlayer } from "@/app/components/video-player";
-import { ModalImage } from "@/app/components/modal-image";
-import { ProfileLink } from "@/app/components/profile-link";
+import { VideoPlayer } from "@/app/components/views/video-player";
+import { ModalImage } from "@/app/components/views/modal-image";
+import { ProfileLink } from "@/app/components/views/profile-link";
 
 interface viewPageProps {
   params: { view_url: string };
@@ -17,7 +17,6 @@ export default function ViewPage({ params }: viewPageProps) {
   const [loading, setLoading] = useState(true);
   const [view, setView] = useState<any | undefined>();
   const [viewElements, setViewElements] = useState<any | undefined>();
-  const [currentElementId, setCurrentElementId] = useState(0);
 
   useEffect(() => {
     axios

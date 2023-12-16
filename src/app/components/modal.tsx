@@ -1,0 +1,77 @@
+import modalStyles from "@/styles/components/modal.module.sass";
+import { ModalPurpose } from "@/utils/structs/modalPurposes.enum";
+import Image from "next/image";
+import { useState } from "react";
+import { AddViewModal } from "./modals/addView";
+import { ManageElementModal } from "./modals/manageElement";
+import { AddElementModal } from "./modals/addElement";
+
+interface ModalProps {
+  visibleModal: boolean;
+  setVisibleModal: Function;
+  modalPurpose: ModalPurpose | undefined;
+  setViews?: Function;
+  view?: any;
+  currentEditElement?: any;
+  setUpdateElements?: Function;
+  setAddFormType?: Function;
+  addFormType?: number;
+}
+
+export function Modal({
+  visibleModal,
+  setVisibleModal,
+  modalPurpose,
+  setViews,
+  currentEditElement,
+  setUpdateElements,
+  view,
+  setAddFormType,
+  addFormType,
+}: ModalProps) {
+  return (
+    <>
+      {visibleModal ? (
+        <section id={modalStyles.modalContainer}>
+          <div id={modalStyles.modal}>
+            <div>
+              <Image
+                src="icons/close-main-color.svg"
+                alt="Close Icon"
+                height="34"
+                width="34"
+                onClick={() => setVisibleModal(false)}
+              />
+            </div>
+            <div>
+              {modalPurpose === ModalPurpose.CREATE_VIEW ? (
+                <AddViewModal
+                  setVisibleModal={setVisibleModal}
+                  setViews={setViews!}
+                />
+              ) : modalPurpose === ModalPurpose.ADD_ELEMENT ? (
+                <AddElementModal
+                  setVisibleModal={setVisibleModal}
+                  view={view}
+                  setUpdateElements={setUpdateElements!}
+                  setAddFormType={setAddFormType!}
+                  addFormType={addFormType!}
+                />
+              ) : modalPurpose === ModalPurpose.EDIT_ELEMENT ? (
+                <ManageElementModal
+                  setVisibleModal={setVisibleModal}
+                  currentEditElement={currentEditElement}
+                  setUpdateElements={setUpdateElements!}
+                />
+              ) : (
+                ""
+              )}
+            </div>
+          </div>
+        </section>
+      ) : (
+        ""
+      )}
+    </>
+  );
+}

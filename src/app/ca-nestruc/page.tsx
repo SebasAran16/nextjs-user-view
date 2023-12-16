@@ -1,9 +1,9 @@
 import styles from "@/styles/page.module.sass";
-import { ProfileLink } from "../components/profile-link";
+import { ProfileLink } from "../components/views/profile-link";
 import Image from "next/image";
-import { VideoPlayer } from "../components/video-player";
+import { VideoPlayer } from "../components/views/video-player";
 import { useState } from "react";
-import { ModalImage } from "../components/modal-image";
+import { ModalImage } from "../components/views/modal-image";
 
 export default async function CaNEstruc() {
   return (
@@ -18,13 +18,11 @@ export default async function CaNEstruc() {
       <VideoPlayer
         text={"Conoce nuestra ficha de cata"}
         url="/videos/ficha-cata.mp4"
-        id={0}
       />
       <ProfileLink text="" url="" />
       <VideoPlayer
         text={"Conoce nuestra historia"}
         url="/videos/historia.mp4"
-        id={1}
       />
       <ProfileLink text={"IDOIA X AMÉLIE"} url="/" />
       <article className={styles.groupedLinks}>
@@ -32,7 +30,7 @@ export default async function CaNEstruc() {
           text={"Productos"}
           url="https://www.vilaviniteca.es/es/catalogsearch/result/?q=CA+N%E2%80%99ESTRUC "
         />
-        <ModalImage text="Sorteos" url="/sorteo.jpeg" id={0} />
+        <ModalImage text="Sorteos" url="/sorteo.jpeg" />
       </article>
       <ProfileLink
         text={"Vive la experiencia vinicola con nosotros"}

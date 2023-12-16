@@ -14,6 +14,10 @@ const UserSchema = new Schema({
     unique: true,
   },
   password: String,
+  rol: {
+    type: String,
+    required: [true, "User rol needed"],
+  },
   created_date: Date,
   image: String,
   telephone: {

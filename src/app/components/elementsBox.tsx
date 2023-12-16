@@ -3,16 +3,15 @@ import styles from "@/styles/components/elements-box.module.sass";
 import confirmationModalStyles from "@/styles/components/confirmation-modal.module.sass";
 import modalStyles from "@/styles/components/modal.module.sass";
 import getTypeFromNumber from "@/utils/getTypeFromNumber";
-import INewElement from "@/types/newElement.interface";
-import { ModalAction } from "@/utils/structs/modals.enum";
+import { ModalAction } from "@/utils/structs/modalActions.enum";
+import { ModalPurpose } from "@/utils/structs/modalPurposes.enum";
 import axios from "axios";
 import React, { useEffect, useRef, useState } from "react";
 import { Toaster, toast } from "react-hot-toast";
 import getSortedElements from "@/utils/getSortedElements";
 import Image from "next/image";
-import IEditElement from "@/types/editElement.interface";
-import CurrentElementData from "./currentElementData";
 import { ConfirmationModal } from "./confirmationModal";
+import { Modal } from "./modal";
 
 interface ElementsBoxProps {
   view: any;
@@ -24,11 +23,6 @@ export default function ElementsBox({ view }: ElementsBoxProps) {
     EXIT,
   }
 
-  enum ModalPurpose {
-    ADD_ELEMENT = "ADD_ELEMENT",
-    EDIT_ELEMENT = "EDIT_ELEMENT",
-  }
-
   const dragItem = useRef<number | undefined>(undefined);
   const dragOverItem = useRef<number | undefined>(undefined);
 
@@ -38,11 +32,11 @@ export default function ElementsBox({ view }: ElementsBoxProps) {
     undefined
   );
   const [addFormType, setAddFormType] = useState<number | undefined>();
+  const [elementToRemove, setElementToRemove] = useState<any | undefined>();
+  const [visibleModal, setVisibleModal] = useState(false);
   const [currentEditElement, setCurrentEditElement] = useState<
     any | undefined
   >();
-  const [disableEditButton, setDisableEditButton] = useState(true);
-  const [elementToRemove, setElementToRemove] = useState<any | undefined>();
 
   useEffect(() => {
     try {
@@ -67,7 +61,7 @@ export default function ElementsBox({ view }: ElementsBoxProps) {
     } finally {
       setUpdateElements(false);
     }
-  }, [updateElements]);
+  }, [view, updateElements]);
 
   useEffect(() => {
     const confirmationContainer = document.querySelector(
@@ -75,8 +69,6 @@ export default function ElementsBox({ view }: ElementsBoxProps) {
     );
 
     if (elementToRemove) {
-      console.log(elementToRemove);
-      console.log("Removing hidden");
       confirmationContainer?.classList.remove(confirmationModalStyles.hidden);
     } else {
       confirmationContainer?.classList.add(confirmationModalStyles.hidden);
@@ -145,165 +137,6 @@ export default function ElementsBox({ view }: ElementsBoxProps) {
     toast.success("Element positions changed correctly");
   };
 
-  const toggleElemenstModal = (
-    action: ModalAction,
-    purpose: ModalPurpose,
-    element: undefined | Object = undefined
-  ) => {
-    const modal = document.querySelector("#" + modalStyles.modalContainer);
-
-    if (purpose === ModalPurpose.ADD_ELEMENT) {
-      setModalPurpose(ModalPurpose.ADD_ELEMENT);
-    } else if (purpose === ModalPurpose.EDIT_ELEMENT) {
-      setCurrentEditElement(element);
-      setModalPurpose(ModalPurpose.EDIT_ELEMENT);
-    }
-
-    if (action === ModalAction.OPEN) {
-      modal?.classList.remove(modalStyles.hidden);
-    } else {
-      modal?.classList.add(modalStyles.hidden);
-    }
-  };
-
-  const handleAddElementSubmit = async (
-    e: React.FormEvent<HTMLFormElement>
-  ) => {
-    try {
-      e.preventDefault();
-      const form = e.currentTarget;
-
-      const elementName = (
-        form.elements.namedItem("addElementName") as HTMLInputElement
-      ).value;
-      const elementType = parseInt(
-        (form.elements.namedItem("addElementType") as HTMLSelectElement).value
-      );
-      const elementText = (
-        form.elements.namedItem("addElementText") as HTMLInputElement
-      ).value;
-
-      const addElementObject: INewElement = {
-        view_id: view._id,
-        name: elementName,
-        type: elementType,
-        text: elementText,
-      };
-
-      switch (elementType) {
-        case 1:
-          break;
-        case 2:
-          const elementVideoLink = (
-            form.elements.namedItem("addElementVideoLink") as HTMLInputElement
-          ).value;
-          addElementObject.video_link = elementVideoLink;
-          break;
-        case 3:
-          const elementImageLink = (
-            form.elements.namedItem("addElementImageLink") as HTMLInputElement
-          ).value;
-          addElementObject.image_link = elementImageLink;
-          break;
-        case 4:
-          const elementButtonLink = (
-            form.elements.namedItem("addElementButtonLink") as HTMLInputElement
-          ).value;
-          addElementObject.button_link = elementButtonLink;
-          break;
-        case 5:
-        // TODO
-        default:
-          throw new Error("Element type not valid");
-      }
-
-      const addResponse = await axios.post(
-        "/api/view-elements/add",
-        addElementObject
-      );
-
-      if (addResponse.status !== 200) throw new Error(addResponse.data.message);
-
-      setUpdateElements(true);
-      toggleElemenstModal(ModalAction.CLOSE, ModalPurpose.ADD_ELEMENT);
-      toast.success(addResponse.data.message);
-    } catch (err) {
-      console.log(err);
-      toast.error("There was an issue adding the element");
-    }
-  };
-
-  const handleEditElementSubmit = async (
-    e: React.FormEvent<HTMLFormElement>
-  ) => {
-    try {
-      e.preventDefault();
-      const form = e.currentTarget;
-
-      const editElementObject: IEditElement = {
-        id: currentEditElement._id,
-      };
-
-      const elementType = currentEditElement.type;
-
-      const elementName = (
-        form.elements.namedItem("editElementName") as HTMLInputElement
-      ).value;
-      if (elementName !== "") editElementObject.name = elementName;
-
-      const elementText = (
-        form.elements.namedItem("editElementText") as HTMLInputElement
-      ).value;
-      if (elementText !== "") editElementObject.text = elementText;
-
-      switch (elementType) {
-        case 1:
-          break;
-        case 2:
-          const elementVideoLink = (
-            form.elements.namedItem("editElementVideoLink") as HTMLInputElement
-          ).value;
-
-          if (elementVideoLink !== "")
-            editElementObject.video_link = elementVideoLink;
-          break;
-        case 3:
-          const elementImageLink = (
-            form.elements.namedItem("editElementImageLink") as HTMLInputElement
-          ).value;
-          if (elementImageLink !== "")
-            editElementObject.image_link = elementImageLink;
-          break;
-        case 4:
-          const elementButtonLink = (
-            form.elements.namedItem("editElementButtonLink") as HTMLInputElement
-          ).value;
-          if (elementButtonLink !== "")
-            editElementObject.button_link = elementButtonLink;
-          break;
-        case 5:
-        // TODO
-        default:
-          throw new Error("Element type not valid");
-      }
-
-      const addResponse = await axios.post(
-        "/api/view-elements/edit",
-        editElementObject
-      );
-
-      if (addResponse.status !== 200) throw new Error(addResponse.data.message);
-
-      setUpdateElements(true);
-      toggleElemenstModal(ModalAction.CLOSE, ModalPurpose.ADD_ELEMENT);
-      setDisableEditButton(true);
-      toast.success(addResponse.data.message);
-    } catch (err) {
-      console.log(err);
-      toast.error("There was an issue editing the element");
-    }
-  };
-
   return (
     <>
       <Toaster />
@@ -319,9 +152,10 @@ export default function ElementsBox({ view }: ElementsBoxProps) {
         <div id={styles.headerSection}>
           <h2>View's Elements:</h2>
           <button
-            onClick={() =>
-              toggleElemenstModal(ModalAction.OPEN, ModalPurpose.ADD_ELEMENT)
-            }
+            onClick={() => {
+              setModalPurpose(ModalPurpose.ADD_ELEMENT);
+              setVisibleModal(true);
+            }}
           >
             Add Element
           </button>
@@ -351,13 +185,11 @@ export default function ElementsBox({ view }: ElementsBoxProps) {
                   </div>
                   <div>
                     <button
-                      onClick={() =>
-                        toggleElemenstModal(
-                          ModalAction.OPEN,
-                          ModalPurpose.EDIT_ELEMENT,
-                          element
-                        )
-                      }
+                      onClick={() => {
+                        setModalPurpose(ModalPurpose.EDIT_ELEMENT);
+                        setCurrentEditElement(element);
+                        setVisibleModal(true);
+                      }}
                     >
                       Manage
                     </button>
@@ -382,168 +214,16 @@ export default function ElementsBox({ view }: ElementsBoxProps) {
           )}
         </div>
       </section>
-      <section id={modalStyles.modalContainer} className={modalStyles.hidden}>
-        <div id={styles.modal}>
-          <div>
-            <Image
-              src="icons/close-main-color.svg"
-              alt="Close Icon"
-              height="34"
-              width="34"
-              onClick={() =>
-                toggleElemenstModal(ModalAction.CLOSE, ModalPurpose.ADD_ELEMENT)
-              }
-            />
-          </div>
-          {modalPurpose ? (
-            modalPurpose === ModalPurpose.ADD_ELEMENT ? (
-              <div className={styles.ModalActionContainer}>
-                <h2>Add Element:</h2>
-                <form onSubmit={handleAddElementSubmit}>
-                  <label>Element Name:</label>
-                  <input
-                    placeholder="ex Restaurant Menu"
-                    type="text"
-                    name="addElementName"
-                    required
-                  />
-                  <label>Element Type:</label>
-                  <select
-                    onChange={(e) => {
-                      const selectedValue = e.target.value;
-
-                      if (selectedValue !== "")
-                        setAddFormType(parseInt(selectedValue));
-                    }}
-                    value={addFormType}
-                    name="addElementType"
-                    required
-                  >
-                    <option value="">Please Choose a Type</option>
-                    <option value="1">Text</option>
-                    <option value="2">Video</option>
-                    <option value="3">Image</option>
-                    <option value="4">Link Button</option>
-                    {/* TODO Add link button component */}
-                  </select>
-                  <label>Text:</label>
-                  <input
-                    placeholder="New Offer!"
-                    type="text"
-                    name="addElementText"
-                    required
-                  />
-                  {addFormType ? (
-                    addFormType === 1 ? (
-                      ""
-                    ) : addFormType === 2 ? (
-                      <>
-                        <label>Video Link:</label>
-                        <input
-                          placeholder="https://youtube.com/sdf..dsfsd"
-                          type="text"
-                          name="addElementVideoLink"
-                        />
-                      </>
-                    ) : addFormType === 3 ? (
-                      <>
-                        <label>Image Link:</label>
-                        <input
-                          placeholder="https://restaurant.com/gallery/1.jpg"
-                          type="text"
-                          name="addElementImageLink"
-                        />
-                      </>
-                    ) : addFormType === 4 ? (
-                      <>
-                        <label>Button Link:</label>
-                        <input
-                          placeholder="https://restaurant.com/menu"
-                          type="text"
-                          name="addElementButtonLink"
-                        />
-                      </>
-                    ) : (
-                      ""
-                    )
-                  ) : (
-                    ""
-                  )}
-                  <button type="submit" disabled={!addFormType}>
-                    Add Element
-                  </button>
-                </form>
-              </div>
-            ) : (
-              <div className={styles.ModalActionContainer}>
-                <CurrentElementData element={currentEditElement} />
-                <h2>Edit Element:</h2>
-                <form onSubmit={handleEditElementSubmit}>
-                  <label>New name:</label>
-                  <input
-                    type="text"
-                    name="editElementName"
-                    placeholder="Modified name"
-                    onChange={() => setDisableEditButton(false)}
-                  />
-                  <label>New text:</label>
-                  <input
-                    type="text"
-                    name="editElementText"
-                    placeholder="New Text"
-                    onChange={() => setDisableEditButton(false)}
-                  />
-                  {currentEditElement ? (
-                    currentEditElement.type === 1 ? (
-                      ""
-                    ) : currentEditElement.type === 2 ? (
-                      <>
-                        <label>New video URL:</label>
-                        <input
-                          type="text"
-                          name="editElementVideoLink"
-                          placeholder="https://youtube.com/sdf..dsfsd"
-                          onChange={() => setDisableEditButton(false)}
-                        />
-                      </>
-                    ) : currentEditElement.type === 3 ? (
-                      <>
-                        <label>New image URL:</label>
-                        <input
-                          type="text"
-                          name="editElementImageLink"
-                          placeholder="https://restaurant.com/gallery/1.jpg"
-                          onChange={() => setDisableEditButton(false)}
-                        />
-                      </>
-                    ) : currentEditElement.type === 4 ? (
-                      <>
-                        <label>New link URL for button:</label>
-                        <input
-                          type="text"
-                          name="editElementButtonLink"
-                          placeholder="https://restaurant.com/menu"
-                          onChange={() => setDisableEditButton(false)}
-                        />
-                      </>
-                    ) : (
-                      "Element type not allowed"
-                    )
-                  ) : (
-                    ""
-                  )}
-                  <button type="submit" disabled={disableEditButton}>
-                    Edit Element
-                  </button>
-                  {disableEditButton ? <p>Type some value to edit</p> : ""}
-                </form>
-              </div>
-            )
-          ) : (
-            ""
-          )}
-        </div>
-      </section>
+      <Modal
+        modalPurpose={modalPurpose}
+        visibleModal={visibleModal}
+        setVisibleModal={setVisibleModal}
+        view={view}
+        currentEditElement={currentEditElement}
+        setUpdateElements={setUpdateElements}
+        setAddFormType={setAddFormType}
+        addFormType={addFormType}
+      />
       <ConfirmationModal
         element={elementToRemove}
         setUpdateElements={setUpdateElements}

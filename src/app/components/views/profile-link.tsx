@@ -3,13 +3,7 @@ import styles from "@/styles/components/profile-link.module.sass";
 import Link from "next/link";
 import Image from "next/image";
 
-export async function ProfileLink({
-  text,
-  url,
-}: {
-  text: string;
-  url: string;
-}) {
+export function ProfileLink({ text, url }: { text: string; url: string }) {
   return (
     <>
       {text !== "" ? (
