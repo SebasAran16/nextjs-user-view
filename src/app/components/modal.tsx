@@ -5,6 +5,7 @@ import { useState } from "react";
 import { AddViewModal } from "./modals/addView";
 import { ManageElementModal } from "./modals/manageElement";
 import { AddElementModal } from "./modals/addElement";
+import { AddRestaurantModal } from "./modals/addRestaurant";
 
 interface ModalProps {
   visibleModal: boolean;
@@ -16,6 +17,7 @@ interface ModalProps {
   setUpdateElements?: Function;
   setAddFormType?: Function;
   addFormType?: number;
+  setUpdateRestaurants?: Function;
 }
 
 export function Modal({
@@ -28,6 +30,7 @@ export function Modal({
   view,
   setAddFormType,
   addFormType,
+  setUpdateRestaurants,
 }: ModalProps) {
   return (
     <>
@@ -36,6 +39,7 @@ export function Modal({
           <div id={modalStyles.modal}>
             <div>
               <Image
+                className={modalStyles.closeImage}
                 src="icons/close-main-color.svg"
                 alt="Close Icon"
                 height="34"
@@ -44,7 +48,12 @@ export function Modal({
               />
             </div>
             <div>
-              {modalPurpose === ModalPurpose.CREATE_VIEW ? (
+              {modalPurpose === ModalPurpose.ADD_RESTAURANT ? (
+                <AddRestaurantModal
+                  setVisibleModal={setVisibleModal}
+                  setUpdateRestaurants={setUpdateRestaurants!}
+                />
+              ) : modalPurpose === ModalPurpose.CREATE_VIEW ? (
                 <AddViewModal
                   setVisibleModal={setVisibleModal}
                   setViews={setViews!}

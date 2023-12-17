@@ -1,0 +1,28 @@
+@import "@/styles/variables.module"
+
+.restaurantCardContainer
+    display: flex
+    flex-direction: column
+    justify-content: center
+    align-items: center
+    border: 1px solid $main-color
+    border-radius: $main-radius
+    padding: $content-padding
+    margin: 1rem 0
+    gap: 1rem
+    transition: 0.2s all
+    img
+        border-radius: 0.4rem
+    > div
+        &:first-of-type
+        &:nth-of-type(2), &:last-of-type
+            display: flex
+            justify-content: space-around
+            width: 100%
+            >button
+                &:last-of-type
+                    background-color: red
+                    color: white
+    &:hover
+        transform: scale(1.005)
+        cursor: pointer

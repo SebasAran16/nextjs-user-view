@@ -1,1 +1,1 @@
-export const credentialPaths = ["/dashboard", "/dashboard/*"];
+export const credentialPaths = ["/restaurants", "/restaurants/*"];

@@ -142,6 +142,7 @@ export default function ElementsBox({ view }: ElementsBoxProps) {
       <Toaster />
       <section id={styles.elementsBox}>
         <Image src={view.image} alt="View Image" width="64" height="64" />
+        <button>Eliminate View</button>
         <p>
           Visible at:{" "}
           <a

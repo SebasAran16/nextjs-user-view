@@ -9,9 +9,8 @@ export default function Dashboard() {
   return (
     <section>
       <div>
-        <h2>These are your current active views:</h2>
         <RestaurantsBox />
-        <ViewsBox />
+        {/* <ViewsBox /> */}
       </div>
     </section>
   );

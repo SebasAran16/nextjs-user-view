@@ -14,7 +14,7 @@ export async function middleware(request: NextRequest) {
   const dataFromToken = token !== "" ? await getDataFromToken(token) : "";
 
   if (isUncredentialPath && token) {
-    return NextResponse.redirect(new URL("/dashboard", request.nextUrl));
+    return NextResponse.redirect(new URL("/restaurants", request.nextUrl));
   } else if (!isUncredentialPath && !token) {
     return NextResponse.redirect(new URL("/login", request.nextUrl));
   }
@@ -26,7 +26,7 @@ export async function middleware(request: NextRequest) {
 export const config = {
   matcher: [
     "/",
-    "/dashboard/:path*",
+    "/restaurants/:path*",
     "/login/:path*",
     "/signup/:path*",
     "/kyc-verification/:path*",
