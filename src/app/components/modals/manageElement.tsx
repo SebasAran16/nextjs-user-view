@@ -73,7 +73,7 @@ export function ManageElementModal({
       }
 
       const addResponse = await axios.post(
-        "/api/view-elements/edit",
+        "/api/elements/edit",
         editElementObject
       );
 

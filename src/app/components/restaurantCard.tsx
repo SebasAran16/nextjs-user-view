@@ -2,13 +2,22 @@ import styles from "@/styles/components/restaurant-card.module.sass";
 import Image from "next/image";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
+import { useState } from "react";
+import { ConfirmationModal } from "./confirmationModal";
+import { Object } from "@/types/structs/object.enum";
 
 interface RestaurantCardProps {
   restaurant: any;
+  setUpdateRestaurants: Function;
 }
 
-export function RestaurantCard({ restaurant }: RestaurantCardProps) {
+export function RestaurantCard({
+  restaurant,
+  setUpdateRestaurants,
+}: RestaurantCardProps) {
   const pathname = usePathname();
+
+  const [visibleConfirmation, setVisibleConfirmation] = useState(false);
 
   return (
     <section className={styles.restaurantCardContainer}>
@@ -19,20 +28,26 @@ export function RestaurantCard({ restaurant }: RestaurantCardProps) {
           width="100"
           height="100"
         />
-      </div>
-      <h3>{restaurant.name}</h3>
-      <p>{restaurant.description}</p>
-      <div>
-        <p>
+        <p className={styles.views}>
           <span>Views:</span> 6
         </p>
       </div>
+      <h3>{restaurant.name}</h3>
+      <p>{restaurant.description}</p>
+
       <div>
         <Link href={pathname + "/" + restaurant._id}>
           <button>Manage</button>
         </Link>
-        <button>Eliminate</button>
+        <button onClick={() => setVisibleConfirmation(true)}>Eliminate</button>
       </div>
+      <ConfirmationModal
+        object={restaurant}
+        objectType={Object.RESTAURANT}
+        visibleConfirmation={visibleConfirmation}
+        setVisibleConfirmation={setVisibleConfirmation}
+        setUpdateRestaurants={setUpdateRestaurants}
+      />
     </section>
   );
 }

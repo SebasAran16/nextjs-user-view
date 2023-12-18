@@ -1,65 +1,88 @@
 import styles from "@/styles/components/confirmation-modal.module.sass";
 import { toast } from "react-hot-toast";
 import axios from "axios";
+import { Object } from "@/types/structs/object.enum";
+import { capitalizeFirstLetter } from "@/utils/capitalizeFirstLetter";
 
 interface ConfirmationProps {
-  element: any | undefined;
-  setUpdateElements: Function;
-  setElementToRemove: Function;
+  object: any | undefined;
+  objectType: Object;
+  visibleConfirmation: boolean;
+  setVisibleConfirmation: Function;
+  setUpdateRestaurants?: Function;
+  setUpdateElements?: Function;
+  setElementToRemove?: Function;
 }
 
 export function ConfirmationModal({
-  element,
+  visibleConfirmation,
+  setVisibleConfirmation,
+  objectType,
+  object,
+  setUpdateRestaurants,
   setUpdateElements,
-  setElementToRemove,
 }: ConfirmationProps) {
+  console.log(visibleConfirmation);
   return (
-    <section id={styles.confirmationContainer} className={styles.hidden}>
-      <div id={styles.confirmationModal}>
-        <p>Element will be removed, do you want to continue?</p>
-        <div>
-          <button
-            onClick={(e) => {
-              const button = e.currentTarget;
-              const modal = button.parentElement?.parentElement?.parentElement;
-              modal?.classList.add(styles.hidden);
-            }}
-          >
-            Cancel
-          </button>
-          <button
-            onClick={async (e) => {
-              try {
-                if (typeof element === "undefined")
-                  toast.error("No element chosen");
+    <>
+      {visibleConfirmation ? (
+        <section id={styles.confirmationContainer}>
+          <div id={styles.confirmationModal}>
+            <p>
+              {capitalizeFirstLetter(objectType) +
+                " will be removed, do you want to continue?"}
+            </p>
+            <div>
+              <button
+                onClick={() => {
+                  setVisibleConfirmation(false);
+                }}
+              >
+                Cancel
+              </button>
+              <button
+                onClick={async (e) => {
+                  try {
+                    if (typeof object === "undefined")
+                      toast.error(`No ${objectType} chosen`);
 
-                const button = e.currentTarget;
-                const modal =
-                  button.parentElement?.parentElement?.parentElement;
-                modal?.classList.add(styles.hidden);
+                    const button = e.currentTarget;
+                    const modal =
+                      button.parentElement?.parentElement?.parentElement;
+                    modal?.classList.add(styles.hidden);
 
-                const removeResponse = await axios.post(
-                  "/api/view-elements/remove",
-                  { id: element._id }
-                );
+                    const removeResponse = await axios.post(
+                      `/api/${objectType}s/remove`,
+                      { id: object._id }
+                    );
 
-                if (removeResponse.status !== 200)
-                  throw new Error(removeResponse.data.message);
+                    if (removeResponse.status !== 200)
+                      throw new Error(removeResponse.data.message);
 
-                setUpdateElements(true);
-                setElementToRemove(undefined);
-                modal?.classList.add(styles.hidden);
-                toast.success(removeResponse.data.message);
-              } catch (err) {
-                console.log(err);
-                toast.error("Could not remove element");
-              }
-            }}
-          >
-            Yes
-          </button>
-        </div>
-      </div>
-    </section>
+                    if (objectType === Object.ELEMENT && setUpdateElements) {
+                      setUpdateElements(true);
+                    } else if (
+                      objectType === Object.RESTAURANT &&
+                      setUpdateRestaurants
+                    ) {
+                      setUpdateRestaurants(true);
+                    }
+
+                    toast.success(removeResponse.data.message);
+                  } catch (err) {
+                    console.log(err);
+                    toast.error("Could not remove element");
+                  }
+                }}
+              >
+                Yes
+              </button>
+            </div>
+          </div>
+        </section>
+      ) : (
+        ""
+      )}
+    </>
   );
 }

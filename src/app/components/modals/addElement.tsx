@@ -70,7 +70,7 @@ export function AddElementModal({
       }
 
       const addResponse = await axios.post(
-        "/api/view-elements/add",
+        "/api/elements/add",
         addElementObject
       );
 

@@ -20,7 +20,7 @@ export default function ViewPage({ params }: viewPageProps) {
 
   useEffect(() => {
     axios
-      .post("/api/view-elements/get-for-url", {
+      .post("/api/elements/get-for-url", {
         url: params.view_url,
       })
       .then((elementsResponse) => {

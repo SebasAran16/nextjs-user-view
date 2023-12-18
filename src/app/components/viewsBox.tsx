@@ -1,8 +1,8 @@
 "use client";
 import styles from "@/styles/components/views-box.module.sass";
 import modalStyles from "@/styles/components/modal.module.sass";
-import { ModalAction } from "@/utils/structs/modalActions.enum";
-import { ModalPurpose } from "@/utils/structs/modalPurposes.enum";
+import { ModalAction } from "@/types/structs/modalActions.enum";
+import { ModalPurpose } from "@/types/structs/modalPurposes.enum";
 import { useEffect, useState } from "react";
 import axios from "axios";
 import { toast } from "react-hot-toast";

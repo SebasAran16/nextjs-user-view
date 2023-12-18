@@ -5,7 +5,7 @@ import { useEffect, useState } from "react";
 import { toast } from "react-hot-toast";
 import { RestaurantCard } from "./restaurantCard";
 import { Modal } from "./modal";
-import { ModalPurpose } from "@/utils/structs/modalPurposes.enum";
+import { ModalPurpose } from "@/types/structs/modalPurposes.enum";
 
 export function RestaurantsBox() {
   const [restaurants, setRestaurants] = useState<undefined | any>();
@@ -44,7 +44,13 @@ export function RestaurantsBox() {
       {restaurants ? (
         <>
           {restaurants.map((restaurant: any, index: number) => {
-            return <RestaurantCard key={index} restaurant={restaurant} />;
+            return (
+              <RestaurantCard
+                key={index}
+                restaurant={restaurant}
+                setUpdateRestaurants={setUpdateRestaurants}
+              />
+            );
           })}
           <div
             className={restaurantCardStyles.restaurantCardContainer}

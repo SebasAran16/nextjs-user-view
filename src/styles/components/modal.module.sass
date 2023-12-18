@@ -17,6 +17,7 @@
     transition: 0.5
 
 #modal
+    position: relative
     width: 80vw
     height: 70vh
     background: grey
@@ -26,15 +27,16 @@
     flex-direction: column
     > div
         &:first-child
-            margin-bottom: 2rem
-        &:last-child
             display: flex
-            flex-direction: column
-
-.closeImage
-    transition: 0.2s all
-    &:hover
-        transform: scale(1.1)
-        cursor: pointer
-    &:active
-        transform: none
+            justify-content: flex-end
+            > img
+                transition: 0.2s all
+                margin: 0.5rem
+                &:hover
+                    transform: scale(1.1)
+                    cursor: pointer
+                &:active
+                    transform: none
+                &:last-child
+                    display: flex
+                    flex-direction: column

@@ -3,8 +3,8 @@ import styles from "@/styles/components/elements-box.module.sass";
 import confirmationModalStyles from "@/styles/components/confirmation-modal.module.sass";
 import modalStyles from "@/styles/components/modal.module.sass";
 import getTypeFromNumber from "@/utils/getTypeFromNumber";
-import { ModalAction } from "@/utils/structs/modalActions.enum";
-import { ModalPurpose } from "@/utils/structs/modalPurposes.enum";
+import { ModalAction } from "@/types/structs/modalActions.enum";
+import { ModalPurpose } from "@/types/structs/modalPurposes.enum";
 import axios from "axios";
 import React, { useEffect, useRef, useState } from "react";
 import { Toaster, toast } from "react-hot-toast";
@@ -12,6 +12,7 @@ import getSortedElements from "@/utils/getSortedElements";
 import Image from "next/image";
 import { ConfirmationModal } from "./confirmationModal";
 import { Modal } from "./modal";
+import { Object } from "@/types/structs/object.enum";
 
 interface ElementsBoxProps {
   view: any;
@@ -37,11 +38,12 @@ export default function ElementsBox({ view }: ElementsBoxProps) {
   const [currentEditElement, setCurrentEditElement] = useState<
     any | undefined
   >();
+  const [visibleConfirmation, setVisibleConfirmation] = useState(false);
 
   useEffect(() => {
     try {
       axios
-        .post("/api/view-elements/get-for-view", {
+        .post("/api/elements/get-for-view", {
           view_id: view._id,
         })
         .then((elementsResponse) => {
@@ -62,18 +64,6 @@ export default function ElementsBox({ view }: ElementsBoxProps) {
       setUpdateElements(false);
     }
   }, [view, updateElements]);
-
-  useEffect(() => {
-    const confirmationContainer = document.querySelector(
-      "#" + confirmationModalStyles.confirmationContainer
-    );
-
-    if (elementToRemove) {
-      confirmationContainer?.classList.remove(confirmationModalStyles.hidden);
-    } else {
-      confirmationContainer?.classList.add(confirmationModalStyles.hidden);
-    }
-  }, [elementToRemove]);
 
   const onDragHover = (
     e: React.DragEvent<HTMLDivElement>,
@@ -112,7 +102,7 @@ export default function ElementsBox({ view }: ElementsBoxProps) {
       position: movedElement.position,
     };
 
-    const elementEditAPIPath = "/api/view-elements/edit";
+    const elementEditAPIPath = "/api/elements/edit";
     const movedElementEditResponse = await axios.post(
       elementEditAPIPath,
       movedElementObject
@@ -226,9 +216,11 @@ export default function ElementsBox({ view }: ElementsBoxProps) {
         addFormType={addFormType}
       />
       <ConfirmationModal
-        element={elementToRemove}
+        object={elementToRemove}
+        objectType={Object.ELEMENT}
         setUpdateElements={setUpdateElements}
-        setElementToRemove={setElementToRemove}
+        visibleConfirmation={visibleConfirmation}
+        setVisibleConfirmation={setVisibleConfirmation}
       />
     </>
   );

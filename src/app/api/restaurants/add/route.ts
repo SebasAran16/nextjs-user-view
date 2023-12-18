@@ -9,7 +9,7 @@ export async function POST(request: NextRequest) {
   try {
     await dbConnect();
 
-    const { name, image } = await request.json();
+    const { name, image, description } = await request.json();
 
     const userToken = cookies().get("token")?.value || "";
 
@@ -41,6 +41,7 @@ export async function POST(request: NextRequest) {
     const newView = new Restaurant({
       name,
       image,
+      description,
       admin_ids: [id],
       created_at: dateCreatedAsDate,
     });

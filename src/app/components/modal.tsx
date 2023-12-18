@@ -1,5 +1,5 @@
 import modalStyles from "@/styles/components/modal.module.sass";
-import { ModalPurpose } from "@/utils/structs/modalPurposes.enum";
+import { ModalPurpose } from "@/types/structs/modalPurposes.enum";
 import Image from "next/image";
 import { useState } from "react";
 import { AddViewModal } from "./modals/addView";
@@ -39,8 +39,7 @@ export function Modal({
           <div id={modalStyles.modal}>
             <div>
               <Image
-                className={modalStyles.closeImage}
-                src="icons/close-main-color.svg"
+                src="/icons/close-main-color.svg"
                 alt="Close Icon"
                 height="34"
                 width="34"
