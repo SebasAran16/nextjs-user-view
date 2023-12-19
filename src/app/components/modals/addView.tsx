@@ -9,9 +9,16 @@ import { useState } from "react";
 interface AddViewProps {
   setVisibleModal: Function;
   setViews: Function;
+  restaurantId: string;
+  setEditingView: Function;
 }
 
-export function AddViewModal({ setViews, setVisibleModal }: AddViewProps) {
+export function AddViewModal({
+  setViews,
+  setVisibleModal,
+  restaurantId,
+  setEditingView,
+}: AddViewProps) {
   const [viewImageToCreate, setViewImageToCreate] = useState<
     string | undefined
   >();
@@ -32,7 +39,8 @@ export function AddViewModal({ setViews, setVisibleModal }: AddViewProps) {
       if (!viewImageToCreate)
         throw new Error("Please, upload view image to continue");
 
-      const createViewResponse = await axios.post("api/view/add", {
+      const createViewResponse = await axios.post("/api/view/add", {
+        restaurant_id: restaurantId,
         name: newViewName,
         url: newViewUrl,
         image: viewImageToCreate,
@@ -41,6 +49,7 @@ export function AddViewModal({ setViews, setVisibleModal }: AddViewProps) {
       if (createViewResponse.status !== 200)
         throw new Error(createViewResponse.data.message);
 
+      setEditingView(createViewResponse.data.view);
       setVisibleModal(false);
       setViews(undefined);
       toast.success(createViewResponse.data.message);

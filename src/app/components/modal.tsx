@@ -18,6 +18,8 @@ interface ModalProps {
   setAddFormType?: Function;
   addFormType?: number;
   setUpdateRestaurants?: Function;
+  restaurantId?: string;
+  setEditingView?: Function;
 }
 
 export function Modal({
@@ -31,6 +33,8 @@ export function Modal({
   setAddFormType,
   addFormType,
   setUpdateRestaurants,
+  restaurantId,
+  setEditingView,
 }: ModalProps) {
   return (
     <>
@@ -56,6 +60,8 @@ export function Modal({
                 <AddViewModal
                   setVisibleModal={setVisibleModal}
                   setViews={setViews!}
+                  restaurantId={restaurantId!}
+                  setEditingView={setEditingView!}
                 />
               ) : modalPurpose === ModalPurpose.ADD_ELEMENT ? (
                 <AddElementModal

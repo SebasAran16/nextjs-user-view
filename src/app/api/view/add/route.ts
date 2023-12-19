@@ -9,7 +9,7 @@ export async function POST(request: NextRequest) {
   try {
     await dbConnect();
 
-    const { name, url, image } = await request.json();
+    const { restaurant_id, name, url, image } = await request.json();
 
     const userToken = cookies().get("token")?.value || "";
 
@@ -46,7 +46,7 @@ export async function POST(request: NextRequest) {
     const dateCreatedAsDate = new Date(dateCreated * 1000);
 
     const newView = new View({
-      owner_id: id,
+      owner_id: restaurant_id,
       name,
       url,
       image,
@@ -56,7 +56,7 @@ export async function POST(request: NextRequest) {
     const savedView = await newView.save();
 
     return NextResponse.json(
-      { message: "View added successfully!", savedView },
+      { message: "View added successfully!", view: savedView },
       { status: 200 }
     );
   } catch (err: any) {

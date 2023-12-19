@@ -13,12 +13,19 @@ import Image from "next/image";
 import { ConfirmationModal } from "./confirmationModal";
 import { Modal } from "./modal";
 import { Object } from "@/types/structs/object.enum";
+import { useRouter } from "next/navigation";
 
 interface ElementsBoxProps {
   view: any;
+  setEditingView: Function;
 }
 
-export default function ElementsBox({ view }: ElementsBoxProps) {
+export default function ElementsBox({
+  view,
+  setEditingView,
+}: ElementsBoxProps) {
+  const router = useRouter();
+
   enum DragHoverAction {
     ENTER,
     EXIT,
@@ -127,12 +134,30 @@ export default function ElementsBox({ view }: ElementsBoxProps) {
     toast.success("Element positions changed correctly");
   };
 
+  const eliminateView = async () => {
+    try {
+      const eliminateResponse = await axios.post("/api/view/remove", {
+        _id: view._id,
+      });
+
+      if (eliminateResponse.status !== 200)
+        throw new Error(eliminateResponse.data.message);
+
+      setEditingView(undefined);
+      router.refresh();
+      toast.success(eliminateResponse.data.message);
+    } catch (err) {
+      console.log(err);
+      toast.error("Could not eliminate view");
+    }
+  };
+
   return (
     <>
       <Toaster />
       <section id={styles.elementsBox}>
         <Image src={view.image} alt="View Image" width="64" height="64" />
-        <button>Eliminate View</button>
+        <button onClick={eliminateView}>Eliminate View</button>
         <p>
           Visible at:{" "}
           <a
@@ -214,6 +239,7 @@ export default function ElementsBox({ view }: ElementsBoxProps) {
         setUpdateElements={setUpdateElements}
         setAddFormType={setAddFormType}
         addFormType={addFormType}
+        setEditingView={setEditingView}
       />
       <ConfirmationModal
         object={elementToRemove}

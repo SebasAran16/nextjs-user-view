@@ -13,17 +13,17 @@ import get64BaseSize from "@/utils/getBase64Size";
 import { Modal } from "./modal";
 
 interface ViewsBoxProps {
-  views: any[];
+  restaurantId: string;
 }
 
-export default function ViewsBox() {
+export default function ViewsBox({ restaurantId }: ViewsBoxProps) {
   const [views, setViews] = useState<any | undefined>();
   const [editingView, setEditingView] = useState<any | undefined>();
   const [visibleModal, setVisibleModal] = useState(false);
 
   useEffect(() => {
     axios
-      .get("/api/view/search")
+      .post("/api/view/search", { restaurant_id: restaurantId })
       .then((viewsResponse) => {
         if (viewsResponse.status !== 200)
           throw new Error(viewsResponse.data.message);
@@ -68,7 +68,7 @@ export default function ViewsBox() {
       </div>
       <div>
         {editingView ? (
-          <ElementsBox view={editingView} />
+          <ElementsBox view={editingView} setEditingView={setEditingView} />
         ) : (
           <p>Select a view to edit it...</p>
         )}
@@ -77,6 +77,9 @@ export default function ViewsBox() {
         visibleModal={visibleModal}
         setVisibleModal={setVisibleModal}
         modalPurpose={ModalPurpose.CREATE_VIEW}
+        setViews={setViews}
+        restaurantId={restaurantId}
+        setEditingView={setEditingView}
       />
     </section>
   );
