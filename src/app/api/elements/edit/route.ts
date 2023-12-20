@@ -33,7 +33,7 @@ export async function POST(request: NextRequest) {
     const editedElement = await elementToEdit.save();
 
     return NextResponse.json(
-      { message: "Element editted successfully!", editedElement },
+      { message: "Element editted successfully!", element: editedElement },
       { status: 200 }
     );
   } catch (err: any) {

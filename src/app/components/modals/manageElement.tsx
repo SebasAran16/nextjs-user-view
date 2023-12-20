@@ -8,13 +8,15 @@ import { useState } from "react";
 interface EditElementModalProps {
   setVisibleModal: Function;
   currentEditElement: any;
-  setUpdateElements: Function;
+  setCurrentElements: Function;
+  currentElements: any[];
 }
 
 export function ManageElementModal({
   setVisibleModal,
   currentEditElement,
-  setUpdateElements,
+  setCurrentElements,
+  currentElements,
 }: EditElementModalProps) {
   const [disableEditButton, setDisableEditButton] = useState(true);
 
@@ -72,17 +74,21 @@ export function ManageElementModal({
           throw new Error("Element type not valid");
       }
 
-      const addResponse = await axios.post(
+      const editResponse = await axios.post(
         "/api/elements/edit",
         editElementObject
       );
 
-      if (addResponse.status !== 200) throw new Error(addResponse.data.message);
+      if (editResponse.status !== 200)
+        throw new Error(editResponse.data.message);
 
-      setUpdateElements(true);
+      const indexToSwap = currentElements.indexOf(currentEditElement);
+      currentElements[indexToSwap] = editResponse.data.element;
+      console.log(currentElements);
+      setCurrentElements(currentElements);
       setVisibleModal(false);
       setDisableEditButton(true);
-      toast.success(addResponse.data.message);
+      toast.success(editResponse.data.message);
     } catch (err) {
       console.log(err);
       toast.error("There was an issue editing the element");

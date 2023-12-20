@@ -6,12 +6,13 @@ import { capitalizeFirstLetter } from "@/utils/capitalizeFirstLetter";
 
 interface ConfirmationProps {
   object: any | undefined;
-  objectType: Object;
+  objectType?: Object;
   visibleConfirmation: boolean;
   setVisibleConfirmation: Function;
+  setObjects: Function;
+  pastObjects: any[];
   setUpdateRestaurants?: Function;
-  setUpdateElements?: Function;
-  setElementToRemove?: Function;
+  setEditingView?: Function;
 }
 
 export function ConfirmationModal({
@@ -19,17 +20,17 @@ export function ConfirmationModal({
   setVisibleConfirmation,
   objectType,
   object,
-  setUpdateRestaurants,
-  setUpdateElements,
+  setObjects,
+  pastObjects,
+  setEditingView,
 }: ConfirmationProps) {
-  console.log(visibleConfirmation);
   return (
     <>
       {visibleConfirmation ? (
         <section id={styles.confirmationContainer}>
           <div id={styles.confirmationModal}>
             <p>
-              {capitalizeFirstLetter(objectType) +
+              {capitalizeFirstLetter(objectType!) +
                 " will be removed, do you want to continue?"}
             </p>
             <div>
@@ -59,15 +60,16 @@ export function ConfirmationModal({
                     if (removeResponse.status !== 200)
                       throw new Error(removeResponse.data.message);
 
-                    if (objectType === Object.ELEMENT && setUpdateElements) {
-                      setUpdateElements(true);
-                    } else if (
-                      objectType === Object.RESTAURANT &&
-                      setUpdateRestaurants
-                    ) {
-                      setUpdateRestaurants(true);
-                    }
+                    setObjects(
+                      pastObjects.filter(
+                        (existentObject) => existentObject._id !== object._id
+                      )
+                    );
 
+                    if (objectType === Object.VIEW && setEditingView)
+                      setEditingView(undefined);
+
+                    setVisibleConfirmation(false);
                     toast.success(removeResponse.data.message);
                   } catch (err) {
                     console.log(err);

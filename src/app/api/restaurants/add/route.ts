@@ -38,7 +38,7 @@ export async function POST(request: NextRequest) {
 
     const dateCreatedAsDate = new Date(dateCreated * 1000);
 
-    const newView = new Restaurant({
+    const newRestaurant = new Restaurant({
       name,
       image,
       description,
@@ -46,10 +46,13 @@ export async function POST(request: NextRequest) {
       created_at: dateCreatedAsDate,
     });
 
-    const savedView = await newView.save();
+    const savedRestaurant = await newRestaurant.save();
 
     return NextResponse.json(
-      { message: "Restaurant added successfully!", savedView },
+      {
+        message: "Restaurant added successfully!",
+        restaurant: savedRestaurant,
+      },
       { status: 200 }
     );
   } catch (err: any) {

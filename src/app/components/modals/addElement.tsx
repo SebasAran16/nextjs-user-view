@@ -5,7 +5,8 @@ import toast from "react-hot-toast";
 
 interface AddElementModalProps {
   setVisibleModal: Function;
-  setUpdateElements: Function;
+  setCurrentElements: Function;
+  currentElements: any[];
   setAddFormType: Function;
   addFormType: number;
   view: any;
@@ -14,7 +15,8 @@ interface AddElementModalProps {
 export function AddElementModal({
   setVisibleModal,
   view,
-  setUpdateElements,
+  setCurrentElements,
+  currentElements,
   setAddFormType,
   addFormType,
 }: AddElementModalProps) {
@@ -76,7 +78,8 @@ export function AddElementModal({
 
       if (addResponse.status !== 200) throw new Error(addResponse.data.message);
 
-      setUpdateElements(true);
+      currentElements.push(addResponse.data.element);
+      setCurrentElements(currentElements);
       setVisibleModal(false);
       toast.success(addResponse.data.message);
     } catch (err) {

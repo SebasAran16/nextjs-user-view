@@ -1,9 +1,6 @@
 "use client";
 import styles from "@/styles/components/elements-box.module.sass";
-import confirmationModalStyles from "@/styles/components/confirmation-modal.module.sass";
-import modalStyles from "@/styles/components/modal.module.sass";
 import getTypeFromNumber from "@/utils/getTypeFromNumber";
-import { ModalAction } from "@/types/structs/modalActions.enum";
 import { ModalPurpose } from "@/types/structs/modalPurposes.enum";
 import axios from "axios";
 import React, { useEffect, useRef, useState } from "react";
@@ -17,12 +14,16 @@ import { useRouter } from "next/navigation";
 
 interface ElementsBoxProps {
   view: any;
+  views: any[];
+  setViews: Function;
   setEditingView: Function;
 }
 
 export default function ElementsBox({
   view,
   setEditingView,
+  views,
+  setViews,
 }: ElementsBoxProps) {
   const router = useRouter();
 
@@ -35,7 +36,6 @@ export default function ElementsBox({
   const dragOverItem = useRef<number | undefined>(undefined);
 
   const [currentElements, setCurrentElements] = useState<any | undefined>();
-  const [updateElements, setUpdateElements] = useState(true);
   const [modalPurpose, setModalPurpose] = useState<ModalPurpose | undefined>(
     undefined
   );
@@ -46,31 +46,35 @@ export default function ElementsBox({
     any | undefined
   >();
   const [visibleConfirmation, setVisibleConfirmation] = useState(false);
+  const [confirmationType, setConfirmationType] = useState<
+    undefined | Object
+  >();
 
   useEffect(() => {
     try {
-      axios
-        .post("/api/elements/get-for-view", {
-          view_id: view._id,
-        })
-        .then((elementsResponse) => {
-          if (elementsResponse.status !== 200)
-            throw new Error(elementsResponse.data.message);
+      if (!currentElements) {
+        axios
+          .post("/api/elements/get-for-view", {
+            view_id: view._id,
+          })
+          .then((elementsResponse) => {
+            if (elementsResponse.status !== 200)
+              throw new Error(elementsResponse.data.message);
 
-          const elements = elementsResponse.data.elements;
+            const elements = elementsResponse.data.elements;
 
-          setCurrentElements(getSortedElements(elements));
-        })
-        .catch((err) => {
-          console.log(err);
-          if (axios.isAxiosError(err)) toast.error(err.message);
-        });
+            setCurrentElements(getSortedElements(elements));
+          })
+          .catch((err) => {
+            console.log(err);
+            if (axios.isAxiosError(err)) toast.error(err.message);
+          });
+      }
     } catch (err) {
+      console.log(err);
       if (axios.isAxiosError(err)) toast.error(err.message);
-    } finally {
-      setUpdateElements(false);
     }
-  }, [view, updateElements]);
+  }, [view]);
 
   const onDragHover = (
     e: React.DragEvent<HTMLDivElement>,
@@ -130,26 +134,8 @@ export default function ElementsBox({
         throw new Error(draggedElementEditResponse.data.message);
     }
 
-    setUpdateElements(true);
+    setCurrentElements(_elements);
     toast.success("Element positions changed correctly");
-  };
-
-  const eliminateView = async () => {
-    try {
-      const eliminateResponse = await axios.post("/api/view/remove", {
-        _id: view._id,
-      });
-
-      if (eliminateResponse.status !== 200)
-        throw new Error(eliminateResponse.data.message);
-
-      setEditingView(undefined);
-      router.refresh();
-      toast.success(eliminateResponse.data.message);
-    } catch (err) {
-      console.log(err);
-      toast.error("Could not eliminate view");
-    }
   };
 
   return (
@@ -157,7 +143,15 @@ export default function ElementsBox({
       <Toaster />
       <section id={styles.elementsBox}>
         <Image src={view.image} alt="View Image" width="64" height="64" />
-        <button onClick={eliminateView}>Eliminate View</button>
+        <button
+          onClick={() => {
+            setConfirmationType(Object.VIEW);
+            setElementToRemove(view);
+            setVisibleConfirmation(true);
+          }}
+        >
+          Eliminate View
+        </button>
         <p>
           Visible at:{" "}
           <a
@@ -209,7 +203,13 @@ export default function ElementsBox({
                     >
                       Manage
                     </button>
-                    <button onClick={() => setElementToRemove(element)}>
+                    <button
+                      onClick={() => {
+                        setConfirmationType(Object.ELEMENT);
+                        setElementToRemove(element);
+                        setVisibleConfirmation(true);
+                      }}
+                    >
                       Delete
                     </button>
                   </div>
@@ -236,17 +236,24 @@ export default function ElementsBox({
         setVisibleModal={setVisibleModal}
         view={view}
         currentEditElement={currentEditElement}
-        setUpdateElements={setUpdateElements}
+        pastObjects={currentElements}
+        setObjects={setCurrentElements}
         setAddFormType={setAddFormType}
         addFormType={addFormType}
         setEditingView={setEditingView}
       />
       <ConfirmationModal
         object={elementToRemove}
-        objectType={Object.ELEMENT}
-        setUpdateElements={setUpdateElements}
+        objectType={confirmationType}
+        pastObjects={
+          confirmationType === Object.ELEMENT ? currentElements : views
+        }
+        setObjects={
+          confirmationType === Object.ELEMENT ? setCurrentElements : setViews
+        }
         visibleConfirmation={visibleConfirmation}
         setVisibleConfirmation={setVisibleConfirmation}
+        setEditingView={setEditingView}
       />
     </>
   );

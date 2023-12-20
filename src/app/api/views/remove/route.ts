@@ -7,10 +7,10 @@ export async function POST(request: NextRequest) {
   try {
     await dbConnect();
 
-    const { _id } = await request.json();
+    const { id } = await request.json();
 
     const viewToRemove = await View.findOne({
-      _id,
+      _id: id,
     });
 
     // TODO Verify user calling is owner

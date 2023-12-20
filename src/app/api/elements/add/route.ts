@@ -42,7 +42,7 @@ export async function POST(request: NextRequest) {
     const savedElement = await newElement.save();
 
     return NextResponse.json(
-      { message: "Element added successfully!", savedElement },
+      { message: "Element added successfully!", element: savedElement },
       { status: 200 }
     );
   } catch (err: any) {

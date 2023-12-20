@@ -11,10 +11,10 @@ interface ModalProps {
   visibleModal: boolean;
   setVisibleModal: Function;
   modalPurpose: ModalPurpose | undefined;
-  setViews?: Function;
+  setObjects: Function;
+  pastObjects: any[];
   view?: any;
   currentEditElement?: any;
-  setUpdateElements?: Function;
   setAddFormType?: Function;
   addFormType?: number;
   setUpdateRestaurants?: Function;
@@ -25,10 +25,10 @@ interface ModalProps {
 export function Modal({
   visibleModal,
   setVisibleModal,
+  setObjects,
+  pastObjects,
   modalPurpose,
-  setViews,
   currentEditElement,
-  setUpdateElements,
   view,
   setAddFormType,
   addFormType,
@@ -54,12 +54,14 @@ export function Modal({
               {modalPurpose === ModalPurpose.ADD_RESTAURANT ? (
                 <AddRestaurantModal
                   setVisibleModal={setVisibleModal}
-                  setUpdateRestaurants={setUpdateRestaurants!}
+                  setRestaurants={setObjects}
+                  restaurants={pastObjects}
                 />
               ) : modalPurpose === ModalPurpose.CREATE_VIEW ? (
                 <AddViewModal
                   setVisibleModal={setVisibleModal}
-                  setViews={setViews!}
+                  views={pastObjects}
+                  setViews={setObjects}
                   restaurantId={restaurantId!}
                   setEditingView={setEditingView!}
                 />
@@ -67,7 +69,8 @@ export function Modal({
                 <AddElementModal
                   setVisibleModal={setVisibleModal}
                   view={view}
-                  setUpdateElements={setUpdateElements!}
+                  setCurrentElements={setObjects}
+                  currentElements={pastObjects}
                   setAddFormType={setAddFormType!}
                   addFormType={addFormType!}
                 />
@@ -75,7 +78,8 @@ export function Modal({
                 <ManageElementModal
                   setVisibleModal={setVisibleModal}
                   currentEditElement={currentEditElement}
-                  setUpdateElements={setUpdateElements!}
+                  setCurrentElements={setObjects}
+                  currentElements={pastObjects}
                 />
               ) : (
                 ""

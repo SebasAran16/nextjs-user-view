@@ -13,7 +13,7 @@ export function RestaurantsBox() {
   const [visibleModal, setVisibleModal] = useState(false);
 
   useEffect(() => {
-    if (updateRestaurants) {
+    if (!restaurants) {
       axios
         .get("/api/restaurants/search")
         .then((restaurantsResponse) => {
@@ -29,7 +29,7 @@ export function RestaurantsBox() {
         })
         .finally(() => setUpdateRestaurants(false));
     }
-  }, [restaurants, updateRestaurants]);
+  }, [restaurants]);
 
   return (
     <section>
@@ -48,7 +48,8 @@ export function RestaurantsBox() {
               <RestaurantCard
                 key={index}
                 restaurant={restaurant}
-                setUpdateRestaurants={setUpdateRestaurants}
+                restaurants={restaurants}
+                setRestaurants={setRestaurants}
               />
             );
           })}
@@ -62,7 +63,8 @@ export function RestaurantsBox() {
             visibleModal={visibleModal}
             setVisibleModal={setVisibleModal}
             modalPurpose={ModalPurpose.ADD_RESTAURANT}
-            setUpdateRestaurants={setUpdateRestaurants}
+            setObjects={setRestaurants}
+            pastObjects={restaurants}
           />
         </>
       ) : (

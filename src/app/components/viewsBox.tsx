@@ -1,15 +1,11 @@
 "use client";
 import styles from "@/styles/components/views-box.module.sass";
-import modalStyles from "@/styles/components/modal.module.sass";
-import { ModalAction } from "@/types/structs/modalActions.enum";
 import { ModalPurpose } from "@/types/structs/modalPurposes.enum";
 import { useEffect, useState } from "react";
 import axios from "axios";
 import { toast } from "react-hot-toast";
 import ElementsBox from "./elementsBox";
-import convertToBase64 from "@/utils/convertToBase64";
 import Image from "next/image";
-import get64BaseSize from "@/utils/getBase64Size";
 import { Modal } from "./modal";
 
 interface ViewsBoxProps {
@@ -22,19 +18,21 @@ export default function ViewsBox({ restaurantId }: ViewsBoxProps) {
   const [visibleModal, setVisibleModal] = useState(false);
 
   useEffect(() => {
-    axios
-      .post("/api/view/search", { restaurant_id: restaurantId })
-      .then((viewsResponse) => {
-        if (viewsResponse.status !== 200)
-          throw new Error(viewsResponse.data.message);
+    if (!views) {
+      axios
+        .post("/api/views/search", { restaurant_id: restaurantId })
+        .then((viewsResponse) => {
+          if (viewsResponse.status !== 200)
+            throw new Error(viewsResponse.data.message);
 
-        const views = viewsResponse.data.views;
-        setViews(views);
-      })
-      .catch((err: any) => {
-        console.log(err);
-        toast.error("Could not get Views");
-      });
+          const views = viewsResponse.data.views;
+          setViews(views);
+        })
+        .catch((err: any) => {
+          console.log(err);
+          toast.error("Could not get Views");
+        });
+    }
   }, [views]);
 
   return (
@@ -68,7 +66,12 @@ export default function ViewsBox({ restaurantId }: ViewsBoxProps) {
       </div>
       <div>
         {editingView ? (
-          <ElementsBox view={editingView} setEditingView={setEditingView} />
+          <ElementsBox
+            view={editingView}
+            setEditingView={setEditingView}
+            setViews={setViews}
+            views={views}
+          />
         ) : (
           <p>Select a view to edit it...</p>
         )}
@@ -77,7 +80,8 @@ export default function ViewsBox({ restaurantId }: ViewsBoxProps) {
         visibleModal={visibleModal}
         setVisibleModal={setVisibleModal}
         modalPurpose={ModalPurpose.CREATE_VIEW}
-        setViews={setViews}
+        pastObjects={views}
+        setObjects={setViews}
         restaurantId={restaurantId}
         setEditingView={setEditingView}
       />

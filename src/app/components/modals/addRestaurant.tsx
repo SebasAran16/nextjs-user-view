@@ -8,12 +8,14 @@ import get64BaseSize from "@/utils/getBase64Size";
 
 interface AddRestaurantModalProps {
   setVisibleModal: Function;
-  setUpdateRestaurants: Function;
+  setRestaurants: Function;
+  restaurants: any[];
 }
 
 export function AddRestaurantModal({
   setVisibleModal,
-  setUpdateRestaurants,
+  setRestaurants,
+  restaurants,
 }: AddRestaurantModalProps) {
   const [restaurantImageToCreate, setRestaurantImageToCreate] = useState<
     string | undefined
@@ -43,7 +45,8 @@ export function AddRestaurantModal({
           if (newRestaurantResponse.status !== 200)
             throw new Error(newRestaurantResponse.data.message);
 
-          setUpdateRestaurants(true);
+          restaurants.push(newRestaurantResponse.data.restaurant);
+          setRestaurants(restaurants);
           toast.success(newRestaurantResponse.data.message);
           setVisibleModal(false);
         })

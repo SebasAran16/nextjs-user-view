@@ -8,12 +8,14 @@ import { Object } from "@/types/structs/object.enum";
 
 interface RestaurantCardProps {
   restaurant: any;
-  setUpdateRestaurants: Function;
+  setRestaurants: Function;
+  restaurants: any[];
 }
 
 export function RestaurantCard({
   restaurant,
-  setUpdateRestaurants,
+  setRestaurants,
+  restaurants,
 }: RestaurantCardProps) {
   const pathname = usePathname();
 
@@ -46,7 +48,8 @@ export function RestaurantCard({
         objectType={Object.RESTAURANT}
         visibleConfirmation={visibleConfirmation}
         setVisibleConfirmation={setVisibleConfirmation}
-        setUpdateRestaurants={setUpdateRestaurants}
+        setObjects={setRestaurants}
+        pastObjects={restaurants}
       />
     </section>
   );
