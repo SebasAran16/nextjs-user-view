@@ -11,6 +11,7 @@ export function RestaurantsBox() {
   const [restaurants, setRestaurants] = useState<undefined | any>();
   const [updateRestaurants, setUpdateRestaurants] = useState(true);
   const [visibleModal, setVisibleModal] = useState(false);
+  const [userRol, setUserRol] = useState<undefined | string>();
 
   useEffect(() => {
     if (!restaurants) {
@@ -21,7 +22,10 @@ export function RestaurantsBox() {
             throw new Error(restaurantsResponse.data.message);
 
           const restaurants = restaurantsResponse.data.restaurants;
+          const rol = restaurantsResponse.data.rol;
+
           setRestaurants(restaurants);
+          setUserRol(rol);
         })
         .catch((err: any) => {
           console.log(err);
@@ -37,7 +41,9 @@ export function RestaurantsBox() {
       <p>
         {restaurants
           ? restaurants.length > 0
-            ? "This is a list of your restaurants"
+            ? userRol !== "admin"
+              ? "This is a list of your restaurants"
+              : "This is a list of all restaurants"
             : "You have no restaurants"
           : ""}
       </p>

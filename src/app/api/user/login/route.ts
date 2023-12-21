@@ -38,6 +38,7 @@ export async function POST(request: NextRequest) {
       id: user._id,
       username: user.username,
       email: user.email,
+      rol: user.rol,
     };
 
     const iat = Math.floor(Date.now() / 1000);

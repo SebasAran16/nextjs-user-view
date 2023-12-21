@@ -25,7 +25,7 @@ export function RestaurantCard({
     <section className={styles.restaurantCardContainer}>
       <div>
         <Image
-          src="/logo.png"
+          src={restaurant.image}
           alt="Restaurant Image"
           width="100"
           height="100"

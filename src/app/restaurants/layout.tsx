@@ -50,7 +50,7 @@ export default function DashboardLayout({
         if (response.status !== 200) throw new Error(responseMessage);
 
         toast.success(responseMessage);
-        router.refresh();
+        router.replace("/");
       });
     } catch (err) {
       console.log(err);

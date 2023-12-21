@@ -3,6 +3,8 @@ import type { NextRequest } from "next/server";
 import { uncredentialPaths } from "@/utils/arrays/middleware/uncredentialPaths";
 import { credentialPaths } from "@/utils/arrays/middleware/credentialPaths";
 import { getDataFromToken } from "@/utils/getDataFromToken";
+import dbConnect from "./lib/mongoConnection";
+import Restaurant from "./models/restaurant";
 
 export async function middleware(request: NextRequest) {
   const path = request.nextUrl.pathname;
@@ -10,6 +12,7 @@ export async function middleware(request: NextRequest) {
   const isUncredentialPath = uncredentialPaths.includes(path);
   const isCredentialPath = credentialPaths.includes(path);
   const token = request.cookies.get("token")?.value || "";
+  const restaurantManager = /\/restaurants\/.*/;
 
   const dataFromToken = token !== "" ? await getDataFromToken(token) : "";
 
@@ -17,6 +20,21 @@ export async function middleware(request: NextRequest) {
     return NextResponse.redirect(new URL("/restaurants", request.nextUrl));
   } else if (!isUncredentialPath && !token) {
     return NextResponse.redirect(new URL("/login", request.nextUrl));
+  } else if (restaurantManager.test(path)) {
+    const restaurantsToken =
+      request.cookies.get("restaurantsToken")?.value || false;
+
+    const restaurantsTokenData = restaurantsToken
+      ? await getDataFromToken(restaurantsToken)
+      : false;
+
+    const restaurantId = path.slice(path.lastIndexOf("/") + 1);
+    const isOwner = restaurantsTokenData
+      ? restaurantsTokenData.hasOwnProperty(restaurantId)
+      : false;
+
+    if (dataFromToken.rol !== "admin" && !isOwner)
+      return NextResponse.redirect(new URL("/", request.nextUrl));
   }
 
   return NextResponse.next();
