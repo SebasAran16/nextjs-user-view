@@ -13,6 +13,8 @@ import { Object } from "@/types/structs/object.enum";
 import { useRouter } from "next/navigation";
 import { useGlobalState } from "@/utils/globalStates";
 import { UserRol } from "@/types/structs/userRol.enum";
+import { AdminElementsPanel } from "./adminElementsPanel";
+import { RestaurantElementsPanel } from "./views/restaurantElementsPanel";
 
 interface ElementsBoxProps {
   view: any;
@@ -29,25 +31,9 @@ export default function ElementsBox({
 }: ElementsBoxProps) {
   const router = useRouter();
 
-  enum DragHoverAction {
-    ENTER,
-    EXIT,
-  }
-
-  const dragItem = useRef<number | undefined>(undefined);
-  const dragOverItem = useRef<number | undefined>(undefined);
-
   const [userData] = useGlobalState("userData");
   const [currentElements, setCurrentElements] = useState<any | undefined>();
-  const [modalPurpose, setModalPurpose] = useState<ModalPurpose | undefined>(
-    undefined
-  );
-  const [addFormType, setAddFormType] = useState<number | undefined>();
   const [elementToRemove, setElementToRemove] = useState<any | undefined>();
-  const [visibleModal, setVisibleModal] = useState(false);
-  const [currentEditElement, setCurrentEditElement] = useState<
-    any | undefined
-  >();
   const [visibleConfirmation, setVisibleConfirmation] = useState(false);
   const [confirmationType, setConfirmationType] = useState<
     undefined | Object
@@ -78,68 +64,6 @@ export default function ElementsBox({
       if (axios.isAxiosError(err)) toast.error(err.message);
     }
   }, [view]);
-
-  const onDragHover = (
-    e: React.DragEvent<HTMLDivElement>,
-    index: number,
-    action: DragHoverAction
-  ) => {
-    dragOverItem.current = index;
-
-    const element = document.querySelectorAll("." + styles.dndElement)[index];
-
-    if (action === DragHoverAction.ENTER) {
-      element.classList.add(styles.elementDragHover);
-    } else {
-      element.classList.remove(styles.elementDragHover);
-    }
-  };
-
-  const handleSwap = async () => {
-    let _elements = [...currentElements];
-
-    // TODO Only continue if positions have been changed
-
-    const movedElement = _elements[dragOverItem.current!];
-    const draggedElement = _elements.splice(dragItem.current!, 1)[0];
-    _elements.splice(dragOverItem.current!, 0, draggedElement);
-
-    dragItem.current = undefined;
-    dragOverItem.current = undefined;
-
-    const movedElementObject = {
-      id: movedElement._id,
-      position: draggedElement.position,
-    };
-    const draggedElementObject = {
-      id: draggedElement._id,
-      position: movedElement.position,
-    };
-
-    const elementEditAPIPath = "/api/elements/edit";
-    const movedElementEditResponse = await axios.post(
-      elementEditAPIPath,
-      movedElementObject
-    );
-    const draggedElementEditResponse = await axios.post(
-      elementEditAPIPath,
-      draggedElementObject
-    );
-
-    if (
-      movedElementEditResponse.status !== 200 ||
-      draggedElementEditResponse.status !== 200
-    ) {
-      if (movedElementEditResponse.status !== 200)
-        throw new Error(movedElementEditResponse.data.message);
-
-      if (draggedElementEditResponse.status !== 200)
-        throw new Error(draggedElementEditResponse.data.message);
-    }
-
-    setCurrentElements(_elements);
-    toast.success("Element positions changed correctly");
-  };
 
   return (
     <>
@@ -173,104 +97,37 @@ export default function ElementsBox({
         </p>
         <div id={styles.headerSection}>
           <h2>View's Elements:</h2>
-          {userData ? (
-            userData.rol === UserRol.ADMIN ? (
-              <button
-                onClick={() => {
-                  setModalPurpose(ModalPurpose.ADD_ELEMENT);
-                  setVisibleModal(true);
-                }}
-              >
-                Add Element
-              </button>
-            ) : (
-              ""
-            )
-          ) : (
-            ""
-          )}
         </div>
         <hr />
         <div id={styles.elementsContainer}>
-          {currentElements ? (
-            currentElements.length > 0 ? (
-              currentElements.map((element: any, index: number) => (
-                <div
-                  key={index}
-                  className={styles.dndElement}
-                  draggable
-                  onDragStart={(e) => (dragItem.current = index)}
-                  onDragEnter={(e) =>
-                    onDragHover(e, index, DragHoverAction.ENTER)
-                  }
-                  onDragLeaveCapture={(e) =>
-                    onDragHover(e, index, DragHoverAction.EXIT)
-                  }
-                  onDragEnd={handleSwap}
-                  // onDragOver={(e) => e.preventDefault()}
-                >
-                  <div>
-                    <h3>{element.name}</h3>
-                    <p>{getTypeFromNumber(element.type)}</p>
-                  </div>
-                  <div>
-                    <button
-                      onClick={() => {
-                        setModalPurpose(ModalPurpose.EDIT_ELEMENT);
-                        setCurrentEditElement(element);
-                        setVisibleModal(true);
-                      }}
-                    >
-                      Manage
-                    </button>
-                    <button
-                      onClick={() => {
-                        setConfirmationType(Object.ELEMENT);
-                        setElementToRemove(element);
-                        setVisibleConfirmation(true);
-                      }}
-                    >
-                      Delete
-                    </button>
-                  </div>
-                </div>
-              ))
+          {userData ? (
+            userData.rol === UserRol.ADMIN ? (
+              <AdminElementsPanel
+                elements={currentElements}
+                setCurrentElements={setCurrentElements}
+                view={view}
+              />
             ) : (
-              <div id={styles.defaultViewNoElements}>
-                <p>Your added elements will show here.</p>
-              </div>
+              <>
+                <h3>This is what your customers see in your View:</h3>
+                <p>You can edit the elements values by selecting them...</p>
+                <RestaurantElementsPanel
+                  elements={currentElements}
+                  setCurrentElements={setCurrentElements}
+                  view={view}
+                />
+              </>
             )
           ) : (
-            <Image
-              src="/icons/loader.gif"
-              alt="Loader Icon"
-              height="28"
-              width="28"
-            />
+            "Log in again"
           )}
         </div>
       </section>
-      <Modal
-        modalPurpose={modalPurpose}
-        visibleModal={visibleModal}
-        setVisibleModal={setVisibleModal}
-        view={view}
-        currentEditElement={currentEditElement}
-        pastObjects={currentElements}
-        setObjects={setCurrentElements}
-        setAddFormType={setAddFormType}
-        addFormType={addFormType}
-        setEditingView={setEditingView}
-      />
       <ConfirmationModal
         object={elementToRemove}
-        objectType={confirmationType}
-        pastObjects={
-          confirmationType === Object.ELEMENT ? currentElements : views
-        }
-        setObjects={
-          confirmationType === Object.ELEMENT ? setCurrentElements : setViews
-        }
+        objectType={Object.VIEW}
+        pastObjects={views}
+        setObjects={setViews}
         visibleConfirmation={visibleConfirmation}
         setVisibleConfirmation={setVisibleConfirmation}
         setEditingView={setEditingView}

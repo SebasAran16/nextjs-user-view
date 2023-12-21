@@ -1,0 +1,45 @@
+@import "@/styles/variables.module"
+
+#adminPanelContainer
+    display: flex
+    flex-direction: column
+    >button
+        align-self: flex-end
+        margin: 0.5rem 0
+
+#defaultViewNoElements
+    display: flex
+    flex-direction: column
+    align-items: center
+    justify-content: center
+
+.dndElement
+    display: flex
+    border-radius: 0.5rem
+    align-items: center
+    justify-content: space-between
+    transition: 0.2s
+    border: 1px solid $main-color
+    margin: 1rem 0
+    overflow: hidden
+    padding: $content-padding
+    > div
+        &:first-child
+            display: flex
+            flex-direction: column
+            gap: 1rem
+        &:last-child
+            > button
+                &:last-of-type
+                    margin-left: 0.5rem
+                    background-color: red
+                    opacity: 0.8
+                    color: white
+    &:hover
+        cursor: grab
+        opacity: 0.9
+        border-color: white
+
+.elementDragHover
+    opacity: 0.5
+    transform: scale(1.01)
