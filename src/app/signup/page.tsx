@@ -48,7 +48,7 @@ export default function Signup() {
         setUserData(user);
 
         toast.success(response.data.message);
-        router.push("/restaurants");
+        router.push("/login");
       } else {
         toast.error("Passwords do not match!");
       }
