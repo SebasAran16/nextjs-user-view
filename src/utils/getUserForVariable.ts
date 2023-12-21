@@ -4,6 +4,7 @@ export function getUserForVariables(user: any): IUser {
   return {
     _id: user._id,
     username: user.username,
+    rol: user.rol,
     firstname: user.firstname,
     lastname: user.lastname,
     image: user.image,

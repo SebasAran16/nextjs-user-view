@@ -5,6 +5,7 @@ import { credentialPaths } from "@/utils/arrays/middleware/credentialPaths";
 import { getDataFromToken } from "@/utils/getDataFromToken";
 import dbConnect from "./lib/mongoConnection";
 import Restaurant from "./models/restaurant";
+import { UserRol } from "./types/structs/userRol.enum";
 
 export async function middleware(request: NextRequest) {
   const path = request.nextUrl.pathname;
@@ -33,7 +34,7 @@ export async function middleware(request: NextRequest) {
       ? restaurantsTokenData.hasOwnProperty(restaurantId)
       : false;
 
-    if (dataFromToken.rol !== "admin" && !isOwner)
+    if (dataFromToken.rol !== UserRol.ADMIN && !isOwner)
       return NextResponse.redirect(new URL("/", request.nextUrl));
   }
 

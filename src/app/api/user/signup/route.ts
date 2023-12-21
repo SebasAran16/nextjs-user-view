@@ -1,5 +1,6 @@
 import dbConnect from "@/lib/mongoConnection";
 import User from "@/models/user";
+import { UserRol } from "@/types/structs/userRol.enum";
 import { getUserForVariables } from "@/utils/getUserForVariable";
 import { NextRequest, NextResponse } from "next/server";
 
@@ -30,7 +31,7 @@ export async function POST(request: NextRequest) {
       password,
       email,
       createdDate: dateCreatedAsDate,
-      rol: "customer",
+      rol: UserRol.CUSTOMER,
     });
 
     const savedUser = await newUser.save();

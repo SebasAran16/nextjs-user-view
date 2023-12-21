@@ -5,6 +5,7 @@ import { NextRequest, NextResponse } from "next/server";
 import Restaurant from "@/models/restaurant";
 import { RestaurantsToken } from "@/types/restaurantsToken.interface";
 import * as jose from "jose";
+import { UserRol } from "@/types/structs/userRol.enum";
 
 export async function GET(request: NextRequest) {
   try {
@@ -23,11 +24,11 @@ export async function GET(request: NextRequest) {
     const { id, rol } = await getDataFromToken(userToken);
 
     const restaurants =
-      rol === "admin"
+      rol === UserRol.ADMIN
         ? await Restaurant.find()
         : await Restaurant.find({ admin_ids: id });
 
-    if (rol !== "admin") {
+    if (rol !== UserRol.ADMIN) {
       const tokenData: RestaurantsToken = {};
       restaurants.forEach((restaurant) => {
         if (restaurant._id) {

@@ -11,7 +11,7 @@ export default function RestaurantManager({ params }: RestaurantManagerProps) {
 
   return (
     <section>
-      <h2>Manage your restaurant:</h2>
+      <h2>Restaurant Manager:</h2>
       <ViewsBox restaurantId={params.restaurant_id} />
     </section>
   );

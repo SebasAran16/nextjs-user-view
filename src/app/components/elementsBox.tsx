@@ -11,6 +11,8 @@ import { ConfirmationModal } from "./confirmationModal";
 import { Modal } from "./modal";
 import { Object } from "@/types/structs/object.enum";
 import { useRouter } from "next/navigation";
+import { useGlobalState } from "@/utils/globalStates";
+import { UserRol } from "@/types/structs/userRol.enum";
 
 interface ElementsBoxProps {
   view: any;
@@ -35,6 +37,7 @@ export default function ElementsBox({
   const dragItem = useRef<number | undefined>(undefined);
   const dragOverItem = useRef<number | undefined>(undefined);
 
+  const [userData] = useGlobalState("userData");
   const [currentElements, setCurrentElements] = useState<any | undefined>();
   const [modalPurpose, setModalPurpose] = useState<ModalPurpose | undefined>(
     undefined
@@ -143,15 +146,24 @@ export default function ElementsBox({
       <Toaster />
       <section id={styles.elementsBox}>
         <Image src={view.image} alt="View Image" width="64" height="64" />
-        <button
-          onClick={() => {
-            setConfirmationType(Object.VIEW);
-            setElementToRemove(view);
-            setVisibleConfirmation(true);
-          }}
-        >
-          Eliminate View
-        </button>
+        {userData ? (
+          userData.rol === UserRol.ADMIN ? (
+            <button
+              onClick={() => {
+                setConfirmationType(Object.VIEW);
+                setElementToRemove(view);
+                setVisibleConfirmation(true);
+              }}
+            >
+              Eliminate View
+            </button>
+          ) : (
+            ""
+          )
+        ) : (
+          ""
+        )}
+
         <p>
           Visible at:{" "}
           <a
@@ -161,14 +173,22 @@ export default function ElementsBox({
         </p>
         <div id={styles.headerSection}>
           <h2>View's Elements:</h2>
-          <button
-            onClick={() => {
-              setModalPurpose(ModalPurpose.ADD_ELEMENT);
-              setVisibleModal(true);
-            }}
-          >
-            Add Element
-          </button>
+          {userData ? (
+            userData.rol === UserRol.ADMIN ? (
+              <button
+                onClick={() => {
+                  setModalPurpose(ModalPurpose.ADD_ELEMENT);
+                  setVisibleModal(true);
+                }}
+              >
+                Add Element
+              </button>
+            ) : (
+              ""
+            )
+          ) : (
+            ""
+          )}
         </div>
         <hr />
         <div id={styles.elementsContainer}>

@@ -6,10 +6,10 @@ import { toast } from "react-hot-toast";
 import { RestaurantCard } from "./restaurantCard";
 import { Modal } from "./modal";
 import { ModalPurpose } from "@/types/structs/modalPurposes.enum";
+import { UserRol } from "@/types/structs/userRol.enum";
 
 export function RestaurantsBox() {
   const [restaurants, setRestaurants] = useState<undefined | any>();
-  const [updateRestaurants, setUpdateRestaurants] = useState(true);
   const [visibleModal, setVisibleModal] = useState(false);
   const [userRol, setUserRol] = useState<undefined | string>();
 
@@ -30,8 +30,7 @@ export function RestaurantsBox() {
         .catch((err: any) => {
           console.log(err);
           toast.error("Could not get restaurants");
-        })
-        .finally(() => setUpdateRestaurants(false));
+        });
     }
   }, [restaurants]);
 
@@ -41,7 +40,7 @@ export function RestaurantsBox() {
       <p>
         {restaurants
           ? restaurants.length > 0
-            ? userRol !== "admin"
+            ? userRol !== UserRol.ADMIN
               ? "This is a list of your restaurants"
               : "This is a list of all restaurants"
             : "You have no restaurants"
