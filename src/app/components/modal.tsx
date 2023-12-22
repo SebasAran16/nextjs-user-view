@@ -1,11 +1,11 @@
 import modalStyles from "@/styles/components/modal.module.sass";
 import { ModalPurpose } from "@/types/structs/modalPurposes.enum";
 import Image from "next/image";
-import { useState } from "react";
 import { AddViewModal } from "./modals/addView";
-import { ManageElementModal } from "./modals/manageElement";
+import { AdminEditElementModal } from "./modals/adminEditElement";
 import { AddElementModal } from "./modals/addElement";
 import { AddRestaurantModal } from "./modals/addRestaurant";
+import { RestaurantEditElementModal } from "./modals/restaurantEditElement";
 
 interface ModalProps {
   visibleModal: boolean;
@@ -17,7 +17,6 @@ interface ModalProps {
   currentEditElement?: any;
   setAddFormType?: Function;
   addFormType?: number;
-  setUpdateRestaurants?: Function;
   restaurantId?: string;
   setEditingView?: Function;
 }
@@ -32,7 +31,6 @@ export function Modal({
   view,
   setAddFormType,
   addFormType,
-  setUpdateRestaurants,
   restaurantId,
   setEditingView,
 }: ModalProps) {
@@ -74,12 +72,19 @@ export function Modal({
                   setAddFormType={setAddFormType!}
                   addFormType={addFormType!}
                 />
-              ) : modalPurpose === ModalPurpose.EDIT_ELEMENT ? (
-                <ManageElementModal
+              ) : modalPurpose === ModalPurpose.ADMIN_EDIT_ELEMENT ? (
+                <AdminEditElementModal
                   setVisibleModal={setVisibleModal}
                   currentEditElement={currentEditElement}
                   setCurrentElements={setObjects}
                   currentElements={pastObjects}
+                />
+              ) : modalPurpose === ModalPurpose.RESTAURANT_EDIT_ELEMENT ? (
+                <RestaurantEditElementModal
+                  setVisibleModal={setVisibleModal}
+                  element={currentEditElement}
+                  currentElements={pastObjects}
+                  setCurrentElements={setObjects}
                 />
               ) : (
                 ""

@@ -1,9 +1,9 @@
 import styles from "@/styles/components/restaurant-elements-panel.module.sass";
-import elementStyles from "@/styles/page.module.sass";
 import { VideoPlayer } from "./video-player";
 import { ModalImage } from "./modal-image";
 import { ProfileLink } from "./profile-link";
 import Image from "next/image";
+import { RestaurantElementEditor } from "../restaurantElementEditor";
 
 interface RestaurantElementsPanelProps {
   elements: any[];
@@ -17,8 +17,8 @@ export function RestaurantElementsPanel({
   view,
 }: RestaurantElementsPanelProps) {
   return (
-    <section id={styles.restaurantElementsContainer}>
-      <div id={elementStyles.main}>
+    <section id={styles.restaurantPanelContainer}>
+      <div id={styles.elementsContainer}>
         <Image
           id={styles.logo}
           src={view.image}
@@ -33,7 +33,15 @@ export function RestaurantElementsPanel({
 
               switch (elementType) {
                 case 1:
-                  return <p key={index}>{element.text}</p>;
+                  return (
+                    <RestaurantElementEditor
+                      element={element}
+                      setCurrentElements={setCurrentElements}
+                      elements={elements}
+                    >
+                      <p key={index}>{element.text}</p>
+                    </RestaurantElementEditor>
+                  );
                 case 2:
                   return (
                     <VideoPlayer
@@ -52,11 +60,17 @@ export function RestaurantElementsPanel({
                   );
                 case 4:
                   return (
-                    <ProfileLink
-                      key={index}
-                      text={element.text ?? "To add"}
-                      url={element.button_link}
-                    />
+                    <RestaurantElementEditor
+                      element={element}
+                      elements={elements}
+                      setCurrentElements={setCurrentElements}
+                    >
+                      <ProfileLink
+                        key={index}
+                        text={element.text ?? "To add"}
+                        url={element.button_link}
+                      />
+                    </RestaurantElementEditor>
                   );
                 default:
                   console.log("Could not show element:", element);

@@ -5,19 +5,19 @@ import toast from "react-hot-toast";
 import CurrentElementData from "../currentElementData";
 import { useState } from "react";
 
-interface EditElementModalProps {
+interface AdminEditElementModalProps {
   setVisibleModal: Function;
   currentEditElement: any;
   setCurrentElements: Function;
   currentElements: any[];
 }
 
-export function ManageElementModal({
+export function AdminEditElementModal({
   setVisibleModal,
   currentEditElement,
   setCurrentElements,
   currentElements,
-}: EditElementModalProps) {
+}: AdminEditElementModalProps) {
   const [disableEditButton, setDisableEditButton] = useState(true);
 
   const handleEditElementSubmit = async (
@@ -84,7 +84,6 @@ export function ManageElementModal({
 
       const indexToSwap = currentElements.indexOf(currentEditElement);
       currentElements[indexToSwap] = editResponse.data.element;
-      console.log(currentElements);
       setCurrentElements(currentElements);
       setVisibleModal(false);
       setDisableEditButton(true);

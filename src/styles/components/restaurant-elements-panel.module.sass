@@ -1,8 +1,52 @@
 @import "@/styles/variables.module"
 
-#restaurantElementsContainer
+#restaurantPanelContainer
     margin-top: 2rem
     border-radius: $main-radius
     padding: 5px
     background: rgba(78, 63, 63, 0.5)
     min-height: 600px
+
+#elementsContainer
+    display: flex
+    flex-direction: column
+    align-items: center
+    padding: 10%
+    p
+        margin: 1rem 0
+
+.groupedLinks
+    display: flex
+    width: 100%
+    justify-content: space-between
+
+#logo
+    border-radius: 1rem
+    width: 5%
+    heigth: 5%
+
+#footer
+    margin-top: 1rem
+    display: flex
+    flex-direction: column
+    text-align: center
+
+@media screen and (min-width: 768px)
+#main
+    padding: 5%
+
+#logo
+    height: 50%
+    width: 50%
+
+.groupedLinks
+    width: 70%
+
+@media screen and (min-width: 992px)
+#main
+    padding: 70px
+
+.groupedLinks
+    width: 60%
+
+@media screen and (min-width: 1200px)

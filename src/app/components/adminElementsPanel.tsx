@@ -133,7 +133,7 @@ export function AdminElementsPanel({
               <div>
                 <button
                   onClick={() => {
-                    setModalPurpose(ModalPurpose.EDIT_ELEMENT);
+                    setModalPurpose(ModalPurpose.ADMIN_EDIT_ELEMENT);
                     setCurrentEditElement(element);
                     setVisibleModal(true);
                   }}
