@@ -1,10 +1,23 @@
 "use client";
-import styles from "@/styles/components/video-player.module.sass";
-import profileStyles from "@/styles/components/profile-link.module.sass";
+import styles from "@/styles/components/elements/video-player.module.sass";
+import profileStyles from "@/styles/components/elements/profile-link.module.sass";
 import { useState } from "react";
-import { MediaComponentProps } from "@/types/mediaComponentProps.interface";
 
-export function VideoPlayer({ text, url }: MediaComponentProps) {
+interface VideoPlayerProps {
+  text: string;
+  url: string;
+  mainColor: string;
+  secondaryColor: string;
+  textColor: string;
+}
+
+export function VideoPlayer({
+  text,
+  url,
+  mainColor,
+  secondaryColor,
+  textColor,
+}: VideoPlayerProps) {
   const [hiddenVideo, setHiddenVideo] = useState(true);
 
   return (
@@ -12,11 +25,14 @@ export function VideoPlayer({ text, url }: MediaComponentProps) {
       <div
         id={profileStyles.profileSection}
         className={styles.videoPlayerSection}
+        style={{
+          background: `linear-gradient(90deg, ${secondaryColor} 0%, #3fb982 55%, ${mainColor} 100%)`,
+        }}
         onClick={() => {
           setHiddenVideo(!hiddenVideo);
         }}
       >
-        <h2>{text}</h2>
+        <h2 style={{ color: textColor }}>{text}</h2>
       </div>
       {!hiddenVideo ? (
         <article id={styles.videoContainer}>

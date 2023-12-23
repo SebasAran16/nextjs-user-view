@@ -1,4 +1,5 @@
 "use client";
+import styles from "@/styles/components/restaurants-box.module.sass";
 import restaurantCardStyles from "@/styles/components/restaurant-card.module.sass";
 import axios from "axios";
 import { useEffect, useState } from "react";
@@ -7,8 +8,11 @@ import { RestaurantCard } from "./restaurantCard";
 import { Modal } from "./modal";
 import { ModalPurpose } from "@/types/structs/modalPurposes.enum";
 import { UserRol } from "@/types/structs/userRol.enum";
+import { useGlobalState } from "@/utils/globalStates";
 
 export function RestaurantsBox() {
+  const [userData] = useGlobalState("userData");
+
   const [restaurants, setRestaurants] = useState<undefined | any>();
   const [visibleModal, setVisibleModal] = useState(false);
   const [userRol, setUserRol] = useState<undefined | string>();
@@ -35,7 +39,7 @@ export function RestaurantsBox() {
   }, [restaurants]);
 
   return (
-    <section>
+    <section id={styles.restaurantsContainer}>
       <h2>Resturants:</h2>
       <p>
         {restaurants
@@ -46,35 +50,45 @@ export function RestaurantsBox() {
             : "You have no restaurants"
           : ""}
       </p>
-      {restaurants ? (
-        <>
-          {restaurants.map((restaurant: any, index: number) => {
-            return (
-              <RestaurantCard
-                key={index}
-                restaurant={restaurant}
-                restaurants={restaurants}
-                setRestaurants={setRestaurants}
-              />
-            );
-          })}
+      <div>
+        {restaurants ? (
+          <>
+            {restaurants.map((restaurant: any, index: number) => {
+              return (
+                <RestaurantCard
+                  key={index}
+                  restaurant={restaurant}
+                  restaurants={restaurants}
+                  setRestaurants={setRestaurants}
+                />
+              );
+            })}
+          </>
+        ) : (
+          "Loading..."
+        )}
+      </div>
+      {userData ? (
+        userData.rol !== "admin" ? (
           <div
             className={restaurantCardStyles.restaurantCardContainer}
             onClick={() => setVisibleModal(true)}
           >
             <h3>+ Add Restaurant</h3>
           </div>
-          <Modal
-            visibleModal={visibleModal}
-            setVisibleModal={setVisibleModal}
-            modalPurpose={ModalPurpose.ADD_RESTAURANT}
-            setObjects={setRestaurants}
-            pastObjects={restaurants}
-          />
-        </>
+        ) : (
+          ""
+        )
       ) : (
-        "Loading..."
+        ""
       )}
+      <Modal
+        visibleModal={visibleModal}
+        setVisibleModal={setVisibleModal}
+        modalPurpose={ModalPurpose.ADD_RESTAURANT}
+        setObjects={setRestaurants}
+        pastObjects={restaurants}
+      />
     </section>
   );
 }

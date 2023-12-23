@@ -8,6 +8,8 @@
     text-align: center
     h3
         width: 70%
+    >button
+        margin-top: 0.5rem
 
 .colorShow
     width: 70px
@@ -29,13 +31,46 @@
             flex-direction: column
             align-items: center
             justify-items: center
-            a
-        &:nth-last-of-type(2) .react-colorful
-            width: 600px
         &:last-of-type
-            justify-content: space-between
+            justify-content: space-around
             width: 100%
+            >button
+                &:first-of-type
+                    background-color: $opacity-gray
+                    color: white
     >form
         >div
             display: flex
             gap: 16px
+
+.colorPickerContainer
+    width: 80%
+    >div
+        &:first-of-type
+            width: 100%
+
+@media screen and (min-width: 768px)
+    #modalSection
+        >div
+            &:nth-last-of-type(2) .react-colorful
+                width: 600px
+            &:last-of-type
+                width: 80%
+
+    .colorPickerContainer
+        width: 60%
+
+@media screen and (min-width: 992px)
+    #modalSection
+        >div
+            &:nth-last-of-type(2) .react-colorful
+                width: 600px
+            &:last-of-type
+                width: 50%
+
+    .colorPickerContainer
+        width: 50%
+
+@media screen and (min-width: 1200px)
+    .colorPickerContainer
+        width: 40%

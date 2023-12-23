@@ -8,6 +8,9 @@ import Image from "next/image";
 import { VideoPlayer } from "@/app/components/views/video-player";
 import { ModalImage } from "@/app/components/views/modal-image";
 import { ProfileLink } from "@/app/components/views/profile-link";
+import { getColorFromUse } from "@/utils/returnUseColor";
+import { ColorUse } from "@/types/structs/colorUse";
+import { TextElement } from "@/app/components/views/text-element";
 
 interface viewPageProps {
   params: { view_url: string };
@@ -17,6 +20,11 @@ export default function ViewPage({ params }: viewPageProps) {
   const [loading, setLoading] = useState(true);
   const [view, setView] = useState<any | undefined>();
   const [viewElements, setViewElements] = useState<any | undefined>();
+  const [mainColor, setMainColor] = useState(getColorFromUse(ColorUse.MAIN));
+  const [secondaryColor, setSecondaryColor] = useState(
+    getColorFromUse(ColorUse.SECONDARY)
+  );
+  const [textColor, setTextColor] = useState(getColorFromUse(ColorUse.TEXT));
 
   useEffect(() => {
     axios
@@ -31,6 +39,9 @@ export default function ViewPage({ params }: viewPageProps) {
         const elements = elementsResponse.data.elements;
 
         setView(view);
+        setMainColor(view.main_color ?? mainColor);
+        setSecondaryColor(view.secondary_color ?? secondaryColor);
+        setTextColor(view.text_color ?? textColor);
         setViewElements(getSortedElements(elements));
         setLoading(false);
       })
@@ -43,7 +54,10 @@ export default function ViewPage({ params }: viewPageProps) {
     <main>
       <Toaster />
       {!loading ? (
-        <section id={styles.main}>
+        <section
+          id={styles.main}
+          style={{ color: view.text_color ?? getColorFromUse(ColorUse.TEXT) }}
+        >
           <Image
             id={styles.logo}
             src={view.image}
@@ -56,12 +70,22 @@ export default function ViewPage({ params }: viewPageProps) {
 
             switch (elementType) {
               case 1:
-                return <p key={index}>{element.text}</p>;
+                return (
+                  <TextElement
+                    key={index}
+                    text={element.text}
+                    mainColor={mainColor}
+                    textColor={textColor}
+                  />
+                );
               case 2:
                 return (
                   <VideoPlayer
                     key={index}
                     text={element.text ?? "To Add"}
+                    mainColor={mainColor}
+                    secondaryColor={secondaryColor}
+                    textColor={textColor}
                     url={element.video_link}
                   />
                 );
@@ -70,6 +94,9 @@ export default function ViewPage({ params }: viewPageProps) {
                   <ModalImage
                     key={index}
                     text={element.text ?? "To add"}
+                    mainColor={mainColor}
+                    secondaryColor={secondaryColor}
+                    textColor={textColor}
                     url={element.image_link}
                   />
                 );
@@ -78,6 +105,9 @@ export default function ViewPage({ params }: viewPageProps) {
                   <ProfileLink
                     key={index}
                     text={element.text ?? "To add"}
+                    mainColor={mainColor}
+                    secondaryColor={secondaryColor}
+                    textColor={textColor}
                     url={element.button_link}
                   />
                 );

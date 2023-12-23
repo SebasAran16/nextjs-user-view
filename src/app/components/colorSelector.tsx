@@ -5,29 +5,32 @@ import Image from "next/image";
 import { useState } from "react";
 import { Modal } from "./modal";
 import { ModalPurpose } from "@/types/structs/modalPurposes.enum";
-
+import { getColorFromUse } from "@/utils/returnUseColor";
 interface ColorSelectorProps {
   existentColor: any;
-  keyToChange: ColorUse;
+  colorUse: ColorUse;
   view: any;
+  setEditingView: Function;
 }
 
 export function ColorSelector({
   existentColor,
-  keyToChange,
+  colorUse,
   view,
+  setEditingView,
 }: ColorSelectorProps) {
-  const [color, setColor] = useState(existentColor ?? "#000000");
+  const [color, setColor] = useState(
+    existentColor ?? getColorFromUse(colorUse)
+  );
   const [editColor, setEditColor] = useState(false);
 
   return (
     <div id={styles.colorSelector}>
-      <h3>{capitalizeFirstLetter(keyToChange) + " Color:"}</h3>
+      <h3>{capitalizeFirstLetter(colorUse) + " Color:"}</h3>
       <div
         className={styles.colorShow}
         style={{ backgroundColor: color }}
       ></div>
-      {color.hex !== "#000000" ? <p>Current Color</p> : <p>Default Color</p>}
       {!editColor ? (
         <button onClick={() => setEditColor(true)}>Edit</button>
       ) : (
@@ -42,7 +45,8 @@ export function ColorSelector({
             object={color}
             setObjects={setColor}
             view={view}
-            keyToChange={keyToChange}
+            colorUse={colorUse}
+            setEditingView={setEditingView}
           />
         </section>
       ) : (

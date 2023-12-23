@@ -4,6 +4,7 @@ import Image from "next/image";
 import { VideoPlayer } from "../components/views/video-player";
 import { useState } from "react";
 import { ModalImage } from "../components/views/modal-image";
+import { MultipleProfileLinks } from "../components/views/multiple-profile-links";
 
 export default async function CaNEstruc() {
   return (
@@ -19,7 +20,7 @@ export default async function CaNEstruc() {
         text={"Conoce nuestra ficha de cata"}
         url="/videos/ficha-cata.mp4"
       />
-      <ProfileLink text="" url="" />
+      <MultipleProfileLinks />
       <VideoPlayer
         text={"Conoce nuestra historia"}
         url="/videos/historia.mp4"

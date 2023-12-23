@@ -1,0 +1,23 @@
+@import "@/styles/variables.module"
+
+#textContainer
+    display: flex
+    align-items: center
+    padding: $content-padding 0.5rem
+    justify-content: center
+    text-align: center
+    border-radius: $main-radius
+    width: 100%
+    margin: 1rem 0.5rem
+    h2
+        margin: 0 0.5rem
+
+@media screen and (min-width: 768px)
+    #textContainer
+        width: 70%
+
+@media screen and (min-width: 992px)
+    #textContainer
+        width: 60%
+
+@media screen and (min-width: 1200px)

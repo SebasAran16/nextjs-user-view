@@ -42,3 +42,22 @@
                 &:last-child
                     display: flex
                     flex-direction: column
+
+@media screen and (min-width: 768px)
+    #modal
+        >div
+            &:last-of-type
+                display: flex
+                flex-direction: column
+                align-self: center
+                width: 80%
+                form
+                    align-self: center
+
+@media screen and (min-width: 992px)
+    #modal
+        >div
+            &:last-of-type
+                width: 60%
+
+@media screen and (min-width: 1200px)

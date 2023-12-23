@@ -1,20 +1,17 @@
 "use client";
 import styles from "@/styles/components/elements-box.module.sass";
-import getTypeFromNumber from "@/utils/getTypeFromNumber";
-import { ModalPurpose } from "@/types/structs/modalPurposes.enum";
 import axios from "axios";
-import React, { useEffect, useRef, useState } from "react";
+import React, { useEffect, useState } from "react";
 import { Toaster, toast } from "react-hot-toast";
 import getSortedElements from "@/utils/getSortedElements";
 import Image from "next/image";
 import { ConfirmationModal } from "./confirmationModal";
-import { Modal } from "./modal";
 import { Object } from "@/types/structs/object.enum";
 import { useRouter } from "next/navigation";
 import { useGlobalState } from "@/utils/globalStates";
 import { UserRol } from "@/types/structs/userRol.enum";
 import { AdminElementsPanel } from "./adminElementsPanel";
-import { RestaurantElementsPanel } from "./views/restaurantElementsPanel";
+import { RestaurantElementsPanel } from "./restaurantElementsPanel";
 
 interface ElementsBoxProps {
   view: any;
@@ -70,24 +67,15 @@ export default function ElementsBox({
       <Toaster />
       <section id={styles.elementsBox}>
         <Image src={view.image} alt="View Image" width="64" height="64" />
-        {userData ? (
-          userData.rol === UserRol.ADMIN ? (
-            <button
-              onClick={() => {
-                setConfirmationType(Object.VIEW);
-                setElementToRemove(view);
-                setVisibleConfirmation(true);
-              }}
-            >
-              Eliminate View
-            </button>
-          ) : (
-            ""
-          )
-        ) : (
-          ""
-        )}
-
+        <button
+          onClick={() => {
+            setConfirmationType(Object.VIEW);
+            setElementToRemove(view);
+            setVisibleConfirmation(true);
+          }}
+        >
+          Eliminate View
+        </button>
         <p>
           Visible at:{" "}
           <a
@@ -113,6 +101,7 @@ export default function ElementsBox({
                   elements={currentElements}
                   setCurrentElements={setCurrentElements}
                   view={view}
+                  setEditingView={setEditingView}
                 />
               </>
             )

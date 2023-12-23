@@ -4,13 +4,15 @@ import axios from "axios";
 import React, { useState } from "react";
 import { HexColorPicker } from "react-colorful";
 import { toast } from "react-hot-toast";
+import { useRouter } from "next/navigation";
 
 interface ColorPickerInterface {
   color: string;
   setColor: any;
   setVisibleModal: Function;
   view: any;
-  keyToChange: ColorUse;
+  colorUse: ColorUse;
+  setEditingView: Function;
 }
 
 export function ColorPicker({
@@ -18,46 +20,35 @@ export function ColorPicker({
   setColor,
   setVisibleModal,
   view,
-  keyToChange,
+  colorUse,
+  setEditingView,
 }: ColorPickerInterface) {
+  const router = useRouter();
   const [initialColor] = useState(color);
   const [hexColor, setHexColor] = useState<string>("");
+
+  const hexRegex = /^#([0-9a-f]{3}){1,2}$/i;
 
   async function handleSaveColor() {
     try {
       axios
         .post("/api/views/edit", {
           id: view._id,
-          [keyToChange + "_color"]: color,
+          [colorUse + "_color"]: color,
         })
         .then((colorChangeResponse) => {
           if (colorChangeResponse.status !== 200)
             throw new Error(colorChangeResponse.data.message);
 
+          view[colorUse + "_color"] = color;
+          setEditingView(view);
           setVisibleModal(false);
+          router.refresh();
           toast.success("Color changed successfully!");
         });
     } catch (err) {
       console.log(err);
       toast.error("There was an error changing the color");
-    }
-  }
-
-  async function handleHexSaveColor(e: React.FormEvent<HTMLFormElement>) {
-    try {
-      e.preventDefault();
-      const hexRegex = /^#([0-9a-f]{3}){1,2}$/i;
-
-      if (!hexRegex.test(hexColor)) {
-        toast.error("Value set is not HEX");
-        return;
-      }
-
-      e.currentTarget.reset();
-      setHexColor("");
-      setColor(hexColor);
-    } catch (err) {
-      console.log(err);
     }
   }
 
@@ -75,31 +66,31 @@ export function ColorPicker({
           style={{ backgroundColor: color }}
         ></div>
       </div>
-      <div>
+      <div className={styles.colorPickerContainer}>
         <HexColorPicker color={color} onChange={setColor} />
       </div>
-      <form onSubmit={handleHexSaveColor}>
+      <form>
         <label>Set in HEX:</label>
         <div>
           <input
             type="text"
             name="colorHex"
             placeholder="#000000"
+            value={color}
             minLength={7}
             maxLength={7}
-            onChange={(e) => setHexColor(e.currentTarget.value)}
+            onChange={(e) => setColor(e.currentTarget.value)}
           />
-          <button
-            type="submit"
-            disabled={hexColor === "" || hexColor.length !== 7}
-          >
-            Set
-          </button>
         </div>
       </form>
       <div>
         <button onClick={handleCancel}>Cancel</button>
-        <button onClick={handleSaveColor}>Save Color</button>
+        <button
+          onClick={handleSaveColor}
+          disabled={color === initialColor || !hexRegex.test(color)}
+        >
+          Save Color
+        </button>
       </div>
     </div>
   );

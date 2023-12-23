@@ -15,14 +15,14 @@ interface ModalProps {
   modalPurpose: ModalPurpose | undefined;
   setObjects: Function;
   pastObjects?: any[];
-  object: any;
+  object?: any;
   view?: any;
   currentEditElement?: any;
   setAddFormType?: Function;
   addFormType?: number;
   restaurantId?: string;
   setEditingView?: Function;
-  keyToChange?: ColorUse;
+  colorUse?: ColorUse;
 }
 
 export function Modal({
@@ -38,7 +38,7 @@ export function Modal({
   addFormType,
   restaurantId,
   setEditingView,
-  keyToChange,
+  colorUse,
 }: ModalProps) {
   return (
     <>
@@ -106,11 +106,12 @@ export function Modal({
             </div>
             {modalPurpose === ModalPurpose.COLOR ? (
               <ColorPicker
-                color={object}
+                color={object!}
                 setColor={setObjects}
                 setVisibleModal={setVisibleModal}
                 view={view}
-                keyToChange={keyToChange!}
+                colorUse={colorUse!}
+                setEditingView={setEditingView!}
               />
             ) : (
               ""

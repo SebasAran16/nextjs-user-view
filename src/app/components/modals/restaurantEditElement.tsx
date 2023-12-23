@@ -4,6 +4,7 @@ import axios from "axios";
 import toast from "react-hot-toast";
 import CurrentElementData from "../currentElementData";
 import { useState } from "react";
+import { useRouter } from "next/navigation";
 
 interface RestaurantEditElementModalProps {
   setVisibleModal: Function;
@@ -18,6 +19,7 @@ export function RestaurantEditElementModal({
   setCurrentElements,
   currentElements,
 }: RestaurantEditElementModalProps) {
+  const router = useRouter();
   const [disableEditButton, setDisableEditButton] = useState(true);
 
   const handleEditElementSubmit = async (
@@ -80,6 +82,7 @@ export function RestaurantEditElementModal({
       const indexToSwap = currentElements.indexOf(element);
       currentElements[indexToSwap] = editResponse.data.element;
       setCurrentElements(currentElements);
+      router.refresh();
       setVisibleModal(false);
       setDisableEditButton(true);
       toast.success(editResponse.data.message);
@@ -95,7 +98,12 @@ export function RestaurantEditElementModal({
       <h2>Edit Element:</h2>
       <form onSubmit={handleEditElementSubmit}>
         <label>Past Text:</label>
-        <input type="text" placeholder={element.text} disabled />
+        <input
+          type="text"
+          placeholder={element.text}
+          className={styles.pastElementValue}
+          disabled
+        />
         <label>New text:</label>
         <input
           type="text"
@@ -111,8 +119,8 @@ export function RestaurantEditElementModal({
               <label>Past video URL:</label>
               <input
                 type="text"
-                name="editElementVideoLink"
                 placeholder={element.video_link}
+                className={styles.pastElementValue}
                 disabled
               />
               <label>New video URL:</label>
@@ -128,8 +136,8 @@ export function RestaurantEditElementModal({
               <label>Past image URL:</label>
               <input
                 type="text"
-                name="editElementImageLink"
                 placeholder={element.image_link}
+                className={styles.pastElementValue}
                 disabled
               />
               <label>New image URL:</label>
@@ -145,8 +153,8 @@ export function RestaurantEditElementModal({
               <label>Past link URL for button:</label>
               <input
                 type="text"
-                name="editElementButtonLink"
                 placeholder={element.button_link}
+                className={styles.pastElementValue}
                 disabled
               />
               <label>New link URL for button:</label>

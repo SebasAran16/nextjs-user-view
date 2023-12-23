@@ -1,13 +1,18 @@
 import { ColorUse } from "@/types/structs/colorUse";
+import {
+  defaultMainColor,
+  defaultSecondaryColor,
+  defaultTextColor,
+} from "./defaultColors";
 
-export function returnUseColor(colorUse: ColorUse) {
+export function getColorFromUse(colorUse: ColorUse) {
   switch (colorUse) {
     case ColorUse.MAIN:
-      return "#74d25e";
+      return defaultMainColor;
     case ColorUse.SECONDARY:
-      return "#0a9bac";
+      return defaultSecondaryColor;
     case ColorUse.TEXT:
-      return "#FFFFFF";
+      return defaultTextColor;
     default:
       console.log("No color suported for use");
       return "#000000";

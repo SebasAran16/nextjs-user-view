@@ -1,43 +1,56 @@
 import styles from "@/styles/components/restaurant-elements-panel.module.sass";
 import Image from "next/image";
-import { RestaurantElementEditor } from "../restaurantElementEditor";
-import { ColorSelector } from "../colorSelector";
+import { RestaurantElementEditor } from "./restaurantElementEditor";
+import { ColorSelector } from "./colorSelector";
 import { ColorUse } from "@/types/structs/colorUse";
+import { hexToRGBA } from "@/utils/hexToRgba";
 
 interface RestaurantElementsPanelProps {
   elements: any[];
   setCurrentElements: Function;
   view: any;
+  setEditingView: Function;
 }
 
 export function RestaurantElementsPanel({
   elements,
   setCurrentElements,
   view,
+  setEditingView,
 }: RestaurantElementsPanelProps) {
   return (
     <>
       <div id={styles.colorSelectorsContainer}>
         <ColorSelector
           existentColor={view.main_color}
-          keyToChange={ColorUse.MAIN}
+          colorUse={ColorUse.MAIN}
           view={view}
+          setEditingView={setEditingView}
         />
         <ColorSelector
           existentColor={view.secondary_color}
-          keyToChange={ColorUse.SECONDARY}
+          colorUse={ColorUse.SECONDARY}
           view={view}
+          setEditingView={setEditingView}
         />
         <ColorSelector
           existentColor={view.text_color}
-          keyToChange={ColorUse.TEXT}
+          colorUse={ColorUse.TEXT}
           view={view}
+          setEditingView={setEditingView}
         />
       </div>
       <h3>This is what your customers see in your View:</h3>
       <section id={styles.restaurantPanelContainer}>
-        <p>-Select element to edit</p>
-
+        {elements ? (
+          elements.length > 0 ? (
+            <p>Select element to edit</p>
+          ) : (
+            ""
+          )
+        ) : (
+          ""
+        )}
         <div id={styles.elementsContainer}>
           <Image
             id={styles.logo}
@@ -61,7 +74,17 @@ export function RestaurantElementsPanel({
                         setCurrentElements={setCurrentElements}
                         elements={elements}
                       >
-                        <p key={index}>{element.text}</p>
+                        <div
+                          id={styles.textElement}
+                          style={{
+                            border: `2px solid ${view.main_color}`,
+                            backgroundColor: hexToRGBA(view.main_color, "0.25"),
+                          }}
+                        >
+                          <h2 style={{ color: view.text_color }}>
+                            {element.text}
+                          </h2>
+                        </div>
                       </RestaurantElementEditor>
                     );
                   case 2:
@@ -74,8 +97,15 @@ export function RestaurantElementsPanel({
                         elements={elements}
                         setCurrentElements={setCurrentElements}
                       >
-                        <div id={styles.elementSection}>
-                          <h2>{element.text}</h2>{" "}
+                        <div
+                          id={styles.elementSection}
+                          style={{
+                            background: `linear-gradient(90deg, ${view.secondary_color} 0%, #3fb982 55%, ${view.main_color} 100%)`,
+                          }}
+                        >
+                          <h2 style={{ color: view.text_color }}>
+                            {element.text}
+                          </h2>{" "}
                         </div>
                       </RestaurantElementEditor>
                     );
@@ -86,7 +116,7 @@ export function RestaurantElementsPanel({
               })
             ) : (
               <div /*id={styles.defaultViewNoElements}*/>
-                <p>Elements added will show here...</p>
+                <p>No elements added yet...</p>
               </div>
             )
           ) : (
