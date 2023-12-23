@@ -12,8 +12,6 @@
     flex-direction: column
     align-items: center
     padding: 10%
-    p
-        margin: 1rem 0
 
 .groupedLinks
     display: flex
@@ -22,31 +20,60 @@
 
 #logo
     border-radius: 1rem
-    width: 5%
-    heigth: 5%
+    width: 40%
+    height: 40%
 
-#footer
-    margin-top: 1rem
+#elementsEditor
+    width: 100%
     display: flex
     flex-direction: column
+    align-items: center
     text-align: center
+    margin: 1rem 0.5rem
+    &:hover
+        transform: scale(1.02)
+        cursor: pointer
+    &:active
+        transform: none
+
+#elementSection
+    text-align: center
+    width: 100%
+    border-radius: $main-radius
+    background: rgb(10,155,172)
+    background: linear-gradient(90deg, $main-contrast 0%, $medium-green 55%, $main-color 100%)
+    transition: 0.5s all
+    h2
+        padding: 0.5rem
+
+#colorSelectorsContainer
+    display: flex
+    justify-content: space-around
+    align-items: center
+    margin: 1rem 0
 
 @media screen and (min-width: 768px)
-#main
-    padding: 5%
+    #main
+        padding: 5%
 
-#logo
-    height: 50%
-    width: 50%
+    #logo
+        height: 50%
+        width: 50%
 
-.groupedLinks
-    width: 70%
+    .groupedLinks
+        width: 70%
+
+    #elementsEditor
+        width: 70%
 
 @media screen and (min-width: 992px)
-#main
-    padding: 70px
+    #main
+        padding: 70px
 
-.groupedLinks
-    width: 60%
+    #elementsEditor
+        width: 70%
+
+    .groupedLinks
+        width: 60%
 
 @media screen and (min-width: 1200px)

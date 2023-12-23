@@ -62,13 +62,13 @@ export default function Login() {
         </div>
         <div id={styles.formPart}>
           <div>
-            <h2>Login</h2>
+            <h2>Log In</h2>
             <p>Enter your credentials</p>
           </div>
           <div>
             <form
               onSubmit={handleSubmit}
-              id={styles.signupForm}
+              id={styles.loginForm}
               name="loginForm"
             >
               <label>Username/Email</label>
@@ -76,7 +76,7 @@ export default function Login() {
 
               <label>Password</label>
               <input type="password" name="userPassword" required></input>
-              <button type="submit">Login</button>
+              <button type="submit">Log In</button>
             </form>
             <div id={styles.alreadyMemberDiv}>
               <p>Forgot your password?</p>

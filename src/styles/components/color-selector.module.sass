@@ -1,0 +1,41 @@
+@import "@/styles/variables.module"
+
+#colorSelector
+    display: flex
+    flex-direction: column
+    align-items: center
+    justify-content: center
+    text-align: center
+    h3
+        width: 70%
+
+.colorShow
+    width: 70px
+    height: 70px
+    border-radius: 50%
+
+#modalSection
+    display: flex
+    flex-direction: column
+    justify-content: center
+    align-items: center
+    h3
+        width: 100%
+        margin: 1rem 0
+    >div
+        margin: 1rem 0
+        display: flex
+        &:first-of-type
+            flex-direction: column
+            align-items: center
+            justify-items: center
+            a
+        &:nth-last-of-type(2) .react-colorful
+            width: 600px
+        &:last-of-type
+            justify-content: space-between
+            width: 100%
+    >form
+        >div
+            display: flex
+            gap: 16px

@@ -1,3 +1,4 @@
+import styles from "@/styles/components/restaurant-elements-panel.module.sass";
 import React, { useState } from "react";
 import { Modal } from "./modal";
 import { ModalPurpose } from "@/types/structs/modalPurposes.enum";
@@ -18,8 +19,10 @@ export function RestaurantElementEditor({
   const [visibleModal, setVisibleModal] = useState(false);
 
   return (
-    <section onClick={() => setVisibleModal(true)}>
-      {children}
+    <>
+      <section id={styles.elementsEditor} onClick={() => setVisibleModal(true)}>
+        {children}
+      </section>
       <Modal
         visibleModal={visibleModal}
         setVisibleModal={setVisibleModal}
@@ -28,6 +31,6 @@ export function RestaurantElementEditor({
         pastObjects={elements}
         currentEditElement={element}
       />
-    </section>
+    </>
   );
 }

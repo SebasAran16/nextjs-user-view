@@ -109,8 +109,6 @@ export default function ElementsBox({
               />
             ) : (
               <>
-                <h3>This is what your customers see in your View:</h3>
-                <p>You can edit the elements values by selecting them...</p>
                 <RestaurantElementsPanel
                   elements={currentElements}
                   setCurrentElements={setCurrentElements}

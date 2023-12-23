@@ -1,22 +1,11 @@
-$main-color: #725DFF
-$main-contrast: #4B36D2
-
-$main-radius: 0.3rem
-$button-padding: 0.6rem 1.4rem
-$input-fill: #FDFDFD
-$input-stroke: #E3E3E3
-$button-color: #725DFF
-$grayed-text: #AEAEAE
-
-$black: #000000
-$white: #FFFFFF
+@import "@/styles/variables.module"
 
 .hidden
     display: none !important
 
 #signUpView
     display: grid
-    grid-template-columns: 0.85fr 1fr
+    grid-template-columns: 1fr
     grid-template-rows: 1fr
     grid-template-areas: "alias-form alias-image"
     height: 100vh
@@ -69,14 +58,10 @@ $white: #FFFFFF
         input
             border: 1px solid $input-stroke
             background-color: $input-fill
-        button
-            background-color: $button-color
-            color: $white
 
-#signupForm
+#loginForm
     display: flex
     flex-direction: column
-    width: 60%
 
 #alreadyMemberDiv
     display: flex
@@ -94,4 +79,15 @@ $white: #FFFFFF
         margin-right: 0.5rem
 
 #formErrorText
-    color: $white
+    color: white
+
+@media screen and (min-width: 768px)
+
+@media screen and (min-width: 992px)
+    #signUpView
+        grid-template-columns: 0.85fr 1fr
+
+    #loginForm
+        width: 80%
+
+@media screen and (min-width: 1200px)

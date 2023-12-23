@@ -17,6 +17,9 @@ const ViewSchema = new Schema({
     type: String,
     required: [true, "Provide a URL for the view"],
   },
+  main_color: String,
+  secondary_color: String,
+  text_color: String,
   created_at: {
     type: Schema.Types.Date,
     required: [true, "Element require date created"],
