@@ -3,8 +3,6 @@ import type { NextRequest } from "next/server";
 import { uncredentialPaths } from "@/utils/arrays/middleware/uncredentialPaths";
 import { credentialPaths } from "@/utils/arrays/middleware/credentialPaths";
 import { getDataFromToken } from "@/utils/getDataFromToken";
-import dbConnect from "./lib/mongoConnection";
-import Restaurant from "./models/restaurant";
 import { UserRol } from "./types/structs/userRol.enum";
 
 export async function middleware(request: NextRequest) {
@@ -48,6 +46,7 @@ export const config = {
     "/restaurants/:path*",
     "/login/:path*",
     "/signup/:path*",
+    "/verify-email/:path",
     "/kyc-verification/:path*",
   ],
 };

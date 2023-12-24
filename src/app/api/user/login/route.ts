@@ -34,6 +34,15 @@ export async function POST(request: NextRequest) {
         { status: 409 }
       );
 
+    if (!user.is_verified)
+      return NextResponse.json(
+        {
+          success: false,
+          message: "User must be verified to log in",
+        },
+        { status: 403 }
+      );
+
     const tokenData: TokenData = {
       id: user._id,
       username: user.username,

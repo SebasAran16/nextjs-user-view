@@ -1,7 +1,9 @@
 import dbConnect from "@/lib/mongoConnection";
 import User from "@/models/user";
+import { EmailType } from "@/types/structs/emailType";
 import { UserRol } from "@/types/structs/userRol.enum";
 import { getUserForVariables } from "@/utils/getUserForVariable";
+import { sendEmail } from "@/utils/mailer";
 import { NextRequest, NextResponse } from "next/server";
 
 export async function POST(request: NextRequest) {
@@ -35,6 +37,12 @@ export async function POST(request: NextRequest) {
     });
 
     const savedUser = await newUser.save();
+
+    await sendEmail({
+      email,
+      emailType: EmailType.VERIFY,
+      userId: savedUser._id,
+    });
 
     return NextResponse.json(
       { message: "Signup completed!", user: getUserForVariables(savedUser) },

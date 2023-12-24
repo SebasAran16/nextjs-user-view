@@ -31,27 +31,28 @@ export default function Signup() {
 
       const passwordsMatch = password.value === repeatedPassword.value;
 
-      if (passwordsMatch) {
-        const data = {
-          username: username.value,
-          email: email.value,
-          password: password.value,
-          dateCreated: Date.now(),
-        };
-
-        const response = await axios.post("/api/user/signup", data);
-
-        if (response.status !== 200)
-          throw new Error("HTTP error! status: " + response.status);
-
-        const user = response.data.user;
-        setUserData(user);
-
-        toast.success(response.data.message);
-        router.push("/login");
-      } else {
+      if (!passwordsMatch) {
         toast.error("Passwords do not match!");
+        return;
       }
+
+      const data = {
+        username: username.value,
+        email: email.value,
+        password: password.value,
+        dateCreated: Date.now(),
+      };
+
+      const response = await axios.post("/api/user/signup", data);
+
+      if (response.status !== 200)
+        throw new Error("HTTP error! status: " + response.status);
+
+      const user = response.data.user;
+      setUserData(user);
+
+      toast.success(response.data.message);
+      router.push("/verify-email");
     } catch (err: any) {
       console.log(err);
       toast.error(err.response.data.message);
