@@ -6,7 +6,9 @@ export default async function Home() {
   return (
     <main>
       <header id={styles.header}>
-        <h1>Welcome to CustomerView!</h1>
+        <h1>
+          Welcome to CustomerView by <span>OwnTheBlock Solutions</span>!
+        </h1>
         <section id={styles.headerButtons}>
           <Link href="/login">
             <button>Login</button>
