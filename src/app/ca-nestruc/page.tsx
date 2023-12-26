@@ -4,7 +4,7 @@ import Image from "next/image";
 import { VideoPlayer } from "../components/views/video-player";
 import { useState } from "react";
 import { ModalImage } from "../components/views/modal-image";
-import { MultipleProfileLinks } from "../components/views/multiple-profile-links";
+import { MultipleProfileLinks } from "../components/views/link-group";
 import { getColorFromUse } from "@/utils/returnUseColor";
 import { ColorUse } from "@/types/structs/colorUse";
 

@@ -6,4 +6,5 @@ export default interface INewElement {
   video_link?: string;
   image_link?: string;
   button_link?: string;
+  link_group?: Object[];
 }

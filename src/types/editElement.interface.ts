@@ -5,4 +5,5 @@ export default interface IEditElement {
   video_link?: string;
   image_link?: string;
   button_link?: string;
+  link_group?: Object[];
 }

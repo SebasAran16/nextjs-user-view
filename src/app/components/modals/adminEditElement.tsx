@@ -4,6 +4,7 @@ import axios from "axios";
 import toast from "react-hot-toast";
 import CurrentElementData from "../currentElementData";
 import { useState } from "react";
+import ElementTypes from "@/utils/elementsStruct";
 
 interface AdminEditElementModalProps {
   setVisibleModal: Function;
@@ -69,7 +70,21 @@ export function AdminEditElementModal({
             editElementObject.button_link = elementButtonLink;
           break;
         case 5:
-        // TODO
+          const linkGroup = currentEditElement.link_group;
+          for (let i = 0; i < currentEditElement.link_group.length; i++) {
+            const customerIndex = i + 1;
+            const linkToEdit = form.elements.namedItem(
+              "editElementLinkGroup" + customerIndex
+            ) as HTMLInputElement;
+
+            if (linkToEdit) {
+              const newLink = linkToEdit.value;
+              linkGroup[i].link = newLink;
+            }
+          }
+
+          editElementObject.link_group = linkGroup;
+          break;
         default:
           throw new Error("Element type not valid");
       }
@@ -114,9 +129,9 @@ export function AdminEditElementModal({
           onChange={() => setDisableEditButton(false)}
         />
         {currentEditElement ? (
-          currentEditElement.type === 1 ? (
+          currentEditElement.type === ElementTypes.TEXT ? (
             ""
-          ) : currentEditElement.type === 2 ? (
+          ) : currentEditElement.type === ElementTypes.VIDEO ? (
             <>
               <label>New video URL:</label>
               <input
@@ -126,7 +141,7 @@ export function AdminEditElementModal({
                 onChange={() => setDisableEditButton(false)}
               />
             </>
-          ) : currentEditElement.type === 3 ? (
+          ) : currentEditElement.type === ElementTypes.IMAGE ? (
             <>
               <label>New image URL:</label>
               <input
@@ -136,7 +151,7 @@ export function AdminEditElementModal({
                 onChange={() => setDisableEditButton(false)}
               />
             </>
-          ) : currentEditElement.type === 4 ? (
+          ) : currentEditElement.type === ElementTypes.LINK ? (
             <>
               <label>New link URL for button:</label>
               <input
@@ -145,6 +160,26 @@ export function AdminEditElementModal({
                 placeholder="https://restaurant.com/menu"
                 onChange={() => setDisableEditButton(false)}
               />
+            </>
+          ) : currentEditElement.type === ElementTypes.LINK_GROUP ? (
+            <>
+              {currentEditElement.link_group.map(
+                (group: any, index: number) => {
+                  const clientIndex = index + 1;
+
+                  return (
+                    <>
+                      <label>{`New link ${clientIndex}:`}</label>
+                      <input
+                        type="text"
+                        name={`editElementLinkGroup${clientIndex}`}
+                        placeholder="https://restaurant.com/menu"
+                        onChange={() => setDisableEditButton(false)}
+                      />
+                    </>
+                  );
+                }
+              )}
             </>
           ) : (
             "Element type not allowed"
@@ -155,7 +190,11 @@ export function AdminEditElementModal({
         <button type="submit" disabled={disableEditButton}>
           Edit Element
         </button>
-        {disableEditButton ? <p>Type some value to edit</p> : ""}
+        {disableEditButton ? (
+          <p className={styles.discreteText}>Type some value to edit</p>
+        ) : (
+          ""
+        )}
       </form>
     </div>
   );

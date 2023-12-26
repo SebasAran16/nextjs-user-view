@@ -9,6 +9,7 @@ export async function POST(request: NextRequest) {
     await dbConnect();
 
     const elementToCreate = await request.json();
+    console.log(elementToCreate);
 
     const dateCreated = Date.now();
 

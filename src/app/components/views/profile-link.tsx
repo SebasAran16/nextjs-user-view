@@ -1,8 +1,6 @@
 "use client";
 import styles from "@/styles/components/elements/profile-link.module.sass";
 import Link from "next/link";
-import Image from "next/image";
-
 interface ProfileLinkInterface {
   text: string;
   url: string;

@@ -4,6 +4,7 @@ import { RestaurantElementEditor } from "./restaurantElementEditor";
 import { ColorSelector } from "./colorSelector";
 import { ColorUse } from "@/types/structs/colorUse";
 import { hexToRGBA } from "@/utils/hexToRgba";
+import ElementTypes from "@/utils/elementsStruct";
 
 interface RestaurantElementsPanelProps {
   elements: any[];
@@ -66,7 +67,7 @@ export function RestaurantElementsPanel({
                 const elementType = element.type;
 
                 switch (elementType) {
-                  case 1:
+                  case ElementTypes.TEXT:
                     return (
                       <RestaurantElementEditor
                         key={index}
@@ -87,9 +88,9 @@ export function RestaurantElementsPanel({
                         </div>
                       </RestaurantElementEditor>
                     );
-                  case 2:
-                  case 3:
-                  case 4:
+                  case ElementTypes.VIDEO:
+                  case ElementTypes.IMAGE:
+                  case ElementTypes.LINK:
                     return (
                       <RestaurantElementEditor
                         key={index}
@@ -106,6 +107,25 @@ export function RestaurantElementsPanel({
                           <h2 style={{ color: view.text_color }}>
                             {element.text}
                           </h2>{" "}
+                        </div>
+                      </RestaurantElementEditor>
+                    );
+                  case ElementTypes.LINK_GROUP:
+                    return (
+                      <RestaurantElementEditor
+                        key={index}
+                        element={element}
+                        elements={elements}
+                        setCurrentElements={setCurrentElements}
+                      >
+                        <div
+                          id={styles.elementSection}
+                          style={{
+                            background: `linear-gradient(90deg, ${view.secondary_color} 0%, #3fb982 55%, ${view.main_color} 100%)`,
+                            color: view.text_color,
+                          }}
+                        >
+                          <p>Use image</p>
                         </div>
                       </RestaurantElementEditor>
                     );

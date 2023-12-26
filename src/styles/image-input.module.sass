@@ -30,3 +30,27 @@
             >p
                 font-size: 0.8rem
                 opacity: 0.8
+
+.uploadedImage
+    display: flex
+    flex-direction: row !important
+    align-items: center
+    padding: 1rem
+    border-radius: 1rem
+    input
+        opacity: 0
+        width: 1px
+        height: 1px !important
+        margin: 0px !important
+        padding: 0px !important
+    > div
+        &:first-of-type
+            flex-grow: 0.3
+        &:last-of-type
+            flex-grow: 1
+            display: flex
+            flex-direction: column
+            align-items: center
+            >p
+                opacity: 0.5
+                font-size: 0.9rem

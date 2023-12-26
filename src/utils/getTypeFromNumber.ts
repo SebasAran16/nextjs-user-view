@@ -8,6 +8,8 @@ export default function getTypeFromNumber(type: number) {
       return "Image";
     case 4:
       return "Button Link";
+    case 5:
+      return "Links Group";
     default:
       return "Type not supported";
   }

@@ -1,4 +1,4 @@
-import styles from "@/styles/components/modals/restaurant.module.sass";
+import styles from "@/styles/image-input.module.sass";
 import convertToBase64 from "@/utils/convertToBase64";
 import axios from "axios";
 import React, { useState } from "react";

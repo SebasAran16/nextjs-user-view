@@ -11,6 +11,7 @@ import { ProfileLink } from "@/app/components/views/profile-link";
 import { getColorFromUse } from "@/utils/returnUseColor";
 import { ColorUse } from "@/types/structs/colorUse";
 import { TextElement } from "@/app/components/views/text-element";
+import { LinkGroup } from "@/app/components/views/link-group";
 
 interface viewPageProps {
   params: { view_url: string };
@@ -109,6 +110,16 @@ export default function ViewPage({ params }: viewPageProps) {
                     secondaryColor={secondaryColor}
                     textColor={textColor}
                     url={element.button_link}
+                  />
+                );
+              case 5:
+                return (
+                  <LinkGroup
+                    key={index}
+                    groups={element.link_group}
+                    mainColor={mainColor}
+                    secondaryColor={secondaryColor}
+                    textColor={textColor}
                   />
                 );
               default:

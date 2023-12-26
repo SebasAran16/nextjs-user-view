@@ -21,6 +21,7 @@ const ElementSchema = new Schema({
   video_link: String,
   image_link: String,
   button_link: String,
+  link_group: [Object],
   created_at: {
     type: Schema.Types.Date,
     required: [true, "Element require date created"],
