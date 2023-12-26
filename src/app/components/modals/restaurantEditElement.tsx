@@ -5,6 +5,8 @@ import toast from "react-hot-toast";
 import CurrentElementData from "../currentElementData";
 import { useState } from "react";
 import { useRouter } from "next/navigation";
+import ElementTypes from "@/utils/elementsStruct";
+import { LinkGroupImageType } from "@/types/structs/linkGroupImageType";
 
 interface RestaurantEditElementModalProps {
   setVisibleModal: Function;
@@ -41,9 +43,9 @@ export function RestaurantEditElementModal({
       if (elementText !== "") editElementObject.text = elementText;
 
       switch (elementType) {
-        case 1:
+        case ElementTypes.TEXT:
           break;
-        case 2:
+        case ElementTypes.VIDEO:
           const elementVideoLink = (
             form.elements.namedItem("editElementVideoLink") as HTMLInputElement
           ).value;
@@ -51,22 +53,49 @@ export function RestaurantEditElementModal({
           if (elementVideoLink !== "")
             editElementObject.video_link = elementVideoLink;
           break;
-        case 3:
+        case ElementTypes.IMAGE:
           const elementImageLink = (
             form.elements.namedItem("editElementImageLink") as HTMLInputElement
           ).value;
           if (elementImageLink !== "")
             editElementObject.image_link = elementImageLink;
           break;
-        case 4:
+        case ElementTypes.LINK:
           const elementButtonLink = (
             form.elements.namedItem("editElementButtonLink") as HTMLInputElement
           ).value;
           if (elementButtonLink !== "")
             editElementObject.button_link = elementButtonLink;
           break;
-        case 5:
-        // TODO
+        case ElementTypes.LINK_GROUP:
+          const linkGroup = element.link_group;
+          for (let i = 0; i < element.link_group.length; i++) {
+            const customerIndex = i + 1;
+            const linkToEdit =
+              (
+                form.elements.namedItem(
+                  "editElementLinkGroup" + customerIndex
+                ) as HTMLInputElement
+              ).value ?? "";
+            const linkImageToEdit =
+              (
+                form.elements.namedItem(
+                  "editLinkGroupImageType" + customerIndex
+                ) as HTMLInputElement
+              ).value ?? "";
+
+            if (linkToEdit) {
+              if (linkGroup[i]) {
+                linkGroup[i].link = linkToEdit;
+              }
+            }
+            if (linkImageToEdit) {
+              linkGroup[i].image = linkImageToEdit;
+            }
+          }
+
+          editElementObject.link_group = linkGroup;
+          break;
         default:
           throw new Error("Element type not valid");
       }
@@ -97,13 +126,6 @@ export function RestaurantEditElementModal({
       <CurrentElementData element={element} />
       <h2>Edit Element:</h2>
       <form onSubmit={handleEditElementSubmit}>
-        <label>Past Text:</label>
-        <input
-          type="text"
-          placeholder={element.text}
-          className={styles.pastElementValue}
-          disabled
-        />
         <label>New text:</label>
         <input
           type="text"
@@ -112,17 +134,10 @@ export function RestaurantEditElementModal({
           onChange={() => setDisableEditButton(false)}
         />
         {element ? (
-          element.type === 1 ? (
+          element.type === ElementTypes.TEXT ? (
             ""
-          ) : element.type === 2 ? (
+          ) : element.type === ElementTypes.VIDEO ? (
             <>
-              <label>Past video URL:</label>
-              <input
-                type="text"
-                placeholder={element.video_link}
-                className={styles.pastElementValue}
-                disabled
-              />
               <label>New video URL:</label>
               <input
                 type="text"
@@ -131,15 +146,8 @@ export function RestaurantEditElementModal({
                 onChange={() => setDisableEditButton(false)}
               />
             </>
-          ) : element.type === 3 ? (
+          ) : element.type === ElementTypes.IMAGE ? (
             <>
-              <label>Past image URL:</label>
-              <input
-                type="text"
-                placeholder={element.image_link}
-                className={styles.pastElementValue}
-                disabled
-              />
               <label>New image URL:</label>
               <input
                 type="text"
@@ -148,15 +156,8 @@ export function RestaurantEditElementModal({
                 onChange={() => setDisableEditButton(false)}
               />
             </>
-          ) : element.type === 4 ? (
+          ) : element.type === ElementTypes.LINK ? (
             <>
-              <label>Past link URL for button:</label>
-              <input
-                type="text"
-                placeholder={element.button_link}
-                className={styles.pastElementValue}
-                disabled
-              />
               <label>New link URL for button:</label>
               <input
                 type="text"
@@ -164,6 +165,52 @@ export function RestaurantEditElementModal({
                 placeholder="https://restaurant.com/menu"
                 onChange={() => setDisableEditButton(false)}
               />
+            </>
+          ) : element.type === ElementTypes.LINK_GROUP ? (
+            <>
+              {element.link_group.map((group: any, index: number) => {
+                const clientIndex = index + 1;
+
+                return (
+                  <div key={index}>
+                    <label>{`New link ${clientIndex}:`}</label>
+                    <input
+                      type="text"
+                      name={`editElementLinkGroup${clientIndex}`}
+                      placeholder="https://restaurant.com/menu"
+                      onChange={() => setDisableEditButton(false)}
+                    />
+                    <select
+                      name={"editLinkGroupImageType" + clientIndex}
+                      onChange={() => setDisableEditButton(false)}
+                    >
+                      <option value="">{`Select New Link ${clientIndex} Image Type`}</option>
+                      <option value={LinkGroupImageType.FACEBOOK}>
+                        Facebook
+                      </option>
+                      <option value={LinkGroupImageType.INSTAGRAM}>
+                        Instagram
+                      </option>
+                      <option value={LinkGroupImageType.LINKEDIN}>
+                        Linkedin
+                      </option>
+                      <option value={LinkGroupImageType.TIK_TOK}>
+                        Tik Tok
+                      </option>
+                      <option value={LinkGroupImageType.X}>X</option>
+                      <option value={LinkGroupImageType.YOUTUBE}>
+                        YouTube
+                      </option>
+                      <option value={LinkGroupImageType.WEBSITE}>
+                        Website
+                      </option>
+                      <option value={LinkGroupImageType.HASHTAG}>
+                        Hashtag
+                      </option>
+                    </select>
+                  </div>
+                );
+              })}
             </>
           ) : (
             "Element type not allowed"
@@ -174,7 +221,11 @@ export function RestaurantEditElementModal({
         <button type="submit" disabled={disableEditButton}>
           Edit Element
         </button>
-        {disableEditButton ? <p>Type some value to edit</p> : ""}
+        {disableEditButton ? (
+          <p className={styles.discreteText}>Type some value to edit</p>
+        ) : (
+          ""
+        )}
       </form>
     </div>
   );

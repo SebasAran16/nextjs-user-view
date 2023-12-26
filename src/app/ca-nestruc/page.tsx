@@ -4,7 +4,7 @@ import Image from "next/image";
 import { VideoPlayer } from "../components/views/video-player";
 import { useState } from "react";
 import { ModalImage } from "../components/views/modal-image";
-import { MultipleProfileLinks } from "../components/views/link-group";
+import { LinkGroup } from "../components/views/link-group";
 import { getColorFromUse } from "@/utils/returnUseColor";
 import { ColorUse } from "@/types/structs/colorUse";
 
@@ -25,7 +25,7 @@ export default async function CaNEstruc() {
         secondaryColor={getColorFromUse(ColorUse.SECONDARY)}
         textColor={getColorFromUse(ColorUse.TEXT)}
       />
-      <MultipleProfileLinks />
+      <LinkGroup />
       <VideoPlayer
         text={"Conoce nuestra historia"}
         url="/videos/historia.mp4"

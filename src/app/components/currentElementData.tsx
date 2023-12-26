@@ -32,7 +32,7 @@ export default function CurrentElementData({
                     const clientIndex = index + 1;
                     const { link } = group;
                     return (
-                      <div>
+                      <div key={index}>
                         <span>{`Link ${clientIndex}:`}</span>
                         <p>{link}</p>
                       </div>

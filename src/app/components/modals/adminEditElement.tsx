@@ -5,6 +5,8 @@ import toast from "react-hot-toast";
 import CurrentElementData from "../currentElementData";
 import { useState } from "react";
 import ElementTypes from "@/utils/elementsStruct";
+import { LinkGroupImageType } from "@/types/structs/linkGroupImageType";
+import { useRouter } from "next/navigation";
 
 interface AdminEditElementModalProps {
   setVisibleModal: Function;
@@ -19,7 +21,15 @@ export function AdminEditElementModal({
   setCurrentElements,
   currentElements,
 }: AdminEditElementModalProps) {
+  const router = useRouter();
+
   const [disableEditButton, setDisableEditButton] = useState(true);
+  const [initialElementGroupLinks] = useState(
+    currentEditElement.link_group ? currentEditElement.link_group.length : 0
+  );
+  const [additionalGroupLinks, setAdditionalGroupLinks] = useState<
+    Array<number>
+  >([]);
 
   const handleEditElementSubmit = async (
     e: React.FormEvent<HTMLFormElement>
@@ -71,15 +81,34 @@ export function AdminEditElementModal({
           break;
         case 5:
           const linkGroup = currentEditElement.link_group;
-          for (let i = 0; i < currentEditElement.link_group.length; i++) {
+          for (
+            let i = 0;
+            i < initialElementGroupLinks + additionalGroupLinks.length;
+            i++
+          ) {
             const customerIndex = i + 1;
-            const linkToEdit = form.elements.namedItem(
-              "editElementLinkGroup" + customerIndex
-            ) as HTMLInputElement;
+            const linkToEdit =
+              (
+                form.elements.namedItem(
+                  "editElementLinkGroup" + customerIndex
+                ) as HTMLInputElement
+              ).value ?? "";
+            const linkImageToEdit =
+              (
+                form.elements.namedItem(
+                  "editLinkGroupImageType" + customerIndex
+                ) as HTMLInputElement
+              ).value ?? "";
 
             if (linkToEdit) {
-              const newLink = linkToEdit.value;
-              linkGroup[i].link = newLink;
+              if (linkGroup[i]) {
+                linkGroup[i].link = linkToEdit;
+              } else {
+                linkGroup.push({ link: linkToEdit, image: "" });
+              }
+            }
+            if (linkImageToEdit) {
+              linkGroup[i].image = linkImageToEdit;
             }
           }
 
@@ -168,7 +197,7 @@ export function AdminEditElementModal({
                   const clientIndex = index + 1;
 
                   return (
-                    <>
+                    <div key={index}>
                       <label>{`New link ${clientIndex}:`}</label>
                       <input
                         type="text"
@@ -176,10 +205,111 @@ export function AdminEditElementModal({
                         placeholder="https://restaurant.com/menu"
                         onChange={() => setDisableEditButton(false)}
                       />
-                    </>
+                      <select
+                        name={"editLinkGroupImageType" + clientIndex}
+                        onChange={() => setDisableEditButton(false)}
+                      >
+                        <option value="">{`Select New Link ${clientIndex} Image Type`}</option>
+                        <option value={LinkGroupImageType.FACEBOOK}>
+                          Facebook
+                        </option>
+                        <option value={LinkGroupImageType.INSTAGRAM}>
+                          Instagram
+                        </option>
+                        <option value={LinkGroupImageType.LINKEDIN}>
+                          Linkedin
+                        </option>
+                        <option value={LinkGroupImageType.TIK_TOK}>
+                          Tik Tok
+                        </option>
+                        <option value={LinkGroupImageType.X}>X</option>
+                        <option value={LinkGroupImageType.YOUTUBE}>
+                          YouTube
+                        </option>
+                        <option value={LinkGroupImageType.WEBSITE}>
+                          Website
+                        </option>
+                        <option value={LinkGroupImageType.HASHTAG}>
+                          Hashtag
+                        </option>
+                      </select>
+                    </div>
                   );
                 }
               )}
+              {additionalGroupLinks.map((linkIndex, index) => {
+                return (
+                  <div key={index}>
+                    <div className={styles.spaceBetweenContainer}>
+                      <label>{`New link ${linkIndex}:*`}</label>
+                    </div>
+
+                    <input
+                      type="text"
+                      name={`editElementLinkGroup${linkIndex}`}
+                      placeholder="https://restaurant.com/menu"
+                      onChange={() => setDisableEditButton(false)}
+                      required
+                    />
+                    <select
+                      name={"editLinkGroupImageType" + linkIndex}
+                      onChange={() => setDisableEditButton(false)}
+                      required
+                    >
+                      <option value="">{`Select New Link ${linkIndex} Image Type`}</option>
+                      <option value={LinkGroupImageType.FACEBOOK}>
+                        Facebook
+                      </option>
+                      <option value={LinkGroupImageType.INSTAGRAM}>
+                        Instagram
+                      </option>
+                      <option value={LinkGroupImageType.LINKEDIN}>
+                        Linkedin
+                      </option>
+                      <option value={LinkGroupImageType.TIK_TOK}>
+                        Tik Tok
+                      </option>
+                      <option value={LinkGroupImageType.X}>X</option>
+                      <option value={LinkGroupImageType.YOUTUBE}>
+                        YouTube
+                      </option>
+                      <option value={LinkGroupImageType.WEBSITE}>
+                        Website
+                      </option>
+                      <option value={LinkGroupImageType.HASHTAG}>
+                        Hashtag
+                      </option>
+                    </select>
+                  </div>
+                );
+              })}
+              <button
+                type="button"
+                onClick={() => {
+                  const pastGroupLinkAdded =
+                    initialElementGroupLinks + additionalGroupLinks.length;
+
+                  if (pastGroupLinkAdded > 4) {
+                    toast.error("Only 5 links can be added");
+                    return;
+                  }
+
+                  additionalGroupLinks.push(
+                    additionalGroupLinks.length > 0
+                      ? initialElementGroupLinks +
+                          additionalGroupLinks.length +
+                          1
+                      : initialElementGroupLinks + 1
+                  );
+                  setAdditionalGroupLinks(additionalGroupLinks);
+                  router.refresh();
+                }}
+                disabled={
+                  initialElementGroupLinks + additionalGroupLinks.length > 4
+                }
+              >
+                + Add Link
+              </button>
             </>
           ) : (
             "Element type not allowed"

@@ -2,19 +2,18 @@
 import styles from "@/styles/components/elements/profile-link.module.sass";
 import Link from "next/link";
 import Image from "next/image";
+import { getImageForLinkGroupImageType } from "@/utils/getImageForLinkGroupImageType";
 
 interface LinkGroupProps {
   groups: any[];
   mainColor: string;
   secondaryColor: string;
-  textColor: string;
 }
 
 export function LinkGroup({
   groups,
   mainColor,
   secondaryColor,
-  textColor,
 }: LinkGroupProps) {
   return (
     <>
@@ -25,12 +24,12 @@ export function LinkGroup({
           background: `linear-gradient(90deg, ${secondaryColor} 0%, #3fb982 55%, ${mainColor} 100%)`,
         }}
       >
-        {groups.map((group) => {
+        {groups.map((group, index) => {
           return (
-            <Link href={group.link} target="_blank">
+            <Link key={index} href={group.link} target="_blank">
               <Image
                 className={styles.experienceToolImage}
-                src={"/social-media/instagram.svg"}
+                src={getImageForLinkGroupImageType(parseInt(group.image)) ?? ""}
                 alt="Instagram Icon"
                 width="50"
                 height="50"

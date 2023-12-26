@@ -9,6 +9,7 @@ import toast from "react-hot-toast";
 import Image from "next/image";
 import get64BaseSize from "@/utils/getBase64Size";
 import { useRouter } from "next/navigation";
+import { LinkGroupImageType } from "@/types/structs/linkGroupImageType";
 
 interface AddElementModalProps {
   setVisibleModal: Function;
@@ -29,7 +30,7 @@ export function AddElementModal({
 }: AddElementModalProps) {
   const router = useRouter();
   const [linkGroupCount, setLinkGroupCount] = useState(0);
-  const [linkGroupImages, setLinkGroupImages] = useState<Array<string>>([]);
+  const [linkGroupImages, setLinkGroupImages] = useState<Array<number>>([]);
 
   const handleAddElementSubmit = async (
     e: React.FormEvent<HTMLFormElement>
@@ -88,11 +89,20 @@ export function AddElementModal({
                 "addElementGroupLink" + i
               ) as HTMLInputElement
             ).value;
-            const linkGroupImage = linkGroupImages[i];
+            const linkGroupLinkImageType = (
+              form.elements.namedItem(
+                "linkGroupImageType" + i
+              ) as HTMLInputElement
+            ).value;
+
+            if (!linkGroupLinkImageType) {
+              toast.error("Set image type for link " + i);
+              return;
+            }
 
             linkGroupValues.push({
               link: linkGroupLink,
-              image: linkGroupImage,
+              image: linkGroupLinkImageType,
             });
           }
           addElementObject.link_group = linkGroupValues;
@@ -120,34 +130,7 @@ export function AddElementModal({
     }
   };
 
-  async function handleFileUpload(e: React.FormEvent<HTMLInputElement>) {
-    try {
-      const element = e.currentTarget;
-      const file = element.files![0] ?? "";
-      const maxSizeInBytes = 15 * 1024 * 1024; // 15MB
-
-      if (file.size > maxSizeInBytes)
-        throw new Error(
-          "Image size exceeds the maximum allowed size (15MB). Please choose a smaller image."
-        );
-
-      const imageBase64 = (await convertToBase64(file)) as string;
-
-      linkGroupImages.push(imageBase64);
-      setLinkGroupImages(linkGroupImages);
-      router.refresh();
-    } catch (err: any) {
-      console.log(err);
-      toast.error(err.message);
-    }
-  }
-
-  const decreaseLinkGroup = (groupLink: number) => {
-    if (linkGroupImages.length === groupLink) {
-      linkGroupImages.splice(linkGroupImages.length - 1, 1);
-      setLinkGroupImages(linkGroupImages);
-    }
-
+  const decreaseLinkGroup = () => {
     setLinkGroupCount(linkGroupCount - 1);
   };
 
@@ -241,46 +224,23 @@ export function AddElementModal({
                 type="text"
                 name="addElementGroupLink1"
               />
-              {linkGroupImages.length > 0 ? (
-                <div className={imageInputStyles.uploadedImage}>
-                  <div>
-                    <Image
-                      src={linkGroupImages[0]}
-                      alt="Added Image"
-                      width="32"
-                      height="32"
-                    />
-                  </div>
-                  <div>
-                    <h3>Image Uploaded!</h3>
-                    <p>{`Size: ${get64BaseSize(linkGroupImages[0])} KB`}</p>
-                  </div>
-                </div>
-              ) : (
-                <label
-                  className={imageInputStyles.imageUpload}
-                  htmlFor="linkGroupImage1"
-                >
-                  <div>+</div>
-                  <div>
-                    <h3>Upload Link 1 Image</h3>
-                    <input
-                      id="linkGroupImage1"
-                      type="file"
-                      name="addElementGroupLinkImage1"
-                      accept=".jpg, .png, .jpeg"
-                      onChange={handleFileUpload}
-                    />
-                    <p>{"(Format should be jpg/png)"}</p>
-                  </div>
-                </label>
-              )}
+              <select name="linkGroupImageType1">
+                <option value="">Select Link 1 Image</option>
+                <option value={LinkGroupImageType.FACEBOOK}>Facebook</option>
+                <option value={LinkGroupImageType.INSTAGRAM}>Instagram</option>
+                <option value={LinkGroupImageType.LINKEDIN}>Linkedin</option>
+                <option value={LinkGroupImageType.TIK_TOK}>Tik Tok</option>
+                <option value={LinkGroupImageType.X}>X</option>
+                <option value={LinkGroupImageType.YOUTUBE}>YouTube</option>
+                <option value={LinkGroupImageType.WEBSITE}>Website</option>
+                <option value={LinkGroupImageType.HASHTAG}>Hashtag</option>
+              </select>
               {linkGroupCount > 1 ? (
                 <>
                   <div className={styles.spaceBetweenContainer}>
                     <label>Link 2:</label>
                     {linkGroupCount === 2 ? (
-                      <button onClick={() => decreaseLinkGroup(2)}>-</button>
+                      <button onClick={() => decreaseLinkGroup()}>-</button>
                     ) : (
                       ""
                     )}
@@ -290,40 +250,23 @@ export function AddElementModal({
                     type="text"
                     name="addElementGroupLink2"
                   />
-                  {linkGroupImages.length > 1 ? (
-                    <div className={imageInputStyles.uploadedImage}>
-                      <div>
-                        <Image
-                          src={linkGroupImages[1]}
-                          alt="Added Image"
-                          width="32"
-                          height="32"
-                        />
-                      </div>
-                      <div>
-                        <h3>Image Uploaded!</h3>
-                        <p>{`Size: ${get64BaseSize(linkGroupImages[1])} KB`}</p>
-                      </div>
-                    </div>
-                  ) : (
-                    <label
-                      className={imageInputStyles.imageUpload}
-                      htmlFor="linkGroupImage2"
-                    >
-                      <div>+</div>
-                      <div>
-                        <h3>Upload Link 2 Image</h3>
-                        <input
-                          id="linkGroupImage2"
-                          type="file"
-                          name="addElementGroupLinkImage2"
-                          accept=".jpg, .png, .jpeg"
-                          onChange={handleFileUpload}
-                        />
-                        <p>{"(Format should be jpg/png)"}</p>
-                      </div>
-                    </label>
-                  )}
+                  <select name="linkGroupImageType2">
+                    <option value="">Select Link 2 Image</option>
+                    <option value={LinkGroupImageType.FACEBOOK}>
+                      Facebook
+                    </option>
+                    <option value={LinkGroupImageType.INSTAGRAM}>
+                      Instagram
+                    </option>
+                    <option value={LinkGroupImageType.LINKEDIN}>
+                      Linkedin
+                    </option>
+                    <option value={LinkGroupImageType.TIK_TOK}>Tik Tok</option>
+                    <option value={LinkGroupImageType.X}>X</option>
+                    <option value={LinkGroupImageType.YOUTUBE}>YouTube</option>
+                    <option value={LinkGroupImageType.WEBSITE}>Website</option>
+                    <option value={LinkGroupImageType.HASHTAG}>Hashtag</option>
+                  </select>
                 </>
               ) : (
                 ""
@@ -333,7 +276,7 @@ export function AddElementModal({
                   <div className={styles.spaceBetweenContainer}>
                     <label>Link 3:</label>
                     {linkGroupCount === 3 ? (
-                      <button onClick={() => decreaseLinkGroup(3)}>-</button>
+                      <button onClick={() => decreaseLinkGroup()}>-</button>
                     ) : (
                       ""
                     )}
@@ -343,40 +286,23 @@ export function AddElementModal({
                     type="text"
                     name="addElementGroupLink3"
                   />
-                  {linkGroupImages.length > 2 ? (
-                    <div className={imageInputStyles.uploadedImage}>
-                      <div>
-                        <Image
-                          src={linkGroupImages[2]}
-                          alt="Added Image"
-                          width="32"
-                          height="32"
-                        />
-                      </div>
-                      <div>
-                        <h3>Image Uploaded!</h3>
-                        <p>{`Size: ${get64BaseSize(linkGroupImages[2])} KB`}</p>
-                      </div>
-                    </div>
-                  ) : (
-                    <label
-                      className={imageInputStyles.imageUpload}
-                      htmlFor="linkGroupImage3"
-                    >
-                      <div>+</div>
-                      <div>
-                        <h3>Upload Link 3 Image</h3>
-                        <input
-                          id="linkGroupImage3"
-                          type="file"
-                          name="addElementGroupLinkImage3"
-                          accept=".jpg, .png, .jpeg"
-                          onChange={handleFileUpload}
-                        />
-                        <p>{"(Format should be jpg/png)"}</p>
-                      </div>
-                    </label>
-                  )}
+                  <select name="linkGroupImageType3">
+                    <option value="">Select Link 3 Image</option>
+                    <option value={LinkGroupImageType.FACEBOOK}>
+                      Facebook
+                    </option>
+                    <option value={LinkGroupImageType.INSTAGRAM}>
+                      Instagram
+                    </option>
+                    <option value={LinkGroupImageType.LINKEDIN}>
+                      Linkedin
+                    </option>
+                    <option value={LinkGroupImageType.TIK_TOK}>Tik Tok</option>
+                    <option value={LinkGroupImageType.X}>X</option>
+                    <option value={LinkGroupImageType.YOUTUBE}>YouTube</option>
+                    <option value={LinkGroupImageType.WEBSITE}>Website</option>
+                    <option value={LinkGroupImageType.HASHTAG}>Hashtag</option>
+                  </select>
                 </>
               ) : (
                 ""
@@ -386,7 +312,7 @@ export function AddElementModal({
                   <div className={styles.spaceBetweenContainer}>
                     <label>Link 4:</label>
                     {linkGroupCount === 4 ? (
-                      <button onClick={() => decreaseLinkGroup(4)}>-</button>
+                      <button onClick={() => decreaseLinkGroup()}>-</button>
                     ) : (
                       ""
                     )}
@@ -396,40 +322,23 @@ export function AddElementModal({
                     type="text"
                     name="addElementGroupLink4"
                   />
-                  {linkGroupImages.length > 3 ? (
-                    <div className={imageInputStyles.uploadedImage}>
-                      <div>
-                        <Image
-                          src={linkGroupImages[3]}
-                          alt="Added Image"
-                          width="32"
-                          height="32"
-                        />
-                      </div>
-                      <div>
-                        <h3>Image Uploaded!</h3>
-                        <p>{`Size: ${get64BaseSize(linkGroupImages[3])} KB`}</p>
-                      </div>
-                    </div>
-                  ) : (
-                    <label
-                      className={imageInputStyles.imageUpload}
-                      htmlFor="linkGroupImage4"
-                    >
-                      <div>+</div>
-                      <div>
-                        <h3>Upload Link 4 Image</h3>
-                        <input
-                          id="linkGroupImage4"
-                          type="file"
-                          name="addElementGroupLinkImage4"
-                          accept=".jpg, .png, .jpeg"
-                          onChange={handleFileUpload}
-                        />
-                        <p>{"(Format should be jpg/png)"}</p>
-                      </div>
-                    </label>
-                  )}
+                  <select name="linkGroupImageType4">
+                    <option value="">Select Link 4 Image</option>
+                    <option value={LinkGroupImageType.FACEBOOK}>
+                      Facebook
+                    </option>
+                    <option value={LinkGroupImageType.INSTAGRAM}>
+                      Instagram
+                    </option>
+                    <option value={LinkGroupImageType.LINKEDIN}>
+                      Linkedin
+                    </option>
+                    <option value={LinkGroupImageType.TIK_TOK}>Tik Tok</option>
+                    <option value={LinkGroupImageType.X}>X</option>
+                    <option value={LinkGroupImageType.YOUTUBE}>YouTube</option>
+                    <option value={LinkGroupImageType.WEBSITE}>Website</option>
+                    <option value={LinkGroupImageType.HASHTAG}>Hashtag</option>
+                  </select>
                 </>
               ) : (
                 ""
@@ -439,7 +348,7 @@ export function AddElementModal({
                   <div className={styles.spaceBetweenContainer}>
                     <label>Link 5:</label>
                     {linkGroupCount === 5 ? (
-                      <button onClick={() => decreaseLinkGroup(5)}>-</button>
+                      <button onClick={() => decreaseLinkGroup()}>-</button>
                     ) : (
                       ""
                     )}
@@ -449,45 +358,29 @@ export function AddElementModal({
                     type="text"
                     name="addElementGroupLink5"
                   />
-                  {linkGroupImages.length > 4 ? (
-                    <div className={imageInputStyles.uploadedImage}>
-                      <div>
-                        <Image
-                          src={linkGroupImages[4]}
-                          alt="Added Image"
-                          width="32"
-                          height="32"
-                        />
-                      </div>
-                      <div>
-                        <h3>Image Uploaded!</h3>
-                        <p>{`Size: ${get64BaseSize(linkGroupImages[4])} KB`}</p>
-                      </div>
-                    </div>
-                  ) : (
-                    <label
-                      className={imageInputStyles.imageUpload}
-                      htmlFor="linkGroupImage5"
-                    >
-                      <div>+</div>
-                      <div>
-                        <h3>Upload Link 5 Image</h3>
-                        <input
-                          id="linkGroupImage5"
-                          type="file"
-                          name="addElementGroupLinkImage5"
-                          accept=".jpg, .png, .jpeg"
-                          onChange={handleFileUpload}
-                        />
-                        <p>{"(Format should be jpg/png)"}</p>
-                      </div>
-                    </label>
-                  )}
+                  <select name="linkGroupImageType5">
+                    <option value="">Select Link 5 Image</option>
+                    <option value={LinkGroupImageType.FACEBOOK}>
+                      Facebook
+                    </option>
+                    <option value={LinkGroupImageType.INSTAGRAM}>
+                      Instagram
+                    </option>
+                    <option value={LinkGroupImageType.LINKEDIN}>
+                      Linkedin
+                    </option>
+                    <option value={LinkGroupImageType.TIK_TOK}>Tik Tok</option>
+                    <option value={LinkGroupImageType.X}>X</option>
+                    <option value={LinkGroupImageType.YOUTUBE}>YouTube</option>
+                    <option value={LinkGroupImageType.WEBSITE}>Website</option>
+                    <option value={LinkGroupImageType.HASHTAG}>Hashtag</option>
+                  </select>
                 </>
               ) : (
                 ""
               )}
               <button
+                type="button"
                 onClick={() => {
                   if (linkGroupCount > 4) {
                     toast.error("Only 5 links can be added");

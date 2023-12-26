@@ -119,7 +119,6 @@ export default function ViewPage({ params }: viewPageProps) {
                     groups={element.link_group}
                     mainColor={mainColor}
                     secondaryColor={secondaryColor}
-                    textColor={textColor}
                   />
                 );
               default:

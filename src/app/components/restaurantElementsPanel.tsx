@@ -5,6 +5,7 @@ import { ColorSelector } from "./colorSelector";
 import { ColorUse } from "@/types/structs/colorUse";
 import { hexToRGBA } from "@/utils/hexToRgba";
 import ElementTypes from "@/utils/elementsStruct";
+import { getImageForLinkGroupImageType } from "@/utils/getImageForLinkGroupImageType";
 
 interface RestaurantElementsPanelProps {
   elements: any[];
@@ -125,7 +126,23 @@ export function RestaurantElementsPanel({
                             color: view.text_color,
                           }}
                         >
-                          <p>Use image</p>
+                          {element.link_group.map(
+                            (group: any, index: number) => {
+                              return (
+                                <Image
+                                  key={index}
+                                  src={
+                                    getImageForLinkGroupImageType(
+                                      parseInt(group.image)
+                                    ) ?? ""
+                                  }
+                                  alt="Link Type Image"
+                                  height="50"
+                                  width="50"
+                                />
+                              );
+                            }
+                          )}
                         </div>
                       </RestaurantElementEditor>
                     );
