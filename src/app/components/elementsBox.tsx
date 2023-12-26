@@ -84,7 +84,7 @@ export default function ElementsBox({
           >{`https://customerview.app/view/${view.url}`}</a>
         </p>
         <div id={styles.headerSection}>
-          <h2>View's Elements:</h2>
+          <h2>View&apos;s Elements:</h2>
         </div>
         <hr />
         <div id={styles.elementsContainer}>

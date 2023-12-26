@@ -1,6 +1,5 @@
 import Link from "next/link";
 import styles from "@/styles/home.module.sass";
-import ElementsBox from "./components/elementsBox";
 
 export default async function Home() {
   return (
