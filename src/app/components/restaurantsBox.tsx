@@ -16,6 +16,10 @@ export function RestaurantsBox() {
   const [restaurants, setRestaurants] = useState<undefined | any>();
   const [visibleModal, setVisibleModal] = useState(false);
   const [userRol, setUserRol] = useState<undefined | string>();
+  const [itemsPerPage] = useState(10);
+  const [currentPage, setCurrentPage] = useState(
+    "0." + (itemsPerPage - 1).toString()
+  );
 
   useEffect(() => {
     if (!restaurants) {
@@ -38,6 +42,26 @@ export function RestaurantsBox() {
     }
   }, [restaurants]);
 
+  function parsePages(currentPage: string): number[] {
+    const [starting, last] = currentPage.split(".");
+
+    return [Number(starting), Number(last)];
+  }
+
+  function handleButtonClick(e: React.MouseEvent<HTMLButtonElement>) {
+    try {
+      const buttonValueIndex = Number(e.currentTarget.innerText);
+      const newStartingIndex = (buttonValueIndex - 1) * itemsPerPage;
+      const newLastIndex = newStartingIndex + itemsPerPage - 1;
+
+      setCurrentPage(
+        `${newStartingIndex.toString()}.${newLastIndex.toString()}`
+      );
+    } catch (err: any) {
+      console.log(err);
+    }
+  }
+
   return (
     <section id={styles.restaurantsContainer}>
       <h2>Resturants:</h2>
@@ -54,14 +78,18 @@ export function RestaurantsBox() {
         {restaurants ? (
           <>
             {restaurants.map((restaurant: any, index: number) => {
-              return (
-                <RestaurantCard
-                  key={index}
-                  restaurant={restaurant}
-                  restaurants={restaurants}
-                  setRestaurants={setRestaurants}
-                />
-              );
+              const [starting, last] = parsePages(currentPage);
+
+              if (index >= starting && index <= last) {
+                return (
+                  <RestaurantCard
+                    key={index}
+                    restaurant={restaurant}
+                    restaurants={restaurants}
+                    setRestaurants={setRestaurants}
+                  />
+                );
+              }
             })}
           </>
         ) : (
@@ -82,6 +110,38 @@ export function RestaurantsBox() {
       ) : (
         ""
       )}
+      <div className={styles.paginationButtonsContainer}>
+        {restaurants
+          ? restaurants.map((restaurant: any, index: number) => {
+              if (index % itemsPerPage === 0) {
+                const paginationIndex = index / itemsPerPage;
+                const [currentPageStart] = parsePages(currentPage);
+                const prevPage = currentPageStart + itemsPerPage;
+                const nextPage = currentPageStart - itemsPerPage;
+
+                if (
+                  paginationIndex === currentPageStart / itemsPerPage ||
+                  paginationIndex === prevPage / itemsPerPage ||
+                  paginationIndex === nextPage / itemsPerPage
+                ) {
+                  return (
+                    <button
+                      key={index}
+                      className={
+                        paginationIndex === currentPageStart / itemsPerPage
+                          ? styles.currentPagination
+                          : ""
+                      }
+                      onClick={handleButtonClick}
+                    >
+                      {index / itemsPerPage + 1}
+                    </button>
+                  );
+                }
+              }
+            })
+          : ""}
+      </div>
       <Modal
         visibleModal={visibleModal}
         setVisibleModal={setVisibleModal}
