@@ -1,5 +1,8 @@
 @import "@/styles/variables.module"
 
+.hidden
+    display: none !important
+
 #dashboardContainer
     padding: $content-padding
 
@@ -7,3 +10,64 @@
     display: flex
     justify-content: space-between
     padding: $content-padding
+    >div
+        display: flex
+        align-items: center
+        &:first-of-type
+        &:last-of-type
+            button
+                background: none
+                color: white
+                border: 1px solid $main-color
+                margin: 0 0.5rem
+                font-weight: 700
+
+#headerNav
+    display: flex
+    flex-direction: column
+    position: fixed
+    top: 0
+    right: 0
+    backdrop-filter: blur(20px)
+    border-radius: 0.5rem
+    border-top-right-radius: 0
+    border-bottom-right-radius: 0
+    overflow: hidden
+    width: 60vw
+    padding: 1rem
+    align-items: center
+    z-index: 100
+    gap: 2rem
+    >img
+        &:first-of-type
+            align-self: flex-end
+    > div
+        &:first-of-type
+            display: flex
+            flex-direction: column
+            gap: 1rem
+
+@media screen and (min-width: 768px)
+
+@media screen and (min-width: 992px)
+    #dashboardNav
+        >div
+            &:first-of-type
+            &:last-of-type
+                >img
+                    display: none
+
+    #headerNav
+        display: flex !important
+        position: initial
+        flex-direction: row
+        justify-content: flex-end
+        >img
+            &:first-of-type
+                display: none
+        > div
+            &:first-of-type
+                flex-direction: row
+                gap: 1rem
+
+@media screen and (min-width: 1200px)
