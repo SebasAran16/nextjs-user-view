@@ -16,7 +16,9 @@ export async function middleware(request: NextRequest) {
   const dataFromToken = token !== "" ? await getDataFromToken(token) : "";
 
   if (isUncredentialPath && token) {
-    return NextResponse.redirect(new URL("/restaurants", request.nextUrl));
+    return NextResponse.redirect(
+      new URL("/dashboard/restaurants", request.nextUrl)
+    );
   } else if (!isUncredentialPath && !token) {
     return NextResponse.redirect(new URL("/login", request.nextUrl));
   } else if (restaurantManager.test(path)) {
