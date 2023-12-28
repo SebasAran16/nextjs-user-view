@@ -20,16 +20,6 @@ const UserSchema = new Schema({
   },
   created_date: Date,
   image: String,
-  telephone: {
-    type: Number,
-  },
-  company_name: {
-    type: String,
-  },
-  company_address: String,
-  company_city: String,
-  company_region: String,
-  company_country: String,
   is_verified: {
     type: Boolean,
     default: false,

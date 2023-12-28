@@ -38,7 +38,7 @@ export default function Login() {
       setUserData(user);
 
       toast.success(response.data.message);
-      router.push("/restaurants");
+      router.push("/dashboard/restaurants");
     } catch (err: any) {
       console.log(err.response.data);
       toast.error(err.response.data.message);

@@ -96,20 +96,6 @@ export function RestaurantsBox() {
           "Loading..."
         )}
       </div>
-      {userData ? (
-        userData.rol !== "admin" ? (
-          <div
-            className={restaurantCardStyles.restaurantCardContainer}
-            onClick={() => setVisibleModal(true)}
-          >
-            <h3>+ Add Restaurant</h3>
-          </div>
-        ) : (
-          ""
-        )
-      ) : (
-        ""
-      )}
       <div className={styles.paginationButtonsContainer}>
         {restaurants
           ? restaurants.map((restaurant: any, index: number) => {
@@ -142,6 +128,20 @@ export function RestaurantsBox() {
             })
           : ""}
       </div>
+      {userData ? (
+        userData.rol !== "admin" ? (
+          <div
+            className={restaurantCardStyles.restaurantCardContainer}
+            onClick={() => setVisibleModal(true)}
+          >
+            <h3>+ Add Restaurant</h3>
+          </div>
+        ) : (
+          ""
+        )
+      ) : (
+        ""
+      )}
       <Modal
         visibleModal={visibleModal}
         setVisibleModal={setVisibleModal}

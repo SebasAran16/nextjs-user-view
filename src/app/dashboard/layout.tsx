@@ -6,9 +6,10 @@ import { Toaster, toast } from "react-hot-toast";
 import axios from "axios";
 import { getUserForVariables } from "@/utils/getUserForVariable";
 import { usePathname, useRouter } from "next/navigation";
-import { dashboardSections } from "@/utils/arrays/dashboard-sections";
+import { dashboardSections } from "@/utils/arrays/dashboardSections";
 import { fromSerpentToReadable } from "@/utils/fromSerpentToReadable";
 import Image from "next/image";
+import { fromSerpentToUrl } from "@/utils/fromSerpentToUrl";
 
 interface DashboardLayoutInterface {
   children: React.ReactNode;
@@ -70,6 +71,16 @@ export default function DashboardLayout({
     }
   };
 
+  const getSectionLink = (section: string) => {
+    const segments = pathname.split("/");
+
+    if (segments.length === 2) {
+      router.replace("dashboard");
+    }
+
+    router.push(fromSerpentToUrl(section));
+  };
+
   return (
     <section>
       <Toaster />
@@ -99,7 +110,21 @@ export default function DashboardLayout({
                 />
                 <div>
                   {dashboardSections.map((section: string, index: number) => {
-                    return <button>{fromSerpentToReadable(section)}</button>;
+                    if (
+                      section === "admin_panel" &&
+                      user &&
+                      user.rol !== "admin"
+                    )
+                      return;
+
+                    return (
+                      <button
+                        key={index}
+                        onClick={() => getSectionLink(section)}
+                      >
+                        {fromSerpentToReadable(section)}
+                      </button>
+                    );
                   })}
                 </div>
                 <button onClick={logOut}>Logout</button>
