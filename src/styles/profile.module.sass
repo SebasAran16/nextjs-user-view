@@ -1,5 +1,23 @@
 @import "@/styles/variables.module"
 
+#profileEditContainer
+    max-width: $max-container-width
+    margin: auto
+    >div
+        display: flex
+        flex-direction: column
+        &:first-of-type
+            >div
+                display: flex
+                flex-direction: column
+    hr
+        width: 90%
+        align-self: center
+    form
+        div
+            display: flex
+            flex-direction: column
+
 #profileHeaderContainer
     display: flex
     flex-direction: column
@@ -29,7 +47,34 @@
     margin-top: 1.5rem
 
 @media screen and (min-width: 768px)
+    #profileEditContainer
+        form
+            align-self: center
+        hr
+            width: 80%
+            align-self: center
+
+    #profileHeaderContainer
+        >div
+            &:first-of-type
+                >p
+            &:last-of-type
+                >div
+                    &:first-of-type
+
+    #changePasswordContainer
 
 @media screen and (min-width: 992px)
+    #profileEditContainer
+        >div
+            flex-direction: row
+            justify-content: space-between
+            >div
+                flex-grow: 1
+                padding: 0 3rem
+                &:first-of-type
+                    border-right: 1px solid gray
+        hr
+            display: none
 
 @media screen and (min-width: 1200px)

@@ -10,6 +10,7 @@ import { dashboardSections } from "@/utils/arrays/dashboardSections";
 import { fromSerpentToReadable } from "@/utils/fromSerpentToReadable";
 import Image from "next/image";
 import { fromSerpentToUrl } from "@/utils/fromSerpentToUrl";
+import { capitalizeFirstLetter } from "@/utils/capitalizeFirstLetter";
 
 interface DashboardLayoutInterface {
   children: React.ReactNode;
@@ -71,7 +72,7 @@ export default function DashboardLayout({
     }
   };
 
-  const getSectionLink = (section: string) => {
+  const goToSectionLink = (section: string) => {
     const segments = pathname.split("/");
 
     if (segments.length === 2) {
@@ -82,13 +83,18 @@ export default function DashboardLayout({
   };
 
   return (
-    <section>
+    <>
       <Toaster />
-      {!loading ? (
+      {!loading && user ? (
         <main id={styles.dashboardContainer}>
           <header id={styles.dashboardNav}>
             <div>
-              <h1>Welcome {user?.username ? user.username : ""}</h1>
+              <h1>
+                Welcome{" "}
+                {user.firstname
+                  ? capitalizeFirstLetter(user.firstname)
+                  : user.username}
+              </h1>
             </div>
             <div>
               <Image
@@ -120,7 +126,10 @@ export default function DashboardLayout({
                     return (
                       <button
                         key={index}
-                        onClick={() => getSectionLink(section)}
+                        onClick={() => {
+                          closeNav();
+                          goToSectionLink(section);
+                        }}
                       >
                         {fromSerpentToReadable(section)}
                       </button>
@@ -136,6 +145,6 @@ export default function DashboardLayout({
       ) : (
         "Loading Layout..."
       )}
-    </section>
+    </>
   );
 }
