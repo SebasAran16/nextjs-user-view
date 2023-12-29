@@ -166,12 +166,20 @@ export default function Profile() {
           <h2>Change Password:</h2>
           <form onSubmit={handleSubmitChangePassword}>
             <label>New Password:*</label>
-            <input type="password" placeholder="*********" name="newPassword" />
+            <input
+              type="password"
+              placeholder="*********"
+              name="newPassword"
+              required
+              minLength={7}
+            />
             <label>Repeat new Password:*</label>
             <input
               type="password"
               placeholder="*********"
               name="newPasswordRepeated"
+              required
+              minLength={7}
             />
             <button type="submit">Change</button>
           </form>

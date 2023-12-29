@@ -5,6 +5,8 @@ export type UserDataEditableVariables =
   | "password"
   | "image";
 
+export const userDataManagable = ["firstname", "lastname", "image", "password"];
+
 export const userDataVariablesAndManagable = {
   username: false,
   email: false,
