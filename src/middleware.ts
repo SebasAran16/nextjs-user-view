@@ -1,26 +1,25 @@
 import { NextResponse } from "next/server";
 import type { NextRequest } from "next/server";
 import { uncredentialPaths } from "@/utils/arrays/middleware/uncredentialPaths";
-import { credentialPaths } from "@/utils/arrays/middleware/credentialPaths";
 import { getDataFromToken } from "@/utils/getDataFromToken";
 import { UserRol } from "./types/structs/userRol.enum";
+import createMiddleware from "next-intl/middleware";
+import { locales } from "./utils/arrays/locales";
 
 export async function middleware(request: NextRequest) {
-  const path = request.nextUrl.pathname;
+  const [, locale, ...segments] = request.nextUrl.pathname.split("/");
+  const path = segments.join("/") === "" ? "/" : segments.join("/");
 
   const isUncredentialPath = uncredentialPaths.includes(path);
-  const isCredentialPath = credentialPaths.includes(path);
   const token = request.cookies.get("token")?.value || "";
   const restaurantManager = /\/restaurants\/.*/;
 
   const dataFromToken = token !== "" ? await getDataFromToken(token) : "";
 
   if (isUncredentialPath && token) {
-    return NextResponse.redirect(
-      new URL("/dashboard/restaurants", request.nextUrl)
-    );
+    request.nextUrl.pathname = `/${locale}/dashboard/restaurants`;
   } else if (!isUncredentialPath && !token) {
-    return NextResponse.redirect(new URL("/login", request.nextUrl));
+    request.nextUrl.pathname = `/${locale}/login`;
   } else if (restaurantManager.test(path)) {
     const restaurantsToken =
       request.cookies.get("restaurantsToken")?.value || false;
@@ -35,20 +34,19 @@ export async function middleware(request: NextRequest) {
       : false;
 
     if (dataFromToken.rol !== UserRol.ADMIN && !isOwner)
-      return NextResponse.redirect(new URL("/", request.nextUrl));
+      request.nextUrl.pathname = `/${locale}/`;
   }
 
-  return NextResponse.next();
+  const handleI18Routing = createMiddleware({
+    locales,
+    defaultLocale: "es",
+  });
+  const response = handleI18Routing(request);
+
+  return response;
 }
 
 // See "Matching Paths" below to learn more
 export const config = {
-  matcher: [
-    "/",
-    "/dashboard/:path*",
-    "/login/:path*",
-    "/signup/:path*",
-    "/verify-email/:path",
-    "/kyc-verification/:path*",
-  ],
+  matcher: ["/  ", "/((?!api|_next|_vercel|.*\\..*).*)"],
 };

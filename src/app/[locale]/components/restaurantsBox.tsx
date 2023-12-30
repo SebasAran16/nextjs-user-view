@@ -9,8 +9,11 @@ import { Modal } from "./modal";
 import { ModalPurpose } from "@/types/structs/modalPurposes.enum";
 import { UserRol } from "@/types/structs/userRol.enum";
 import { useGlobalState } from "@/utils/globalStates";
+import { useTranslations } from "next-intl";
 
 export function RestaurantsBox() {
+  const t = useTranslations("Dashboard.Components.Restaurants");
+
   const [userData] = useGlobalState("userData");
 
   const [restaurants, setRestaurants] = useState<undefined | any>();
@@ -64,7 +67,7 @@ export function RestaurantsBox() {
 
   return (
     <section id={styles.restaurantsContainer}>
-      <h2>Resturants:</h2>
+      <h2>{t("title")}:</h2>
       <p>
         {restaurants
           ? restaurants.length > 0

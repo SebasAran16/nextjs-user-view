@@ -1,0 +1,9 @@
+{
+  "Landing": {
+    "title": "Bienvenidos a CustomerView por OwnTheBlock Solutions!",
+    "authButtons": {
+      "login": "Iniciar Sesion",
+      "signup": "Registrarse"
+    }
+  }
+}

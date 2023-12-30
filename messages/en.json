@@ -1,0 +1,27 @@
+{
+  "Landing": {
+    "title": "Welcome to CustomerView by OwnTheBlock Solutions!",
+    "authButtons": {
+      "login": "Log In",
+      "signup": "Sign Up"
+    }
+  },
+  "Dashboard": {
+    "Header": {
+      "headerTitle": "Welcome",
+      "navigations": {
+        "restaurants": "Restaurants",
+        "profile": "Profile",
+        "admin_panel": "Admin Panel"
+      },
+      "logout": "Log Out"
+    },
+    "Components": {
+      "Restaurants": {
+        "title": "Restaurants"
+      },
+      "Profile": {},
+      "AdminPanel": {}
+    }
+  }
+}

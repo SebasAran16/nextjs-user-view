@@ -5,13 +5,13 @@ import React, { useEffect, useState } from "react";
 import { Toaster, toast } from "react-hot-toast";
 import getSortedElements from "@/utils/getSortedElements";
 import Image from "next/image";
-import { VideoPlayer } from "@/app/components/views/video-player";
-import { ModalImage } from "@/app/components/views/modal-image";
-import { ProfileLink } from "@/app/components/views/profile-link";
+import { VideoPlayer } from "@/app/[locale]/components/views/video-player";
+import { ModalImage } from "@/app/[locale]/components/views/modal-image";
+import { ProfileLink } from "@/app/[locale]/components/views/profile-link";
 import { getColorFromUse } from "@/utils/returnUseColor";
 import { ColorUse } from "@/types/structs/colorUse";
-import { TextElement } from "@/app/components/views/text-element";
-import { LinkGroup } from "@/app/components/views/link-group";
+import { TextElement } from "@/app/[locale]//components/views/text-element";
+import { LinkGroup } from "@/app/[locale]//components/views/link-group";
 
 interface viewPageProps {
   params: { view_url: string };

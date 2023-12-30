@@ -1,5 +1,5 @@
 "use client";
-import ViewsBox from "@/app/components/viewsBox";
+import ViewsBox from "@/app/[locale]/components/viewsBox";
 import { useEffect } from "react";
 
 interface RestaurantManagerProps {

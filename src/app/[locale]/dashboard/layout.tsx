@@ -11,6 +11,7 @@ import { fromSerpentToReadable } from "@/utils/fromSerpentToReadable";
 import Image from "next/image";
 import { fromSerpentToUrl } from "@/utils/fromSerpentToUrl";
 import { capitalizeFirstLetter } from "@/utils/capitalizeFirstLetter";
+import { useTranslations } from "next-intl";
 
 interface DashboardLayoutInterface {
   children: React.ReactNode;
@@ -19,6 +20,7 @@ interface DashboardLayoutInterface {
 export default function DashboardLayout({
   children,
 }: DashboardLayoutInterface) {
+  const t = useTranslations("Dashboard");
   const router = useRouter();
   const pathname = usePathname();
 
@@ -90,7 +92,7 @@ export default function DashboardLayout({
           <header id={styles.dashboardNav}>
             <div>
               <h1>
-                Welcome{" "}
+                {t("Header.headerTitle")}{" "}
                 {user.firstname
                   ? capitalizeFirstLetter(user.firstname)
                   : user.username}
@@ -131,12 +133,12 @@ export default function DashboardLayout({
                           goToSectionLink(section);
                         }}
                       >
-                        {fromSerpentToReadable(section)}
+                        {t("Header.navigations." + section)}
                       </button>
                     );
                   })}
                 </div>
-                <button onClick={logOut}>Logout</button>
+                <button onClick={logOut}>{t("Header.logout")}</button>
               </nav>
             </div>
           </header>
