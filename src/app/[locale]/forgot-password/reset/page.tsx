@@ -6,8 +6,10 @@ import React, { useEffect, useState } from "react";
 import { useRouter } from "next/navigation";
 import axios from "axios";
 import { Toaster, toast } from "react-hot-toast";
+import { useTranslations } from "next-intl";
 
 export default function ResetPassword() {
+  const t = useTranslations("AuthFlow.ForgotPassword.Reset");
   const router = useRouter();
 
   const [resetToken, setResetToken] = useState("");
@@ -73,13 +75,13 @@ export default function ResetPassword() {
               width="31"
               height="31"
             />
-            <p>CustomerView</p>
+            <p>{t("headerCompanyName")}</p>
           </Link>
         </div>
         <div id={styles.formPart}>
           <div>
-            <h2>Change Password</h2>
-            <p>Set your new password:</p>
+            <h2>{t("title")}</h2>
+            <p>{t("sectionExplanation")}</p>
           </div>
           <div>
             <form
@@ -87,18 +89,18 @@ export default function ResetPassword() {
               id={styles.signupForm}
               name="resetPasswordForm"
             >
-              <label>New Password:</label>
+              <label>{t("newPassword")}</label>
               <input type="password" name="newPassword" required />
 
-              <label>Repeat New Password:</label>
+              <label>{t("newPasswordRepeat")}</label>
               <input type="password" name="repeatedNewPassword" required />
               <button type="submit" disabled={!resetToken}>
-                Change Password
+                {t("changePassword")}
               </button>
             </form>
             <div id={styles.alreadyMemberDiv}>
-              <p>Have no account?</p>
-              <Link href="/signup">Create Account</Link>
+              <p>{t("noAccount")}</p>
+              <Link href="/signup">{t("createAccount")}</Link>
             </div>
           </div>
         </div>

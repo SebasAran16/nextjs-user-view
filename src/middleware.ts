@@ -1,5 +1,5 @@
 import { NextResponse } from "next/server";
-import type { NextRequest } from "next/server";
+import { NextRequest } from "next/server";
 import { uncredentialPaths } from "@/utils/arrays/middleware/uncredentialPaths";
 import { getDataFromToken } from "@/utils/getDataFromToken";
 import { UserRol } from "./types/structs/userRol.enum";
@@ -7,34 +7,43 @@ import createMiddleware from "next-intl/middleware";
 import { locales } from "./utils/arrays/locales";
 
 export async function middleware(request: NextRequest) {
-  const [, locale, ...segments] = request.nextUrl.pathname.split("/");
-  const path = segments.join("/") === "" ? "/" : segments.join("/");
+  const defaultLocale = request.headers.get("accept-language");
 
-  const isUncredentialPath = uncredentialPaths.includes(path);
+  const [, locale, ...segments] = request.nextUrl.pathname.split("/");
+  const path = segments.join("/") === "" ? "/" : `/${segments.join("/")}`;
+
+  const isUncredentialPath =
+    uncredentialPaths.includes(path) ||
+    (path !== "/" && uncredentialPaths.some((item) => path.startsWith(item)));
   const token = request.cookies.get("token")?.value || "";
   const restaurantManager = /\/restaurants\/.*/;
 
   const dataFromToken = token !== "" ? await getDataFromToken(token) : "";
 
-  if (isUncredentialPath && token) {
-    request.nextUrl.pathname = `/${locale}/dashboard/restaurants`;
-  } else if (!isUncredentialPath && !token) {
-    request.nextUrl.pathname = `/${locale}/login`;
-  } else if (restaurantManager.test(path)) {
-    const restaurantsToken =
-      request.cookies.get("restaurantsToken")?.value || false;
+  if (path !== "/") {
+    if (isUncredentialPath && token) {
+      return NextResponse.redirect(
+        new URL("/dashboard/restaurants", request.nextUrl)
+      );
+    } else if (!isUncredentialPath && !token) {
+      console.log("got here");
+      return NextResponse.redirect(new URL("/login", request.nextUrl));
+    } else if (restaurantManager.test(path)) {
+      const restaurantsToken =
+        request.cookies.get("restaurantsToken")?.value || false;
 
-    const restaurantsTokenData = restaurantsToken
-      ? await getDataFromToken(restaurantsToken)
-      : false;
+      const restaurantsTokenData = restaurantsToken
+        ? await getDataFromToken(restaurantsToken)
+        : false;
 
-    const restaurantId = path.slice(path.lastIndexOf("/") + 1);
-    const isOwner = restaurantsTokenData
-      ? restaurantsTokenData.hasOwnProperty(restaurantId)
-      : false;
+      const restaurantId = path.slice(path.lastIndexOf("/") + 1);
+      const isOwner = restaurantsTokenData
+        ? restaurantsTokenData.hasOwnProperty(restaurantId)
+        : false;
 
-    if (dataFromToken.rol !== UserRol.ADMIN && !isOwner)
-      request.nextUrl.pathname = `/${locale}/`;
+      if (dataFromToken.rol !== UserRol.ADMIN && !isOwner)
+        return NextResponse.redirect(new URL("/", request.nextUrl));
+    }
   }
 
   const handleI18Routing = createMiddleware({
@@ -48,5 +57,5 @@ export async function middleware(request: NextRequest) {
 
 // See "Matching Paths" below to learn more
 export const config = {
-  matcher: ["/  ", "/((?!api|_next|_vercel|.*\\..*).*)"],
+  matcher: ["/", "/((?!api|_next|_vercel|.*\\..*).*)"],
 };

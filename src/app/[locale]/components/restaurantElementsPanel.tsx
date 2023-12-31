@@ -6,6 +6,7 @@ import { ColorUse } from "@/types/structs/colorUse";
 import { hexToRGBA } from "@/utils/hexToRgba";
 import ElementTypes from "@/utils/elementsStruct";
 import { getImageForLinkGroupImageType } from "@/utils/getImageForLinkGroupImageType";
+import { useTranslations } from "next-intl";
 
 interface RestaurantElementsPanelProps {
   elements: any[];
@@ -20,6 +21,10 @@ export function RestaurantElementsPanel({
   view,
   setEditingView,
 }: RestaurantElementsPanelProps) {
+  const t = useTranslations(
+    "Dashboard.Components.Restaurants.ElementsBox.RestaurantElementsPanel"
+  );
+
   return (
     <>
       <div id={styles.colorSelectorsContainer}>
@@ -42,17 +47,9 @@ export function RestaurantElementsPanel({
           setEditingView={setEditingView}
         />
       </div>
-      <h3>This is what your customers see in your View:</h3>
+      <h3>{t("panelExplanation")}</h3>
       <section id={styles.restaurantPanelContainer}>
-        {elements ? (
-          elements.length > 0 ? (
-            <p>Select element to edit</p>
-          ) : (
-            ""
-          )
-        ) : (
-          ""
-        )}
+        {elements ? elements.length > 0 ? <p>{t("editExplainer")}</p> : "" : ""}
         <div id={styles.elementsContainer}>
           <Image
             id={styles.logo}
@@ -152,8 +149,8 @@ export function RestaurantElementsPanel({
                 }
               })
             ) : (
-              <div /*id={styles.defaultViewNoElements}*/>
-                <p>No elements added yet...</p>
+              <div>
+                <p>{t("noElementsMessage")}</p>
               </div>
             )
           ) : (

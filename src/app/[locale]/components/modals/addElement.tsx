@@ -10,6 +10,7 @@ import Image from "next/image";
 import get64BaseSize from "@/utils/getBase64Size";
 import { useRouter } from "next/navigation";
 import { LinkGroupImageType } from "@/types/structs/linkGroupImageType";
+import { useTranslations } from "next-intl";
 
 interface AddElementModalProps {
   setVisibleModal: Function;
@@ -28,6 +29,7 @@ export function AddElementModal({
   setAddFormType,
   addFormType,
 }: AddElementModalProps) {
+  const t = useTranslations("Modals.AddElementModal");
   const router = useRouter();
   const [linkGroupCount, setLinkGroupCount] = useState(0);
   const [linkGroupImages, setLinkGroupImages] = useState<Array<number>>([]);
@@ -136,16 +138,16 @@ export function AddElementModal({
 
   return (
     <>
-      <h2>Add Element:</h2>
+      <h2>{t("title")}</h2>
       <form onSubmit={handleAddElementSubmit}>
-        <label>Element Name:</label>
+        <label>{t("elementName")}</label>
         <input
           placeholder="ex Restaurant Menu"
           type="text"
           name="addElementName"
           required
         />
-        <label>Element Type:</label>
+        <label>{t("elementType")}</label>
         <select
           onChange={(e) => {
             const selectedValue = e.target.value;
@@ -160,17 +162,27 @@ export function AddElementModal({
           name="addElementType"
           required
         >
-          <option value="">Please Choose a Type</option>
-          <option value={ElementTypes.TEXT}>Text</option>
-          <option value={ElementTypes.VIDEO}>Video</option>
-          <option value={ElementTypes.IMAGE}>Image</option>
-          <option value={ElementTypes.LINK}>Link Button</option>
-          <option value={ElementTypes.LINK_GROUP}>Link Group</option>
+          <option value="">{t("elementTypeOptions.fallback")}</option>
+          <option value={ElementTypes.TEXT}>
+            {t("elementTypeOptions.text.option")}
+          </option>
+          <option value={ElementTypes.VIDEO}>
+            {t("elementTypeOptions.video.option")}
+          </option>
+          <option value={ElementTypes.IMAGE}>
+            {t("elementTypeOptions.image.option")}
+          </option>
+          <option value={ElementTypes.LINK}>
+            {t("elementTypeOptions.link_button.option")}
+          </option>
+          <option value={ElementTypes.LINK_GROUP}>
+            {t("elementTypeOptions.link_group.option")}
+          </option>
         </select>
         {addFormType ? (
           addFormType !== ElementTypes.LINK_GROUP ? (
             <>
-              <label>Text:</label>
+              <label>{t("elementTypeOptions.text.label")}</label>
               <input
                 placeholder="New Offer!"
                 type="text"
@@ -189,7 +201,7 @@ export function AddElementModal({
             ""
           ) : addFormType === ElementTypes.VIDEO ? (
             <>
-              <label>Video Link:</label>
+              <label>{t("elementTypeOptions.video.label")}</label>
               <input
                 placeholder="https://youtube.com/sdf..dsfsd"
                 type="text"
@@ -198,7 +210,7 @@ export function AddElementModal({
             </>
           ) : addFormType === ElementTypes.IMAGE ? (
             <>
-              <label>Image Link:</label>
+              <label>{t("elementTypeOptions.image.label")}</label>
               <input
                 placeholder="https://restaurant.com/gallery/1.jpg"
                 type="text"
@@ -207,7 +219,7 @@ export function AddElementModal({
             </>
           ) : addFormType === ElementTypes.LINK ? (
             <>
-              <label>Button Link:</label>
+              <label>{t("elementTypeOptions.link_button.label")}</label>
               <input
                 placeholder="https://restaurant.com/menu"
                 type="text"
@@ -217,7 +229,7 @@ export function AddElementModal({
           ) : addFormType === ElementTypes.LINK_GROUP ? (
             <>
               <div className={styles.spaceBetweenContainer}>
-                <label>Link 1:</label>
+                <label>{t("elementTypeOptions.link_group.link1.label")}</label>
               </div>
               <input
                 placeholder="https://restaurant.com/menu"
@@ -225,7 +237,9 @@ export function AddElementModal({
                 name="addElementGroupLink1"
               />
               <select name="linkGroupImageType1">
-                <option value="">Select Link 1 Image</option>
+                <option value="">
+                  {t("elementTypeOptions.link_group.link1.selectMessage")}
+                </option>
                 <option value={LinkGroupImageType.FACEBOOK}>Facebook</option>
                 <option value={LinkGroupImageType.INSTAGRAM}>Instagram</option>
                 <option value={LinkGroupImageType.LINKEDIN}>Linkedin</option>
@@ -238,7 +252,9 @@ export function AddElementModal({
               {linkGroupCount > 1 ? (
                 <>
                   <div className={styles.spaceBetweenContainer}>
-                    <label>Link 2:</label>
+                    <label>
+                      {t("elementTypeOptions.link_group.link2.label")}
+                    </label>
                     {linkGroupCount === 2 ? (
                       <button onClick={() => decreaseLinkGroup()}>-</button>
                     ) : (
@@ -251,7 +267,9 @@ export function AddElementModal({
                     name="addElementGroupLink2"
                   />
                   <select name="linkGroupImageType2">
-                    <option value="">Select Link 2 Image</option>
+                    <option value="">
+                      {t("elementTypeOptions.link_group.link2.selectMessage")}
+                    </option>
                     <option value={LinkGroupImageType.FACEBOOK}>
                       Facebook
                     </option>
@@ -274,7 +292,9 @@ export function AddElementModal({
               {linkGroupCount > 2 ? (
                 <>
                   <div className={styles.spaceBetweenContainer}>
-                    <label>Link 3:</label>
+                    <label>
+                      {t("elementTypeOptions.link_group.link3.label")}
+                    </label>
                     {linkGroupCount === 3 ? (
                       <button onClick={() => decreaseLinkGroup()}>-</button>
                     ) : (
@@ -287,7 +307,9 @@ export function AddElementModal({
                     name="addElementGroupLink3"
                   />
                   <select name="linkGroupImageType3">
-                    <option value="">Select Link 3 Image</option>
+                    <option value="">
+                      {t("elementTypeOptions.link_group.link3.selectMessage")}
+                    </option>
                     <option value={LinkGroupImageType.FACEBOOK}>
                       Facebook
                     </option>
@@ -310,7 +332,9 @@ export function AddElementModal({
               {linkGroupCount > 3 ? (
                 <>
                   <div className={styles.spaceBetweenContainer}>
-                    <label>Link 4:</label>
+                    <label>
+                      {t("elementTypeOptions.link_group.link4.label")}
+                    </label>
                     {linkGroupCount === 4 ? (
                       <button onClick={() => decreaseLinkGroup()}>-</button>
                     ) : (
@@ -323,7 +347,9 @@ export function AddElementModal({
                     name="addElementGroupLink4"
                   />
                   <select name="linkGroupImageType4">
-                    <option value="">Select Link 4 Image</option>
+                    <option value="">
+                      {t("elementTypeOptions.link_group.link4.selectMessage")}
+                    </option>
                     <option value={LinkGroupImageType.FACEBOOK}>
                       Facebook
                     </option>
@@ -346,7 +372,9 @@ export function AddElementModal({
               {linkGroupCount > 4 ? (
                 <>
                   <div className={styles.spaceBetweenContainer}>
-                    <label>Link 5:</label>
+                    <label>
+                      {t("elementTypeOptions.link_group.link5.label")}
+                    </label>
                     {linkGroupCount === 5 ? (
                       <button onClick={() => decreaseLinkGroup()}>-</button>
                     ) : (
@@ -359,7 +387,9 @@ export function AddElementModal({
                     name="addElementGroupLink5"
                   />
                   <select name="linkGroupImageType5">
-                    <option value="">Select Link 5 Image</option>
+                    <option value="">
+                      {t("elementTypeOptions.link_group.link5.selectMessage")}
+                    </option>
                     <option value={LinkGroupImageType.FACEBOOK}>
                       Facebook
                     </option>
@@ -390,10 +420,12 @@ export function AddElementModal({
                 }}
                 disabled={linkGroupCount > 4}
               >
-                + Add Link
+                {`+ ${t("elementTypeOptions.link_group.addLink")}`}
               </button>
               {linkGroupCount === 5 ? (
-                <p className={styles.discreteText}>Maximum links reached</p>
+                <p className={styles.discreteText}>
+                  {t("elementTypeOptions.link_group.maximumReached")}
+                </p>
               ) : (
                 ""
               )}
@@ -405,7 +437,7 @@ export function AddElementModal({
           ""
         )}
         <button type="submit" disabled={!addFormType}>
-          Add Element
+          {t("addElement")}
         </button>
       </form>
     </>

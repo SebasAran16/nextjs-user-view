@@ -1,9 +1,241 @@
 {
   "Landing": {
-    "title": "Bienvenidos a CustomerView por OwnTheBlock Solutions!",
+    "title": "¡Bienvenido a CustomerView de OwnTheBlock Solutions!",
     "authButtons": {
-      "login": "Iniciar Sesion",
+      "login": "Iniciar sesión",
       "signup": "Registrarse"
+    }
+  },
+  "AuthFlow": {
+    "Signup": {
+      "headerCompanyName": "CustomerView",
+      "title": "Crea tu cuenta",
+      "sectionExplanation": "Ingresa los siguientes detalles para registrarte.",
+      "username": "Nombre de usuario",
+      "email": "Correo electrónico",
+      "password": "Contraseña",
+      "repeatPassword": "Repetir contraseña",
+      "registerButton": "Registrarse ahora",
+      "alreadyRegister": "¿Ya estás registrado?",
+      "loginAnchor": "Iniciar sesión"
+    },
+    "Login": {
+      "headerCompanyName": "CustomerView",
+      "title": "Iniciar sesión",
+      "sectionExplanation": "Ingresa tus credenciales",
+      "loginKey": "Usuario o correo electrónico",
+      "password": "Contraseña",
+      "loginButton": "Iniciar sesión",
+      "forgotPasswordText": "¿Olvidaste tu contraseña?",
+      "recoverPasswordAnchor": "Recuperar"
+    },
+    "ForgotPassword": {
+      "headerCompanyName": "CustomerView",
+      "title": "Restablecer contraseña",
+      "sectionExplanation": "Ingresa tu nueva contraseña",
+      "existingEmail": "Correo electrónico existente",
+      "resetPassword": "Restablecer contraseña",
+      "noAccount": "¿No tienes cuenta?",
+      "createAccount": "Crear cuenta",
+      "mailSent": "¡Correo enviado!",
+      "emailExplainer": "¡Hemos enviado un correo para que puedas restablecer tu contraseña!",
+      "Reset": {
+        "headerCompanyName": "CustomerView",
+        "title": "Cambiar contraseña",
+        "sectionExplanation": "Establece tu nueva contraseña:",
+        "newPassword": "Nueva contraseña:",
+        "newPasswordRepeat": "Repetir nueva contraseña:",
+        "changePassword": "Cambiar contraseña",
+        "noAccount": "¿No tienes cuenta?",
+        "createAccount": "Crear cuenta"
+      }
+    }
+  },
+  "Dashboard": {
+    "Header": {
+      "headerTitle": "Bienvenido",
+      "navigations": {
+        "restaurants": "Restaurantes",
+        "profile": "Perfil",
+        "admin_panel": "Panel de Administración"
+      },
+      "logout": "Cerrar sesión"
+    },
+    "Components": {
+      "Restaurants": {
+        "title": "Restaurantes",
+        "restaurantRestaurantsText": "Esta es una lista de tus restaurantes",
+        "adminRestaurantsText": "Esta es una lista de todos los restaurantes",
+        "noRestaurantsText": "No hay restaurantes disponibles",
+        "addRestaurant": "Agregar restaurante",
+        "RestaurantCard": {
+          "manage": "Administrar",
+          "eliminate": "Eliminar"
+        },
+        "ViewsBox": {
+          "create": "Crear una vista",
+          "selectText": "Selecciona una vista para editarla..."
+        },
+        "ElementsBox": {
+          "eliminateView": "Eliminar vista",
+          "visibility": "Visible en: ",
+          "title": "Elementos de la vista:",
+          "fallbackMessage": "Vuelve a iniciar sesión",
+          "AdminElementsPanel": {
+            "add": "Agregar elemento",
+            "manage": "Administrar",
+            "delete": "Eliminar",
+            "noElementsMessage": "Los elementos agregados se mostrarán aquí..."
+          },
+          "RestaurantElementsPanel": {
+            "panelExplanation": "Esto es lo que ven tus clientes en tu vista:",
+            "editExplainer": "Selecciona un elemento para editarlo",
+            "noElementsMessage": "Aún no se han agregado elementos...",
+            "ColorSelector": {
+              "edit": "Editar"
+            }
+          }
+        }
+      },
+      "Profile": {
+        "title": "Perfil",
+        "currentData": "Datos actuales:",
+        "noImage": "No se ha establecido ninguna imagen",
+        "verifiedAccount": "Cuenta verificada",
+        "notVerifiedAccount": "Cuenta no verificada",
+        "rol": "Rol:",
+        "creationDate": "Creado en:",
+        "inputToSet": "Nuevo",
+        "saveProfile": "Guardar",
+        "updateProfileFallbackMessage": "No se pudieron obtener los datos del usuario",
+        "changePassword": "Cambiar contraseña:",
+        "newPassword": "Nueva contraseña:*",
+        "newPasswordRepeat": "Repetir nueva contraseña:*",
+        "changePasswordConfirm": "Cambiar"
+      },
+      "AdminPanel": {
+        "title": "Panel de Administración:",
+        "manageMessage": "Administrar usuario administrador:",
+        "removeButton": "Eliminar",
+        "addButton": "Agregar"
+      }
+    }
+  },
+  "Modals": {
+    "ConfirmationModal": {
+      "removeConfirmation": " será eliminado, ¿deseas continuar?",
+      "cancel": "Cancelar",
+      "confirm": "Sí",
+      "removeErrorMessage": "No se pudo eliminar el elemento"
+    },
+    "AddElementModal": {
+      "title": "Agregar elemento:",
+      "elementName": "Nombre del elemento:",
+      "elementType": "Tipo de elemento",
+      "elementTypeOptions": {
+        "fallback": "Por favor elige un tipo",
+        "text": {
+          "option": "Texto",
+          "label": "Texto"
+        },
+        "video": {
+          "option": "Video",
+          "label": "Enlace de video:"
+        },
+        "image": {
+          "option": "Imagen",
+          "label": "Enlace de imagen"
+        },
+        "link_button": {
+          "option": "Botón de enlace",
+          "label": "Enlace del botón:"
+        },
+        "link_group": {
+          "option": "Grupo de enlaces",
+          "link1": {
+            "label": "Enlace 1:",
+            "selectMessage": "Selecciona la imagen del Enlace 1"
+          },
+          "link2": {
+            "label": "Enlace 2:",
+            "selectMessage": "Selecciona la imagen del Enlace 2"
+          },
+          "link3": {
+            "label": "Enlace 3:",
+            "selectMessage": "Selecciona la imagen del Enlace 3"
+          },
+          "link4": {
+            "label": "Enlace 4:",
+            "selectMessage": "Selecciona la imagen del Enlace 4"
+          },
+          "link5": {
+            "label": "Enlace 5:",
+            "selectMessage": "Selecciona la imagen del Enlace 5"
+          },
+          "addLink": "Agregar enlace",
+          "maximumReached": "Se ha alcanzado el máximo de enlaces"
+        }
+      },
+      "addElement": "Agregar elemento"
+    },
+    "AddRestaurantModal": {
+      "title": "Agregar restaurante:",
+      "restaurantName": "Nombre del restaurante",
+      "uploadImage": "Subir imagen del restaurante",
+      "uploadedImage": "¡Imagen subida!",
+      "imageFormatMessage": "(El formato debe ser jpg/png)",
+      "restaurantDescription": "Descripción del restaurante:",
+      "addRestaurant": "Agregar restaurante"
+    },
+    "AddViewModal": {
+      "title": "Agregar vista:",
+      "viewName": "Nombre de la vista",
+      "viewUrl": "URL de la vista",
+      "uploadImage": "Subir imagen de la vista",
+      "uploadedImage": "¡Imagen subida!",
+      "imageFormatMessage": "(El formato debe ser jpg/png)",
+      "viewDescription": "Descripción de la vista:",
+      "addView": "Agregar"
+    },
+    "AdminEditElementModal": {
+      "title": "Editar elemento:",
+      "newName": "Nuevo nombre:",
+      "newText": "Nuevo texto:",
+      "newVideo": "Nuevo URL de video:",
+      "newImage": "Nuevo URL de imagen:",
+      "newButtonLink": "Nuevo enlace del botón:",
+      "linksGroup": {
+        "newLink": "Nuevo enlace ",
+        "newImage-1": "Seleccionar nuevo enlace ",
+        "newImage-2": " tipo de imagen",
+        "addLink": " Agregar enlace"
+      },
+      "wrongElementType": "Tipo de elemento no permitido",
+      "editElement": "Editar elemento",
+      "disabledButtonText": "Escribe algún valor para editar"
+    },
+    "ColorPicker": {
+      "colorPicked": "Color seleccionado:",
+      "setInHEX": "Establecer en HEX:",
+      "cancel": "Cancelar",
+      "saveColor": "Guardar color"
+    },
+    "RestaurantEditElementModal": {
+      "title": "Editar elemento:",
+      "newName": "Nuevo nombre:",
+      "newText": "Nuevo texto:",
+      "newVideo": "Nuevo URL de video:",
+      "newImage": "Nuevo URL de imagen:",
+      "newButtonLink": "Nuevo enlace del botón:",
+      "linksGroup": {
+        "newLink": "Nuevo enlace ",
+        "newImage-1": "Seleccionar nuevo enlace ",
+        "newImage-2": " tipo de imagen",
+        "addLink": " Agregar enlace"
+      },
+      "wrongElementType": "Tipo de elemento no permitido",
+      "editElement": "Editar elemento",
+      "disabledButtonText": "Escribe algún valor para editar"
     }
   }
 }

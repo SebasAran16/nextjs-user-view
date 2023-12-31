@@ -7,8 +7,10 @@ import { useRouter } from "next/navigation";
 import axios from "axios";
 import { Toaster, toast } from "react-hot-toast";
 import { useGlobalState } from "@/utils/globalStates";
+import { useTranslations } from "use-intl";
 
 export default function Signup() {
+  const t = useTranslations("AuthFlow.Signup");
   const router = useRouter();
 
   const [, setUserData] = useGlobalState("userData");
@@ -71,13 +73,13 @@ export default function Signup() {
               width="31"
               height="31"
             />
-            <p>CustomerView</p>
+            <p>{t("headerCompanyName")}</p>
           </Link>
         </div>
         <div id={styles.formPart}>
           <div>
-            <h2>Create your account</h2>
-            <p>Enter following details to register yourself.</p>
+            <h2>{t("title")}</h2>
+            <p>{t("sectionExplanation")}</p>
           </div>
           <div>
             <form
@@ -85,7 +87,7 @@ export default function Signup() {
               id={styles.signupForm}
               name="signupForm"
             >
-              <label>Username</label>
+              <label>{t("username")}</label>
               <input
                 type="text"
                 id="username"
@@ -94,7 +96,7 @@ export default function Signup() {
                 maxLength={30}
                 required
               ></input>
-              <label>Email</label>
+              <label>{t("email")}</label>
               <input
                 type="email"
                 name="userEmail"
@@ -102,21 +104,21 @@ export default function Signup() {
                 minLength={5}
                 required
               ></input>
-              <label>Password</label>
+              <label>{t("password")}</label>
               <input
                 type="password"
                 name="userPasswordOne"
                 id="userPasswordOne"
                 required
               ></input>
-              <label>Repeat Password</label>
+              <label>{t("repeatPassword")}</label>
               <input
                 type="password"
                 name="userPasswordTwo"
                 id="userPasswordTwo"
                 required
               ></input>
-              <div>
+              {/* <div>
                 <label>
                   <input
                     type="checkbox"
@@ -127,12 +129,12 @@ export default function Signup() {
                   I am agreeing with <Link href="/">Privacy Policy</Link> and{" "}
                   <Link href="/">Terms & Conditions</Link>.
                 </label>
-              </div>
-              <button type="submit">Register Now</button>
+              </div> */}
+              <button type="submit">{t("registerButton")}</button>
             </form>
             <div id={styles.alreadyMemberDiv}>
-              <p>Already a registered?</p>
-              <Link href="/login">Login</Link>
+              <p>{t("alreadyRegister")}</p>
+              <Link href="/login">{t("loginAnchor")}</Link>
             </div>
           </div>
         </div>

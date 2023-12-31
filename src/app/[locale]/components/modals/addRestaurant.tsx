@@ -5,6 +5,7 @@ import React, { useState } from "react";
 import { toast } from "react-hot-toast";
 import Image from "next/image";
 import get64BaseSize from "@/utils/getBase64Size";
+import { useTranslations } from "next-intl";
 
 interface AddRestaurantModalProps {
   setVisibleModal: Function;
@@ -17,6 +18,8 @@ export function AddRestaurantModal({
   setRestaurants,
   restaurants,
 }: AddRestaurantModalProps) {
+  const t = useTranslations("Modals.AddRestaurantModal");
+
   const [restaurantImageToCreate, setRestaurantImageToCreate] = useState<
     string | undefined
   >();
@@ -81,9 +84,9 @@ export function AddRestaurantModal({
 
   return (
     <>
-      <h2>Add Restaurant:</h2>
+      <h2>{t("title")}</h2>
       <form onSubmit={handleAddNewRestaurantSubmit}>
-        <label>Restaurant Name:</label>
+        <label>{t("restaurantName")}</label>
         <input
           type="text"
           name="newRestaurantName"
@@ -101,7 +104,7 @@ export function AddRestaurantModal({
               />
             </div>
             <div>
-              <h3>Image Uploaded!</h3>
+              <h3>{t("uploadedImage")}</h3>
               <p>{`Size: ${get64BaseSize(restaurantImageToCreate)} KB`}</p>
             </div>
           </div>
@@ -109,7 +112,7 @@ export function AddRestaurantModal({
           <label className={styles.imageUpload} htmlFor="restaurantImageUpload">
             <div>+</div>
             <div>
-              <h3>Upload Restaurant Image</h3>
+              <h3>{t("uploadImage")}</h3>
               <input
                 id="restaurantImageUpload"
                 type="file"
@@ -118,13 +121,13 @@ export function AddRestaurantModal({
                 onChange={handleFileUpload}
                 required
               />
-              <p>{"(Format should be jpg/png)"}</p>
+              <p>{t("imageFormatMessage")}</p>
             </div>
           </label>
         )}
-        <label>Restaurant Description:</label>
+        <label>{t("restaurantDescription")}</label>
         <textarea name="newRestaurantDescription" required />
-        <button type="submit">Add Restaurant</button>
+        <button type="submit">{t("addRestaurant")}</button>
       </form>
     </>
   );

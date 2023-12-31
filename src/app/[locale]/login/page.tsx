@@ -8,8 +8,10 @@ import { useRouter } from "next/navigation";
 import axios from "axios";
 import { Toaster, toast } from "react-hot-toast";
 import { useGlobalState } from "@/utils/globalStates";
+import { useTranslations } from "next-intl";
 
 export default function Login() {
+  const t = useTranslations("AuthFlow.Login");
   const router = useRouter();
   const [, setUserData] = useGlobalState("userData");
 
@@ -57,13 +59,13 @@ export default function Login() {
               width="31"
               height="31"
             />
-            <p>CustomerView</p>
+            <p>{t("headerCompanyName")}</p>
           </Link>
         </div>
         <div id={styles.formPart}>
           <div>
-            <h2>Log In</h2>
-            <p>Enter your credentials</p>
+            <h2>{t("title")}</h2>
+            <p>{t("sectionExplanation")}</p>
           </div>
           <div>
             <form
@@ -71,16 +73,16 @@ export default function Login() {
               id={styles.loginForm}
               name="loginForm"
             >
-              <label>Username/Email</label>
+              <label>{t("loginKey")}</label>
               <input type="text" name="usernameOrEmail" required></input>
 
-              <label>Password</label>
+              <label>{t("password")}</label>
               <input type="password" name="userPassword" required></input>
-              <button type="submit">Log In</button>
+              <button type="submit">{t("loginButton")}</button>
             </form>
             <div id={styles.alreadyMemberDiv}>
-              <p>Forgot your password?</p>
-              <Link href="/forgot-password">Recover</Link>
+              <p>{t("forgotPasswordText")}</p>
+              <Link href="/forgot-password">{t("recoverPasswordAnchor")}</Link>
             </div>
           </div>
         </div>

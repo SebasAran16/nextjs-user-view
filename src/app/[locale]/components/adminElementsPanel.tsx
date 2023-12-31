@@ -8,6 +8,7 @@ import { Object } from "@/types/structs/object.enum";
 import { Modal } from "./modal";
 import { ModalPurpose } from "@/types/structs/modalPurposes.enum";
 import { ConfirmationModal } from "./confirmationModal";
+import { useTranslations } from "next-intl";
 
 interface AdminElementsPanelProps {
   elements: any[];
@@ -20,6 +21,10 @@ export function AdminElementsPanel({
   setCurrentElements,
   view,
 }: AdminElementsPanelProps) {
+  const t = useTranslations(
+    "Dashboard.Components.Restaurants.ElementsBox.AdminElementsPanel"
+  );
+
   enum DragHoverAction {
     ENTER,
     EXIT,
@@ -109,7 +114,7 @@ export function AdminElementsPanel({
           setVisibleModal(true);
         }}
       >
-        + Add Element
+        + {t("add")}
       </button>
       {elements ? (
         elements.length > 0 ? (
@@ -138,7 +143,7 @@ export function AdminElementsPanel({
                     setVisibleModal(true);
                   }}
                 >
-                  Manage
+                  {t("manage")}
                 </button>
                 <button
                   onClick={() => {
@@ -146,14 +151,14 @@ export function AdminElementsPanel({
                     setVisibleConfirmation(true);
                   }}
                 >
-                  Delete
+                  {t("delete")}
                 </button>
               </div>
             </div>
           ))
         ) : (
           <div id={styles.defaultViewNoElements}>
-            <p>Elements added will show here...</p>
+            <p>{t("noElementsMessage")}</p>
           </div>
         )
       ) : (

@@ -1,11 +1,11 @@
 import styles from "@/styles/components/color-selector.module.sass";
 import { ColorUse } from "@/types/structs/colorUse";
 import { capitalizeFirstLetter } from "@/utils/capitalizeFirstLetter";
-import Image from "next/image";
 import { useState } from "react";
 import { Modal } from "./modal";
 import { ModalPurpose } from "@/types/structs/modalPurposes.enum";
 import { getColorFromUse } from "@/utils/returnUseColor";
+import { useTranslations } from "next-intl";
 interface ColorSelectorProps {
   existentColor: any;
   colorUse: ColorUse;
@@ -19,6 +19,10 @@ export function ColorSelector({
   view,
   setEditingView,
 }: ColorSelectorProps) {
+  const t = useTranslations(
+    "Dashboard.Components.Restaurants.ElementsBox.RestaurantElementsPanel.ColorSelector"
+  );
+
   const [color, setColor] = useState(
     existentColor ?? getColorFromUse(colorUse)
   );
@@ -32,7 +36,7 @@ export function ColorSelector({
         style={{ backgroundColor: color }}
       ></div>
       {!editColor ? (
-        <button onClick={() => setEditColor(true)}>Edit</button>
+        <button onClick={() => setEditColor(true)}>{t("edit")}</button>
       ) : (
         ""
       )}

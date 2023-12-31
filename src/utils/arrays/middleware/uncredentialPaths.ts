@@ -1,1 +1,6 @@
-export const uncredentialPaths = ["/", "/signup", "/login", "/verify-email"];
+export const uncredentialPaths = [
+  "/signup",
+  "/login",
+  "/forgot-password",
+  "/verify-email",
+];

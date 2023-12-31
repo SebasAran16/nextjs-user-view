@@ -5,6 +5,7 @@ import React, { useState } from "react";
 import { HexColorPicker } from "react-colorful";
 import { toast } from "react-hot-toast";
 import { useRouter } from "next/navigation";
+import { useTranslations } from "next-intl";
 
 interface ColorPickerInterface {
   color: string;
@@ -23,6 +24,7 @@ export function ColorPicker({
   colorUse,
   setEditingView,
 }: ColorPickerInterface) {
+  const t = useTranslations("Modals.ColorPicker");
   const router = useRouter();
   const [initialColor] = useState(color);
   const [hexColor, setHexColor] = useState<string>("");
@@ -60,7 +62,7 @@ export function ColorPicker({
   return (
     <div id={styles.modalSection}>
       <div>
-        <h3>Color Picked:</h3>
+        <h3>{t("colorPicked")}</h3>
         <div
           className={styles.colorShow}
           style={{ backgroundColor: color }}
@@ -70,7 +72,7 @@ export function ColorPicker({
         <HexColorPicker color={color} onChange={setColor} />
       </div>
       <form>
-        <label>Set in HEX:</label>
+        <label>{t("setInHEX")}</label>
         <div>
           <input
             type="text"
@@ -84,12 +86,12 @@ export function ColorPicker({
         </div>
       </form>
       <div>
-        <button onClick={handleCancel}>Cancel</button>
+        <button onClick={handleCancel}>{t("cancel")}</button>
         <button
           onClick={handleSaveColor}
           disabled={color === initialColor || !hexRegex.test(color)}
         >
-          Save Color
+          {t("saveColor")}
         </button>
       </div>
     </div>

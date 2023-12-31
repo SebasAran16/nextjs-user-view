@@ -3,6 +3,7 @@ import { toast } from "react-hot-toast";
 import axios from "axios";
 import { Object } from "@/types/structs/object.enum";
 import { capitalizeFirstLetter } from "@/utils/capitalizeFirstLetter";
+import { useTranslations } from "next-intl";
 
 interface ConfirmationProps {
   object: any | undefined;
@@ -24,14 +25,16 @@ export function ConfirmationModal({
   pastObjects,
   setEditingView,
 }: ConfirmationProps) {
+  const t = useTranslations("Modals.ConfirmationModal");
+
   return (
     <>
       {visibleConfirmation ? (
         <section id={styles.confirmationContainer}>
           <div id={styles.confirmationModal}>
             <p>
-              {capitalizeFirstLetter(objectType!) +
-                " will be removed, do you want to continue?"}
+              {capitalizeFirstLetter(objectType!)}
+              {t("removeConfirmation")}
             </p>
             <div>
               <button
@@ -39,7 +42,7 @@ export function ConfirmationModal({
                   setVisibleConfirmation(false);
                 }}
               >
-                Cancel
+                {t("cancel")}
               </button>
               <button
                 onClick={async (e) => {
@@ -73,11 +76,11 @@ export function ConfirmationModal({
                     toast.success(removeResponse.data.message);
                   } catch (err) {
                     console.log(err);
-                    toast.error("Could not remove element");
+                    toast.error(t("removeErrorMessage"));
                   }
                 }}
               >
-                Yes
+                {t("confirm")}
               </button>
             </div>
           </div>

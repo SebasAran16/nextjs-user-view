@@ -77,7 +77,7 @@ export default function DashboardLayout({
   const goToSectionLink = (section: string) => {
     const segments = pathname.split("/");
 
-    if (segments.length === 2) {
+    if (segments.length === 3) {
       router.replace("dashboard");
     }
 

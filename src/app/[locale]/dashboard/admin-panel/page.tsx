@@ -1,10 +1,12 @@
 "use client";
 import styles from "@/styles/admin-panel.module.sass";
 import axios from "axios";
+import { useTranslations } from "next-intl";
 import React, { useState } from "react";
 import { toast } from "react-hot-toast";
 
 export default function AdminPanel() {
+  const t = useTranslations("Dashboard.Components.AdminPanel");
   const [addAdmin, setAddAdmin] = useState<undefined | boolean>();
 
   const handleAddAdminSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
@@ -40,10 +42,10 @@ export default function AdminPanel() {
 
   return (
     <section>
-      <h1>Admin Panel:</h1>
+      <h1>{t("title")}</h1>
       <div>
         <form onSubmit={handleAddAdminSubmit}>
-          <label>Manage admin user:</label>
+          <label>{t("manageMessage")}</label>
           <input
             type="text"
             placeholder="test@example.com"
@@ -52,10 +54,10 @@ export default function AdminPanel() {
           />
           <div className={styles.submitButtonsContainer}>
             <button type="submit" onClick={() => setAddAdmin(false)}>
-              Remove
+              {t("removeButton")}
             </button>
             <button type="submit" onClick={() => setAddAdmin(true)}>
-              Add
+              {t("addButton")}
             </button>
           </div>
         </form>

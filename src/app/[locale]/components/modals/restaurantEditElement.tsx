@@ -7,6 +7,7 @@ import { useState } from "react";
 import { useRouter } from "next/navigation";
 import ElementTypes from "@/utils/elementsStruct";
 import { LinkGroupImageType } from "@/types/structs/linkGroupImageType";
+import { useTranslations } from "next-intl";
 
 interface RestaurantEditElementModalProps {
   setVisibleModal: Function;
@@ -21,6 +22,7 @@ export function RestaurantEditElementModal({
   setCurrentElements,
   currentElements,
 }: RestaurantEditElementModalProps) {
+  const t = useTranslations("Modals.RestaurantEditElementModal");
   const router = useRouter();
   const [disableEditButton, setDisableEditButton] = useState(true);
 
@@ -124,9 +126,9 @@ export function RestaurantEditElementModal({
   return (
     <div className={styles.modalActionContainer}>
       <CurrentElementData element={element} />
-      <h2>Edit Element:</h2>
+      <h2>{t("title")}</h2>
       <form onSubmit={handleEditElementSubmit}>
-        <label>New text:</label>
+        <label>{t("newText")}</label>
         <input
           type="text"
           name="editElementText"
@@ -138,7 +140,7 @@ export function RestaurantEditElementModal({
             ""
           ) : element.type === ElementTypes.VIDEO ? (
             <>
-              <label>New video URL:</label>
+              <label>{t("newVideo")}</label>
               <input
                 type="text"
                 name="editElementVideoLink"
@@ -148,7 +150,7 @@ export function RestaurantEditElementModal({
             </>
           ) : element.type === ElementTypes.IMAGE ? (
             <>
-              <label>New image URL:</label>
+              <label>{t("newImage")}</label>
               <input
                 type="text"
                 name="editElementImageLink"
@@ -158,7 +160,7 @@ export function RestaurantEditElementModal({
             </>
           ) : element.type === ElementTypes.LINK ? (
             <>
-              <label>New link URL for button:</label>
+              <label>{t("newButtonLink")}</label>
               <input
                 type="text"
                 name="editElementButtonLink"
@@ -173,7 +175,7 @@ export function RestaurantEditElementModal({
 
                 return (
                   <div key={index}>
-                    <label>{`New link ${clientIndex}:`}</label>
+                    <label>{`${t("linksGroup.newLink")}${clientIndex}:`}</label>
                     <input
                       type="text"
                       name={`editElementLinkGroup${clientIndex}`}
@@ -184,7 +186,9 @@ export function RestaurantEditElementModal({
                       name={"editLinkGroupImageType" + clientIndex}
                       onChange={() => setDisableEditButton(false)}
                     >
-                      <option value="">{`Select New Link ${clientIndex} Image Type`}</option>
+                      <option value="">{`${t(
+                        "linksGroup.newImage-1"
+                      )}${clientIndex}${t("linksGroup.newImage-2")}`}</option>
                       <option value={LinkGroupImageType.FACEBOOK}>
                         Facebook
                       </option>
@@ -213,16 +217,16 @@ export function RestaurantEditElementModal({
               })}
             </>
           ) : (
-            "Element type not allowed"
+            t("wrongElementType")
           )
         ) : (
           ""
         )}
         <button type="submit" disabled={disableEditButton}>
-          Edit Element
+          {t("editElement")}
         </button>
         {disableEditButton ? (
-          <p className={styles.discreteText}>Type some value to edit</p>
+          <p className={styles.discreteText}>{t("disabledButtonText")}</p>
         ) : (
           ""
         )}

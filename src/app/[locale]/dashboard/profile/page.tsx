@@ -12,8 +12,11 @@ import { toast } from "react-hot-toast";
 import axios from "axios";
 import React from "react";
 import { fromSerpentToReadable } from "@/utils/fromSerpentToReadable";
+import { useTranslations } from "next-intl";
 
 export default function Profile() {
+  const t = useTranslations("Dashboard.Components.Profile");
+
   const userDataVariables = Object.keys(
     userDataVariablesAndManagable
   ) as UserDataVariables[];
@@ -94,12 +97,12 @@ export default function Profile() {
 
   return (
     <section id={styles.profileEditContainer}>
-      <h1>Profile</h1>
+      <h1>{t("title")}</h1>
       <div>
         {userData ? (
           <>
             <div>
-              <h2>Current Data:</h2>
+              <h2>{t("currentData")}</h2>
               <div id={styles.profileHeaderContainer}>
                 <div>
                   <Image
@@ -108,24 +111,24 @@ export default function Profile() {
                     height="50"
                     width="50"
                   />
-                  {userData.image ? "" : <p>No image set</p>}
+                  {userData.image ? "" : <p>{t("noImage")}</p>}
                 </div>
                 <div>
                   {userData.is_verified ? (
                     <div>
-                      <h4>Verified Account</h4>
+                      <h4>{t("verifiedAccount")}</h4>
                     </div>
                   ) : (
                     <div>
-                      <h4>Account Not Verified</h4>
+                      <h4>{t("notVerifiedAccount")}</h4>
                     </div>
                   )}
                   <div>
-                    <h4>Rol:</h4>
+                    <h4>{t("rol")}</h4>
                     <p>{userData.rol}</p>
                   </div>
                   <div>
-                    <h4>Created At:</h4>
+                    <h4>{t("creationDate")}</h4>
                     <p>
                       {userData.created_date
                         ? userData.created_date.toString()
@@ -144,7 +147,7 @@ export default function Profile() {
                           type="text"
                           placeholder={
                             userDataVariablesAndManagable[data]
-                              ? `New ${data}`
+                              ? `${t("inputToSet")} ${data}`
                               : userData[data]?.toString()
                           }
                           name={`${data}ChangeInput`}
@@ -154,18 +157,18 @@ export default function Profile() {
                     );
                   }
                 )}
-                <button type="submit">Save</button>
+                <button type="submit">{t("saveProfile")}</button>
               </form>
             </div>
           </>
         ) : (
-          "Could not get user data"
+          t("updateProfileFallbackMessage")
         )}
         <hr />
         <div id={styles.changePasswordContainer}>
-          <h2>Change Password:</h2>
+          <h2>{t("changePassword")}</h2>
           <form onSubmit={handleSubmitChangePassword}>
-            <label>New Password:*</label>
+            <label>{t("newPassword")}</label>
             <input
               type="password"
               placeholder="*********"
@@ -173,7 +176,7 @@ export default function Profile() {
               required
               minLength={7}
             />
-            <label>Repeat new Password:*</label>
+            <label>{t("newPasswordRepeat")}</label>
             <input
               type="password"
               placeholder="*********"
@@ -181,7 +184,7 @@ export default function Profile() {
               required
               minLength={7}
             />
-            <button type="submit">Change</button>
+            <button type="submit">{t("changePasswordConfirm")}</button>
           </form>
         </div>
       </div>

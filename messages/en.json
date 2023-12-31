@@ -6,6 +6,51 @@
       "signup": "Sign Up"
     }
   },
+  "AuthFlow": {
+    "Signup": {
+      "headerCompanyName": "CustomerView",
+      "title": "Create your account",
+      "sectionExplanation": "Enter following details to register.",
+      "username": "Username",
+      "email": "Email",
+      "password": "Password",
+      "repeatPassword": "Repeat Password",
+      "registerButton": "Register Now",
+      "alreadyRegister": "Already registered?",
+      "loginAnchor": "Log In"
+    },
+    "Login": {
+      "headerCompanyName": "CustomerView",
+      "title": "Log In",
+      "sectionExplanation": "Enter your credentials",
+      "loginKey": "Username or Email",
+      "password": "Password",
+      "loginButton": "Log In",
+      "forgotPasswordText": "Forgot your password?",
+      "recoverPasswordAnchor": "Recover"
+    },
+    "ForgotPassword": {
+      "headerCompanyName": "CustomerView",
+      "title": "Reset Password",
+      "sectionExplanation": "Enter your new password",
+      "existingEmail": "Existing Email",
+      "resetPassword": "Reset Password",
+      "noAccount": "Have no account?",
+      "createAccount": "Create Account",
+      "mailSent": "Mail Sent!",
+      "emailExplainer": "We have sent an email for you to reset your password!",
+      "Reset": {
+        "headerCompanyName": "CustomerView",
+        "title": "Change Password",
+        "sectionExplanation": "Set your new password:",
+        "newPassword": "New Password:",
+        "newPasswordRepeat": "Repeat New Password:",
+        "changePassword": "Change Password",
+        "noAccount": "Have no account?",
+        "createAccount": "Create Account"
+      }
+    }
+  },
   "Dashboard": {
     "Header": {
       "headerTitle": "Welcome",
@@ -18,10 +63,179 @@
     },
     "Components": {
       "Restaurants": {
-        "title": "Restaurants"
+        "title": "Restaurants",
+        "restaurantRestaurantsText": "This is a list of your restaurants",
+        "adminRestaurantsText": "This is a list of all restaurants",
+        "noRestaurantsText": "No restaurants available",
+        "addRestaurant": "Add Restaurant",
+        "RestaurantCard": {
+          "manage": "Manage",
+          "eliminate": "Eliminate"
+        },
+        "ViewsBox": {
+          "create": "Create a View",
+          "selectText": "Select a view to edit it..."
+        },
+        "ElementsBox": {
+          "eliminateView": "Eliminate View",
+          "visibility": "Visible at: ",
+          "title": "View's Elements:",
+          "fallbackMessage": "Log In again",
+          "AdminElementsPanel": {
+            "add": "AddElement",
+            "manage": "Manage",
+            "delete": "Delete",
+            "noElementsMessage": "Elements added will show here..."
+          },
+          "RestaurantElementsPanel": {
+            "panelExplanation": "This is what your customers see in your View:",
+            "editExplainer": "Select element to edit",
+            "noElementsMessage": "No elements added yet...",
+            "ColorSelector": {
+              "edit": "Edit"
+            }
+          }
+        }
       },
-      "Profile": {},
-      "AdminPanel": {}
+      "Profile": {
+        "title": "Profile",
+        "currentData": "Current Data:",
+        "noImage": "No image set",
+        "verifiedAccount": "Verified Account",
+        "notVerifiedAccount": "Account not verified",
+        "rol": "Rol:",
+        "creationDate": "Created At:",
+        "inputToSet": "New",
+        "saveProfile": "Save",
+        "updateProfileFallbackMessage": "Could not get user data",
+        "changePassword": "Change Password:",
+        "newPassword": "New Password:*",
+        "newPasswordRepeat": "Repeat New Password:*",
+        "changePasswordConfirm": "Change"
+      },
+      "AdminPanel": {
+        "title": "Admin Panel:",
+        "manageMessage": "Manage admin user:",
+        "removeButton": "Remove",
+        "addButton": "Add"
+      }
+    }
+  },
+  "Modals": {
+    "ConfirmationModal": {
+      "removeConfirmation": " will be removed, do you want to continue?",
+      "cancel": "Cancel",
+      "confirm": "Yes",
+      "removeErrorMessage": "Could not remove element"
+    },
+    "AddElementModal": {
+      "title": "Add Element:",
+      "elementName": "Element Name:",
+      "elementType": "Element Type",
+      "elementTypeOptions": {
+        "fallback": "Please choose a Type",
+        "text": {
+          "option": "Text",
+          "label": "Text"
+        },
+        "video": {
+          "option": "Video",
+          "label": "Video Link:"
+        },
+        "image": {
+          "option": "Image",
+          "label": "Image Link"
+        },
+        "link_button": {
+          "option": "Link Button",
+          "label": "Button Link:"
+        },
+        "link_group": {
+          "option": "Links Group",
+          "link1": {
+            "label": "Link 1:",
+            "selectMessage": "Select Link 1 Image"
+          },
+          "link2": {
+            "label": "Link 2:",
+            "selectMessage": "Select Link 2 Image"
+          },
+          "link3": {
+            "label": "Link 3:",
+            "selectMessage": "Select Link 3 Image"
+          },
+          "link4": {
+            "label": "Link 4:",
+            "selectMessage": "Select Link 4 Image"
+          },
+          "link5": {
+            "label": "Link 5:",
+            "selectMessage": "Select Link 5 Image"
+          },
+          "addLink": "Add Link",
+          "maximumReached": "Maximum links reached"
+        }
+      },
+      "addElement": "Add Element"
+    },
+    "AddRestaurantModal": {
+      "title": "Add Restaurant:",
+      "restaurantName": "Restaurant Name",
+      "uploadImage": "Upload Restaurant Image",
+      "uploadedImage": "Image Uploaded!",
+      "imageFormatMessage": "(Format should be jpg/png)",
+      "restaurantDescription": "Restaurant Description:",
+      "addRestaurant": "Add Restaurant"
+    },
+    "AddViewModal": {
+      "title": "Add View:",
+      "viewName": "View Name",
+      "viewUrl": "View URL",
+      "uploadImage": "Upload View Image",
+      "uploadedImage": "Image Uploaded!",
+      "imageFormatMessage": "(Format should be jpg/png)",
+      "viewDescription": "Restaurant Description:",
+      "addView": "Add"
+    },
+    "AdminEditElementModal": {
+      "title": "Edit Element:",
+      "newName": "New name:",
+      "newText": "New text:",
+      "newVideo": "New video URL:",
+      "newImage": "New image URL:",
+      "newButtonLink": "New button link:",
+      "linksGroup": {
+        "newLink": "New link ",
+        "newImage-1": "Select new Link ",
+        "newImage-2": " image type",
+        "addLink": " Add Link"
+      },
+      "wrongElementType": "Element type not allowed",
+      "editElement": "Edit Element",
+      "disabledButtonText": "Type some value to edit"
+    },
+    "ColorPicker": {
+      "colorPicked": "Color Picked:",
+      "setInHEX": "Set in HEX:",
+      "cancel": "Cancel",
+      "saveColor": "Save Color"
+    },
+    "RestaurantEditElementModal": {
+      "title": "Edit Element:",
+      "newName": "New name:",
+      "newText": "New text:",
+      "newVideo": "New video URL:",
+      "newImage": "New image URL:",
+      "newButtonLink": "New button link:",
+      "linksGroup": {
+        "newLink": "New link ",
+        "newImage-1": "Select new Link ",
+        "newImage-2": " image type",
+        "addLink": " Add Link"
+      },
+      "wrongElementType": "Element type not allowed",
+      "editElement": "Edit Element",
+      "disabledButtonText": "Type some value to edit"
     }
   }
 }

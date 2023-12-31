@@ -7,6 +7,7 @@ import { useState } from "react";
 import ElementTypes from "@/utils/elementsStruct";
 import { LinkGroupImageType } from "@/types/structs/linkGroupImageType";
 import { useRouter } from "next/navigation";
+import { useTranslations } from "next-intl";
 
 interface AdminEditElementModalProps {
   setVisibleModal: Function;
@@ -21,6 +22,7 @@ export function AdminEditElementModal({
   setCurrentElements,
   currentElements,
 }: AdminEditElementModalProps) {
+  const t = useTranslations("Modals.AdminEditElementModal");
   const router = useRouter();
 
   const [disableEditButton, setDisableEditButton] = useState(true);
@@ -141,16 +143,16 @@ export function AdminEditElementModal({
   return (
     <div className={styles.modalActionContainer}>
       <CurrentElementData element={currentEditElement} />
-      <h2>Edit Element:</h2>
+      <h2>{t("title")}</h2>
       <form onSubmit={handleEditElementSubmit}>
-        <label>New name:</label>
+        <label>{t("newName")}</label>
         <input
           type="text"
           name="editElementName"
           placeholder="Modified name"
           onChange={() => setDisableEditButton(false)}
         />
-        <label>New text:</label>
+        <label>{t("newText")}</label>
         <input
           type="text"
           name="editElementText"
@@ -162,7 +164,7 @@ export function AdminEditElementModal({
             ""
           ) : currentEditElement.type === ElementTypes.VIDEO ? (
             <>
-              <label>New video URL:</label>
+              <label>{t("newVideo")}</label>
               <input
                 type="text"
                 name="editElementVideoLink"
@@ -172,7 +174,7 @@ export function AdminEditElementModal({
             </>
           ) : currentEditElement.type === ElementTypes.IMAGE ? (
             <>
-              <label>New image URL:</label>
+              <label>{t("newImage")}</label>
               <input
                 type="text"
                 name="editElementImageLink"
@@ -182,7 +184,7 @@ export function AdminEditElementModal({
             </>
           ) : currentEditElement.type === ElementTypes.LINK ? (
             <>
-              <label>New link URL for button:</label>
+              <label>{t("newButtonLink")}</label>
               <input
                 type="text"
                 name="editElementButtonLink"
@@ -198,7 +200,9 @@ export function AdminEditElementModal({
 
                   return (
                     <div key={index}>
-                      <label>{`New link ${clientIndex}:`}</label>
+                      <label>{`${t(
+                        "linksGroup.newLink"
+                      )}${clientIndex}:`}</label>
                       <input
                         type="text"
                         name={`editElementLinkGroup${clientIndex}`}
@@ -209,7 +213,9 @@ export function AdminEditElementModal({
                         name={"editLinkGroupImageType" + clientIndex}
                         onChange={() => setDisableEditButton(false)}
                       >
-                        <option value="">{`Select New Link ${clientIndex} Image Type`}</option>
+                        <option value="">{`${t(
+                          "linksGroup.newImage-1"
+                        )}${clientIndex}${t("linksGroup.newImage-2")}`}</option>
                         <option value={LinkGroupImageType.FACEBOOK}>
                           Facebook
                         </option>
@@ -241,7 +247,9 @@ export function AdminEditElementModal({
                 return (
                   <div key={index}>
                     <div className={styles.spaceBetweenContainer}>
-                      <label>{`New link ${linkIndex}:*`}</label>
+                      <label>{`${t(
+                        "linksGroup.newLink"
+                      )}${linkIndex}:*`}</label>
                     </div>
 
                     <input
@@ -256,7 +264,9 @@ export function AdminEditElementModal({
                       onChange={() => setDisableEditButton(false)}
                       required
                     >
-                      <option value="">{`Select New Link ${linkIndex} Image Type`}</option>
+                      <option value="">{`${t(
+                        "linksGroup.newImage-1"
+                      )}${linkIndex}${t("linksGroup.newImage-2")}`}</option>
                       <option value={LinkGroupImageType.FACEBOOK}>
                         Facebook
                       </option>
@@ -308,20 +318,20 @@ export function AdminEditElementModal({
                   initialElementGroupLinks + additionalGroupLinks.length > 4
                 }
               >
-                + Add Link
+                {`+${t("linksGroup.addLink")}`}
               </button>
             </>
           ) : (
-            "Element type not allowed"
+            t("wrongElementType")
           )
         ) : (
           ""
         )}
         <button type="submit" disabled={disableEditButton}>
-          Edit Element
+          {t("editElement")}
         </button>
         {disableEditButton ? (
-          <p className={styles.discreteText}>Type some value to edit</p>
+          <p className={styles.discreteText}>{t("disabledButtonText")}</p>
         ) : (
           ""
         )}

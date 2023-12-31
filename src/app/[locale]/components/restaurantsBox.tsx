@@ -72,9 +72,9 @@ export function RestaurantsBox() {
         {restaurants
           ? restaurants.length > 0
             ? userRol !== UserRol.ADMIN
-              ? "This is a list of your restaurants"
-              : "This is a list of all restaurants"
-            : "You have no restaurants"
+              ? t("restaurantRestaurantsText")
+              : t("adminRestaurantsText")
+            : t("noRestaurantsText")
           : ""}
       </p>
       <div>
@@ -137,7 +137,7 @@ export function RestaurantsBox() {
             className={restaurantCardStyles.restaurantCardContainer}
             onClick={() => setVisibleModal(true)}
           >
-            <h3>+ Add Restaurant</h3>
+            <h3>+ {t("addRestaurant")}</h3>
           </div>
         ) : (
           ""

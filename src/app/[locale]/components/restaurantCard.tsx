@@ -5,6 +5,7 @@ import { usePathname } from "next/navigation";
 import { useState } from "react";
 import { ConfirmationModal } from "./confirmationModal";
 import { Object } from "@/types/structs/object.enum";
+import { useTranslations } from "next-intl";
 
 interface RestaurantCardProps {
   restaurant: any;
@@ -17,6 +18,7 @@ export function RestaurantCard({
   setRestaurants,
   restaurants,
 }: RestaurantCardProps) {
+  const t = useTranslations("Dashboard.Components.Restaurants.RestaurantCard");
   const pathname = usePathname();
 
   const [visibleConfirmation, setVisibleConfirmation] = useState(false);
@@ -39,9 +41,11 @@ export function RestaurantCard({
 
       <div>
         <Link href={pathname + "/" + restaurant._id}>
-          <button>Manage</button>
+          <button>{t("manage")}</button>
         </Link>
-        <button onClick={() => setVisibleConfirmation(true)}>Eliminate</button>
+        <button onClick={() => setVisibleConfirmation(true)}>
+          {t("eliminate")}
+        </button>
       </div>
       <ConfirmationModal
         object={restaurant}

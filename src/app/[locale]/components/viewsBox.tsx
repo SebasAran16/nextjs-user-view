@@ -7,12 +7,15 @@ import { toast } from "react-hot-toast";
 import ElementsBox from "./elementsBox";
 import Image from "next/image";
 import { Modal } from "./modal";
+import { useTranslations } from "use-intl";
 
 interface ViewsBoxProps {
   restaurantId: string;
 }
 
 export default function ViewsBox({ restaurantId }: ViewsBoxProps) {
+  const t = useTranslations("Dashboard.Components.Restaurants.ViewsBox");
+
   const [views, setViews] = useState<any | undefined>();
   const [editingView, setEditingView] = useState<any | undefined>();
   const [visibleModal, setVisibleModal] = useState(false);
@@ -61,7 +64,7 @@ export default function ViewsBox({ restaurantId }: ViewsBoxProps) {
               />
             </div>
           )}
-          <button onClick={() => setVisibleModal(true)}>+ Create a View</button>
+          <button onClick={() => setVisibleModal(true)}>+ {t("create")}</button>
         </div>
       </div>
       <div>
@@ -73,7 +76,7 @@ export default function ViewsBox({ restaurantId }: ViewsBoxProps) {
             views={views}
           />
         ) : (
-          <p>Select a view to edit it...</p>
+          <p>{t("selectText")}</p>
         )}
       </div>
       <Modal

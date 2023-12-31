@@ -5,6 +5,7 @@ import get64BaseSize from "@/utils/getBase64Size";
 import axios from "axios";
 import toast from "react-hot-toast";
 import { useState } from "react";
+import { useTranslations } from "next-intl";
 
 interface AddViewProps {
   setVisibleModal: Function;
@@ -21,6 +22,7 @@ export function AddViewModal({
   setEditingView,
   views,
 }: AddViewProps) {
+  const t = useTranslations("Modals.AddViewModal");
   const [viewImageToCreate, setViewImageToCreate] = useState<
     string | undefined
   >();
@@ -86,16 +88,16 @@ export function AddViewModal({
 
   return (
     <>
-      <h2>Create View:</h2>
+      <h2>{t("title")}</h2>
       <form onSubmit={handleCreateView}>
-        <label>View Name:</label>
+        <label>{t("viewName")}</label>
         <input
           placeholder="McDonalds View"
           type="text"
           name="newViewName"
           required
         />
-        <label>View URL:</label>
+        <label>{t("viewUrl")}</label>
         <input
           placeholder="mc-donalds"
           type="text"
@@ -113,7 +115,7 @@ export function AddViewModal({
               />
             </div>
             <div>
-              <h3>Image Uploaded!</h3>
+              <h3>{t("uploadedImage")}</h3>
               <p>{`Size: ${get64BaseSize(viewImageToCreate)} KB`}</p>
             </div>
           </div>
@@ -121,7 +123,7 @@ export function AddViewModal({
           <label className={styles.imageUpload} htmlFor="viewImageUpload">
             <div>+</div>
             <div>
-              <h3>Upload View Image</h3>
+              <h3>{t("uploadImage")}</h3>
               <input
                 id="viewImageUpload"
                 type="file"
@@ -130,12 +132,12 @@ export function AddViewModal({
                 onChange={handleFileUpload}
                 required
               />
-              <p>{"(Format should be jpg/png)"}</p>
+              <p>{t("imageFormatMessage")}</p>
             </div>
           </label>
         )}
 
-        <button type="submit">Create</button>
+        <button type="submit">{t("addView")}</button>
       </form>
     </>
   );

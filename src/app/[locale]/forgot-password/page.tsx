@@ -5,8 +5,11 @@ import styles from "@/styles/login.module.sass";
 import React from "react";
 import axios from "axios";
 import { Toaster, toast } from "react-hot-toast";
+import { useTranslations } from "next-intl";
 
 export default function ForgotPassword() {
+  const t = useTranslations("AuthFlow.ForgotPassword");
+
   async function handleSubmit(e: React.FormEvent<HTMLFormElement>) {
     e.preventDefault();
     const form = e.currentTarget;
@@ -39,13 +42,13 @@ export default function ForgotPassword() {
               width="31"
               height="31"
             />
-            <p>CustomerView</p>
+            <p>{t("headerCompanyName")}</p>
           </Link>
         </div>
         <div id={styles.formPart}>
           <div>
-            <h2>Reset Password</h2>
-            <p>Enter your new password</p>
+            <h2>{t("title")}</h2>
+            <p>{t("sectionExplanation")}</p>
           </div>
           <div>
             <form
@@ -53,7 +56,7 @@ export default function ForgotPassword() {
               id={styles.signupForm}
               name="forgotForm"
             >
-              <label>Existing Email</label>
+              <label>{t("existingEmail")}</label>
               <input
                 type="text"
                 name="email"
@@ -61,7 +64,7 @@ export default function ForgotPassword() {
                 required
               />
 
-              <button type="submit">Reset Password</button>
+              <button type="submit">{t("resetPassword")}</button>
             </form>
             <div id={styles.errorDiv} className={styles.hidden}>
               <Image
@@ -73,15 +76,15 @@ export default function ForgotPassword() {
               <p id={styles.formErrorText}></p>
             </div>
             <div id={styles.alreadyMemberDiv}>
-              <p>Have no account?</p>
-              <Link href="/signup">Create Account</Link>
+              <p>{t("noAccount")}</p>
+              <Link href="/signup">{t("createAccount")}</Link>
             </div>
           </div>
         </div>
         <div id={styles.resetMailSent} className={styles.hidden}>
-          <h2>Reset password mail sent</h2>
+          <h2>{t("mailSent")}</h2>
           <br />
-          <p>We have sent an email for you to reset your password!</p>
+          <p>{t("emailExplainer")}</p>
         </div>
       </section>
       <section id={styles.imageSection}></section>

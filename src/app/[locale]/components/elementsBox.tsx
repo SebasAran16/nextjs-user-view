@@ -12,6 +12,7 @@ import { useGlobalState } from "@/utils/globalStates";
 import { UserRol } from "@/types/structs/userRol.enum";
 import { AdminElementsPanel } from "./adminElementsPanel";
 import { RestaurantElementsPanel } from "./restaurantElementsPanel";
+import { useTranslations } from "next-intl";
 
 interface ElementsBoxProps {
   view: any;
@@ -26,6 +27,7 @@ export default function ElementsBox({
   views,
   setViews,
 }: ElementsBoxProps) {
+  const t = useTranslations("Dashboard.Components.Restaurants.ElementsBox");
   const router = useRouter();
 
   const [userData] = useGlobalState("userData");
@@ -74,17 +76,17 @@ export default function ElementsBox({
             setVisibleConfirmation(true);
           }}
         >
-          Eliminate View
+          {t("eliminateView")}
         </button>
         <p>
-          Visible at:{" "}
+          {t("visibility")}
           <a
             href={`https://customerview.app/view/${view.url}`}
             target="_blank"
           >{`https://customerview.app/view/${view.url}`}</a>
         </p>
         <div id={styles.headerSection}>
-          <h2>View&apos;s Elements:</h2>
+          <h2>{t("title")}</h2>
         </div>
         <hr />
         <div id={styles.elementsContainer}>
@@ -106,7 +108,7 @@ export default function ElementsBox({
               </>
             )
           ) : (
-            "Log in again"
+            t("fallbackMessage")
           )}
         </div>
       </section>
