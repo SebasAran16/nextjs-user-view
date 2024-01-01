@@ -2,6 +2,7 @@ import "@/styles/globals.sass";
 import "@/styles/variables.module.sass";
 import type { Metadata } from "next";
 import { NextIntlClientProvider, useMessages } from "next-intl";
+import { SpeedInsights } from "@vercel/speed-insights/next";
 
 export const metadata: Metadata = {
   title: "Customer View",
@@ -26,6 +27,7 @@ export default function RootLayout({
       <body>
         <NextIntlClientProvider messages={messages}>
           {children}
+          <SpeedInsights />
         </NextIntlClientProvider>
       </body>
     </html>
