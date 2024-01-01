@@ -1,0 +1,241 @@
+{
+  "Landing": {
+    "title": "Benvingut a CustomerView de OwnTheBlock Solutions!",
+    "authButtons": {
+      "login": "Inicia la sessió",
+      "signup": "Registra't"
+    }
+  },
+  "AuthFlow": {
+    "Signup": {
+      "headerCompanyName": "CustomerView",
+      "title": "Crea el teu compte",
+      "sectionExplanation": "Introdueix els següents detalls per registrar-te.",
+      "username": "Nom d'usuari",
+      "email": "Correu electrònic",
+      "password": "Contrasenya",
+      "repeatPassword": "Repeteix la contrasenya",
+      "registerButton": "Registra't ara",
+      "alreadyRegister": "Ja estàs registrat?",
+      "loginAnchor": "Inicia la sessió"
+    },
+    "Login": {
+      "headerCompanyName": "CustomerView",
+      "title": "Inicia la sessió",
+      "sectionExplanation": "Introdueix les teves credencials",
+      "loginKey": "Nom d'usuari o correu electrònic",
+      "password": "Contrasenya",
+      "loginButton": "Inicia la sessió",
+      "forgotPasswordText": "Has oblidat la contrasenya?",
+      "recoverPasswordAnchor": "Recupera-la"
+    },
+    "ForgotPassword": {
+      "headerCompanyName": "CustomerView",
+      "title": "Restableix la contrasenya",
+      "sectionExplanation": "Introdueix la teva nova contrasenya",
+      "existingEmail": "Correu electrònic existent",
+      "resetPassword": "Restableix la contrasenya",
+      "noAccount": "No tens compte?",
+      "createAccount": "Crea un compte",
+      "mailSent": "Correu enviat!",
+      "emailExplainer": "Hem enviat un correu electrònic per restablir la teva contrasenya!",
+      "Reset": {
+        "headerCompanyName": "CustomerView",
+        "title": "Canvia la contrasenya",
+        "sectionExplanation": "Estableix la teva nova contrasenya:",
+        "newPassword": "Nova contrasenya:",
+        "newPasswordRepeat": "Repeteix la nova contrasenya:",
+        "changePassword": "Canvia la contrasenya",
+        "noAccount": "No tens compte?",
+        "createAccount": "Crea un compte"
+      }
+    }
+  },
+  "Dashboard": {
+    "Header": {
+      "headerTitle": "Benvingut",
+      "navigations": {
+        "restaurants": "Restaurants",
+        "profile": "Perfil",
+        "admin_panel": "Panell d'administració"
+      },
+      "logout": "Tanca la sessió"
+    },
+    "Components": {
+      "Restaurants": {
+        "title": "Restaurants",
+        "restaurantRestaurantsText": "Aquesta és una llista dels teus restaurants",
+        "adminRestaurantsText": "Aquesta és una llista de tots els restaurants",
+        "noRestaurantsText": "No hi ha restaurants disponibles",
+        "addRestaurant": "Afegeix un restaurant",
+        "RestaurantCard": {
+          "manage": "Gestiona",
+          "eliminate": "Elimina"
+        },
+        "ViewsBox": {
+          "create": "Crea un View",
+          "selectText": "Selecciona un View per editar-la..."
+        },
+        "ElementsBox": {
+          "eliminateView": "Elimina la View",
+          "visibility": "Visible a: ",
+          "title": "Elements del View:",
+          "fallbackMessage": "Inicia la sessió de nou",
+          "AdminElementsPanel": {
+            "add": "Afegeix Element",
+            "manage": "Gestiona",
+            "delete": "Elimina",
+            "noElementsMessage": "Els elements afegits es mostraran aquí..."
+          },
+          "RestaurantElementsPanel": {
+            "panelExplanation": "Això és el que veuen els teus clients a la teva View:",
+            "editExplainer": "Selecciona l'element a editar",
+            "noElementsMessage": "Encara no s'han afegit elements...",
+            "ColorSelector": {
+              "edit": "Edita"
+            }
+          }
+        }
+      },
+      "Profile": {
+        "title": "Perfil",
+        "currentData": "Dades actuals:",
+        "noImage": "No s'ha establert cap imatge",
+        "verifiedAccount": "Compte verificat",
+        "notVerifiedAccount": "Compte no verificat",
+        "rol": "Rol:",
+        "creationDate": "Creat el:",
+        "inputToSet": "Nou",
+        "saveProfile": "Desa",
+        "updateProfileFallbackMessage": "No s'han pogut obtenir les dades de l'usuari",
+        "changePassword": "Canvia la contrasenya:",
+        "newPassword": "Nova contrasenya:*",
+        "newPasswordRepeat": "Repeteix la nova contrasenya:*",
+        "changePasswordConfirm": "Canvia"
+      },
+      "AdminPanel": {
+        "title": "Panell d'administració:",
+        "manageMessage": "Gestiona l'usuari d'administrador:",
+        "removeButton": "Elimina",
+        "addButton": "Afegeix"
+      }
+    }
+  },
+  "Modals": {
+    "ConfirmationModal": {
+      "removeConfirmation": " serà eliminat, vols continuar?",
+      "cancel": "Cancel·la",
+      "confirm": "Sí",
+      "removeErrorMessage": "No s'ha pogut eliminar l'element"
+    },
+    "AddElementModal": {
+      "title": "Afegeix un element:",
+      "elementName": "Nom de l'element:",
+      "elementType": "Tipus d'element",
+      "elementTypeOptions": {
+        "fallback": "Si us plau, tria un tipus",
+        "text": {
+          "option": "Text",
+          "label": "Text"
+        },
+        "video": {
+          "option": "Vídeo",
+          "label": "Enllaç del vídeo:"
+        },
+        "image": {
+          "option": "Imatge",
+          "label": "Enllaç de la imatge"
+        },
+        "link_button": {
+          "option": "Botó d'enllaç",
+          "label": "Enllaç del botó:"
+        },
+        "link_group": {
+          "option": "Grup d'enllaços",
+          "link1": {
+            "label": "Enllaç 1:",
+            "selectMessage": "Selecciona la imatge de l'enllaç 1"
+          },
+          "link2": {
+            "label": "Enllaç 2:",
+            "selectMessage": "Selecciona la imatge de l'enllaç 2"
+          },
+          "link3": {
+            "label": "Enllaç 3:",
+            "selectMessage": "Selecciona la imatge de l'enllaç 3"
+          },
+          "link4": {
+            "label": "Enllaç 4:",
+            "selectMessage": "Selecciona la imatge de l'enllaç 4"
+          },
+          "link5": {
+            "label": "Enllaç 5:",
+            "selectMessage": "Selecciona la imatge de l'enllaç 5"
+          },
+          "addLink": "Afegeix un enllaç",
+          "maximumReached": "S'ha assolit el nombre màxim d'enllaços"
+        }
+      },
+      "addElement": "Afegeix l'element"
+    },
+    "AddRestaurantModal": {
+      "title": "Afegeix un restaurant:",
+      "restaurantName": "Nom del restaurant",
+      "uploadImage": "Puja la imatge del restaurant",
+      "uploadedImage": "Imatge pujada!",
+      "imageFormatMessage": "(El format ha de ser jpg/png)",
+      "restaurantDescription": "Descripció del restaurant:",
+      "addRestaurant": "Afegeix el restaurant"
+    },
+    "AddViewModal": {
+      "title": "Afegeix una View:",
+      "viewName": "Nom del View",
+      "viewUrl": "URL del View",
+      "uploadImage": "Puja la imatge del View",
+      "uploadedImage": "Imatge pujada!",
+      "imageFormatMessage": "(El format ha de ser jpg/png)",
+      "viewDescription": "Descripció del View:",
+      "addView": "Afegeix"
+    },
+    "AdminEditElementModal": {
+      "title": "Edita l'element:",
+      "newName": "Nou nom:",
+      "newText": "Nou text:",
+      "newVideo": "Nou URL del vídeo:",
+      "newImage": "Nou URL de la imatge:",
+      "newButtonLink": "Nou enllaç del botó:",
+      "linksGroup": {
+        "newLink": "Nou enllaç ",
+        "newImage-1": "Selecciona el nou enllaç ",
+        "newImage-2": " tipus de imatge",
+        "addLink": " Afegeix l'enllaç"
+      },
+      "wrongElementType": "Tipus d'element no permès",
+      "editElement": "Edita l'element",
+      "disabledButtonText": "Escriu algun valor per editar"
+    },
+    "ColorPicker": {
+      "colorPicked": "Color triat:",
+      "setInHEX": "Estableix-ho en HEX:",
+      "cancel": "Cancel·la",
+      "saveColor": "Desa el color"
+    },
+    "RestaurantEditElementModal": {
+      "title": "Edita l'element:",
+      "newName": "Nou nom:",
+      "newText": "Nou text:",
+      "newVideo": "Nou URL del vídeo:",
+      "newImage": "Nou URL de la imatge:",
+      "newButtonLink": "Nou enllaç del botó:",
+      "linksGroup": {
+        "newLink": "Nou enllaç ",
+        "newImage-1": "Selecciona el nou enllaç ",
+        "newImage-2": " tipus de imatge",
+        "addLink": " Afegeix l'enllaç"
+      },
+      "wrongElementType": "Tipus d'element no permès",
+      "editElement": "Edita l'element",
+      "disabledButtonText": "Escriu algun valor per editar"
+    }
+  }
+}

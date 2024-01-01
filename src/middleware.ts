@@ -18,15 +18,15 @@ export async function middleware(request: NextRequest) {
   const token = request.cookies.get("token")?.value || "";
   const restaurantManager = /\/restaurants\/.*/;
 
+  const viewPath = path.startsWith("/view/");
   const dataFromToken = token !== "" ? await getDataFromToken(token) : "";
 
-  if (path !== "/" && locale !== "view") {
+  if (path !== "/" && locale !== "view" && !viewPath) {
     if (isUncredentialPath && token) {
       return NextResponse.redirect(
         new URL("/dashboard/restaurants", request.nextUrl)
       );
     } else if (!isUncredentialPath && !token) {
-      console.log("got here");
       return NextResponse.redirect(new URL("/login", request.nextUrl));
     } else if (restaurantManager.test(path)) {
       const restaurantsToken =

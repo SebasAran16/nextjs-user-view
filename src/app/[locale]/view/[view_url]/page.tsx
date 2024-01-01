@@ -122,7 +122,7 @@ export default function ViewPage({ params }: viewPageProps) {
                   key={index}
                   onClick={() => handleLanguageChange(locale)}
                 >
-                  {ISO6391.getName(locale)}
+                  {ISO6391.getName(locale === "cat" ? "ca" : locale)}
                 </button>
               );
             })}
