@@ -10,6 +10,7 @@ import { ModalPurpose } from "@/types/structs/modalPurposes.enum";
 import { UserRol } from "@/types/structs/userRol.enum";
 import { useGlobalState } from "@/utils/globalStates";
 import { useTranslations } from "next-intl";
+import Image from "next/image";
 
 export function RestaurantsBox() {
   const t = useTranslations("Dashboard.Components.Restaurants");
@@ -23,6 +24,7 @@ export function RestaurantsBox() {
   const [currentPage, setCurrentPage] = useState(
     "0." + (itemsPerPage - 1).toString()
   );
+  const [restaurantViews, setRestaurantViews] = useState<undefined | any>();
 
   useEffect(() => {
     if (!restaurants) {
@@ -34,9 +36,27 @@ export function RestaurantsBox() {
 
           const restaurants = restaurantsResponse.data.restaurants;
           const rol = restaurantsResponse.data.rol;
+          const views: any = {};
 
-          setRestaurants(restaurants);
-          setUserRol(rol);
+          for (const restaurant of restaurants) {
+            const restaurantId = restaurant._id;
+
+            axios
+              .post("/api/views/find-for-restaurant", {
+                restaurantId,
+              })
+              .then((viewsResponse) => {
+                if (viewsResponse.status !== 200)
+                  throw new Error(viewsResponse.data.message);
+
+                views[restaurantId] = viewsResponse.data.views;
+
+                setRestaurantViews(views);
+                setRestaurants(restaurants);
+                setUserRol(rol);
+              })
+              .catch((err) => console.log(err));
+          }
         })
         .catch((err: any) => {
           console.log(err);
@@ -78,7 +98,7 @@ export function RestaurantsBox() {
           : ""}
       </p>
       <div>
-        {restaurants ? (
+        {restaurants && restaurantViews ? (
           <>
             {restaurants.map((restaurant: any, index: number) => {
               const [starting, last] = parsePages(currentPage);
@@ -90,13 +110,14 @@ export function RestaurantsBox() {
                     restaurant={restaurant}
                     restaurants={restaurants}
                     setRestaurants={setRestaurants}
+                    views={restaurantViews[restaurant._id]}
                   />
                 );
               }
             })}
           </>
         ) : (
-          "Loading..."
+          <Image src="/icons/loader.gif" alt="Lader" height="50" width="50" />
         )}
       </div>
       <div className={styles.paginationButtonsContainer}>

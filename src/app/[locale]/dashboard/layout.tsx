@@ -12,6 +12,7 @@ import Image from "next/image";
 import { fromSerpentToUrl } from "@/utils/fromSerpentToUrl";
 import { capitalizeFirstLetter } from "@/utils/capitalizeFirstLetter";
 import { useTranslations } from "next-intl";
+import Loader from "../components/loader";
 
 interface DashboardLayoutInterface {
   children: React.ReactNode;
@@ -81,7 +82,7 @@ export default function DashboardLayout({
       router.replace("dashboard");
     }
 
-    router.push(fromSerpentToUrl(section));
+    router.replace(fromSerpentToUrl(section));
   };
 
   return (
@@ -145,7 +146,7 @@ export default function DashboardLayout({
           {children}
         </main>
       ) : (
-        "Loading Layout..."
+        <Loader />
       )}
     </>
   );

@@ -18,6 +18,7 @@ import ISO6391 from "iso-639-1";
 import { getElementTextTranslated } from "@/utils/getElementTextTranslated";
 import { locales } from "@/utils/arrays/locales";
 import { useRouter } from "next/navigation";
+import Loader from "../../components/loader";
 
 interface viewPageProps {
   params: { view_url: string };
@@ -196,7 +197,7 @@ export default function ViewPage({ params }: viewPageProps) {
           })}
         </section>
       ) : (
-        "Loading..."
+        <Loader />
       )}
     </main>
   );

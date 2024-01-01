@@ -11,12 +11,14 @@ interface RestaurantCardProps {
   restaurant: any;
   setRestaurants: Function;
   restaurants: any[];
+  views: number;
 }
 
 export function RestaurantCard({
   restaurant,
   setRestaurants,
   restaurants,
+  views,
 }: RestaurantCardProps) {
   const t = useTranslations("Dashboard.Components.Restaurants.RestaurantCard");
   const pathname = usePathname();
@@ -33,7 +35,7 @@ export function RestaurantCard({
           height="100"
         />
         <p className={styles.views}>
-          <span>Views:</span> 6
+          <span>Views:</span> {views}
         </p>
       </div>
       <h3>{restaurant.name}</h3>
