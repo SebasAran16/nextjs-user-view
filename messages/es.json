@@ -73,13 +73,13 @@
           "eliminate": "Eliminar"
         },
         "ViewsBox": {
-          "create": "Crear una vista",
-          "selectText": "Selecciona una vista para editarla..."
+          "create": "Crear un View",
+          "selectText": "Selecciona un View para editarlo..."
         },
         "ElementsBox": {
-          "eliminateView": "Eliminar vista",
+          "eliminateView": "Eliminar View",
           "visibility": "Visible en: ",
-          "title": "Elementos de la vista:",
+          "title": "Elementos del View:",
           "fallbackMessage": "Vuelve a iniciar sesión",
           "AdminElementsPanel": {
             "add": "Agregar elemento",
@@ -88,7 +88,7 @@
             "noElementsMessage": "Los elementos agregados se mostrarán aquí..."
           },
           "RestaurantElementsPanel": {
-            "panelExplanation": "Esto es lo que ven tus clientes en tu vista:",
+            "panelExplanation": "Esto es lo que ven tus clientes en tu View:",
             "editExplainer": "Selecciona un elemento para editarlo",
             "noElementsMessage": "Aún no se han agregado elementos...",
             "ColorSelector": {
@@ -188,13 +188,13 @@
       "addRestaurant": "Agregar restaurante"
     },
     "AddViewModal": {
-      "title": "Agregar vista:",
-      "viewName": "Nombre de la vista",
-      "viewUrl": "URL de la vista",
-      "uploadImage": "Subir imagen de la vista",
+      "title": "Agregar View:",
+      "viewName": "Nombre del View",
+      "viewUrl": "URL del view",
+      "uploadImage": "Subir imagen del View",
       "uploadedImage": "¡Imagen subida!",
       "imageFormatMessage": "(El formato debe ser jpg/png)",
-      "viewDescription": "Descripción de la vista:",
+      "viewDescription": "Descripción del View:",
       "addView": "Agregar"
     },
     "AdminEditElementModal": {
