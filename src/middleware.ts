@@ -20,7 +20,7 @@ export async function middleware(request: NextRequest) {
 
   const dataFromToken = token !== "" ? await getDataFromToken(token) : "";
 
-  if (path !== "/") {
+  if (path !== "/" && locale !== "view") {
     if (isUncredentialPath && token) {
       return NextResponse.redirect(
         new URL("/dashboard/restaurants", request.nextUrl)

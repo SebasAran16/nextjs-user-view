@@ -3,4 +3,5 @@ export const uncredentialPaths = [
   "/login",
   "/forgot-password",
   "/verify-email",
+  "/view",
 ];

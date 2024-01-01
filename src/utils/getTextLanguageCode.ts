@@ -1,6 +1,10 @@
-import cld from "cld";
+import LanguageDetect from "languagedetect";
+const languageDetector = new LanguageDetect();
 
-export async function returnLanguageCode(text: string) {
-  const result = await cld.detect(text);
-  return result.languages[0].code;
+export function getTextLanguage(text: string) {
+  const result = languageDetector.detect(text, 1);
+
+  const language = result[0][0];
+
+  return language;
 }

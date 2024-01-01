@@ -1,0 +1,241 @@
+{
+  "Landing": {
+    "title": "Willkommen bei CustomerView von OwnTheBlock Solutions!",
+    "authButtons": {
+      "login": "Anmelden",
+      "signup": "Registrieren"
+    }
+  },
+  "AuthFlow": {
+    "Signup": {
+      "headerCompanyName": "CustomerView",
+      "title": "Erstelle dein Konto",
+      "sectionExplanation": "Gib die folgenden Details ein, um dich zu registrieren.",
+      "username": "Benutzername",
+      "email": "E-Mail",
+      "password": "Passwort",
+      "repeatPassword": "Passwort wiederholen",
+      "registerButton": "Jetzt registrieren",
+      "alreadyRegister": "Bereits registriert?",
+      "loginAnchor": "Anmelden"
+    },
+    "Login": {
+      "headerCompanyName": "CustomerView",
+      "title": "Anmelden",
+      "sectionExplanation": "Gib deine Anmeldedaten ein",
+      "loginKey": "Benutzername oder E-Mail",
+      "password": "Passwort",
+      "loginButton": "Anmelden",
+      "forgotPasswordText": "Passwort vergessen?",
+      "recoverPasswordAnchor": "Wiederherstellen"
+    },
+    "ForgotPassword": {
+      "headerCompanyName": "CustomerView",
+      "title": "Passwort zurücksetzen",
+      "sectionExplanation": "Gib dein neues Passwort ein",
+      "existingEmail": "Vorhandene E-Mail",
+      "resetPassword": "Passwort zurücksetzen",
+      "noAccount": "Noch kein Konto?",
+      "createAccount": "Konto erstellen",
+      "mailSent": "E-Mail gesendet!",
+      "emailExplainer": "Wir haben dir eine E-Mail zum Zurücksetzen deines Passworts geschickt!",
+      "Reset": {
+        "headerCompanyName": "CustomerView",
+        "title": "Passwort ändern",
+        "sectionExplanation": "Setze dein neues Passwort:",
+        "newPassword": "Neues Passwort:",
+        "newPasswordRepeat": "Neues Passwort wiederholen:",
+        "changePassword": "Passwort ändern",
+        "noAccount": "Noch kein Konto?",
+        "createAccount": "Konto erstellen"
+      }
+    }
+  },
+  "Dashboard": {
+    "Header": {
+      "headerTitle": "Willkommen",
+      "navigations": {
+        "restaurants": "Restaurants",
+        "profile": "Profil",
+        "admin_panel": "Admin-Bereich"
+      },
+      "logout": "Abmelden"
+    },
+    "Components": {
+      "Restaurants": {
+        "title": "Restaurants",
+        "restaurantRestaurantsText": "Hier ist eine Liste deiner Restaurants",
+        "adminRestaurantsText": "Hier ist eine Liste aller Restaurants",
+        "noRestaurantsText": "Keine Restaurants verfügbar",
+        "addRestaurant": "Restaurant hinzufügen",
+        "RestaurantCard": {
+          "manage": "Verwalten",
+          "eliminate": "Löschen"
+        },
+        "ViewsBox": {
+          "create": "Eine Ansicht erstellen",
+          "selectText": "Wähle eine Ansicht aus, um sie zu bearbeiten..."
+        },
+        "ElementsBox": {
+          "eliminateView": "Ansicht löschen",
+          "visibility": "Sichtbar bei: ",
+          "title": "Elemente der Ansicht:",
+          "fallbackMessage": "Erneut anmelden",
+          "AdminElementsPanel": {
+            "add": "Element hinzufügen",
+            "manage": "Verwalten",
+            "delete": "Löschen",
+            "noElementsMessage": "Hinzugefügte Elemente werden hier angezeigt..."
+          },
+          "RestaurantElementsPanel": {
+            "panelExplanation": "Das sehen deine Kunden in deiner Ansicht:",
+            "editExplainer": "Element zum Bearbeiten auswählen",
+            "noElementsMessage": "Noch keine Elemente hinzugefügt...",
+            "ColorSelector": {
+              "edit": "Bearbeiten"
+            }
+          }
+        }
+      },
+      "Profile": {
+        "title": "Profil",
+        "currentData": "Aktuelle Daten:",
+        "noImage": "Kein Bild festgelegt",
+        "verifiedAccount": "Verifiziertes Konto",
+        "notVerifiedAccount": "Konto nicht verifiziert",
+        "rol": "Rolle:",
+        "creationDate": "Erstellt am:",
+        "inputToSet": "Neu",
+        "saveProfile": "Speichern",
+        "updateProfileFallbackMessage": "Benutzerdaten konnten nicht abgerufen werden",
+        "changePassword": "Passwort ändern:",
+        "newPassword": "Neues Passwort:*",
+        "newPasswordRepeat": "Neues Passwort wiederholen:*",
+        "changePasswordConfirm": "Ändern"
+      },
+      "AdminPanel": {
+        "title": "Admin-Bereich:",
+        "manageMessage": "Admin-Benutzer verwalten:",
+        "removeButton": "Entfernen",
+        "addButton": "Hinzufügen"
+      }
+    }
+  },
+  "Modals": {
+    "ConfirmationModal": {
+      "removeConfirmation": " wird entfernt, möchtest du fortfahren?",
+      "cancel": "Abbrechen",
+      "confirm": "Ja",
+      "removeErrorMessage": "Element konnte nicht entfernt werden"
+    },
+    "AddElementModal": {
+      "title": "Element hinzufügen:",
+      "elementName": "Elementname:",
+      "elementType": "Elementtyp",
+      "elementTypeOptions": {
+        "fallback": "Bitte einen Typ wählen",
+        "text": {
+          "option": "Text",
+          "label": "Text"
+        },
+        "video": {
+          "option": "Video",
+          "label": "Videolink:"
+        },
+        "image": {
+          "option": "Bild",
+          "label": "Bildlink"
+        },
+        "link_button": {
+          "option": "Link-Button",
+          "label": "Button-Link:"
+        },
+        "link_group": {
+          "option": "Link-Gruppe",
+          "link1": {
+            "label": "Link 1:",
+            "selectMessage": "Wähle Bild für Link 1"
+          },
+          "link2": {
+            "label": "Link 2:",
+            "selectMessage": "Wähle Bild für Link 2"
+          },
+          "link3": {
+            "label": "Link 3:",
+            "selectMessage": "Wähle Bild für Link 3"
+          },
+          "link4": {
+            "label": "Link 4:",
+            "selectMessage": "Wähle Bild für Link 4"
+          },
+          "link5": {
+            "label": "Link 5:",
+            "selectMessage": "Wähle Bild für Link 5"
+          },
+          "addLink": "Link hinzufügen",
+          "maximumReached": "Maximale Anzahl an Links erreicht"
+        }
+      },
+      "addElement": "Element hinzufügen"
+    },
+    "AddRestaurantModal": {
+      "title": "Restaurant hinzufügen:",
+      "restaurantName": "Name des Restaurants",
+      "uploadImage": "Restaurantbild hochladen",
+      "uploadedImage": "Bild hochgeladen!",
+      "imageFormatMessage": "(Format sollte jpg/png sein)",
+      "restaurantDescription": "Beschreibung des Restaurants:",
+      "addRestaurant": "Restaurant hinzufügen"
+    },
+    "AddViewModal": {
+      "title": "Ansicht hinzufügen:",
+      "viewName": "Name der Ansicht",
+      "viewUrl": "Ansichts-URL",
+      "uploadImage": "Bild der Ansicht hochladen",
+      "uploadedImage": "Bild hochgeladen!",
+      "imageFormatMessage": "(Format sollte jpg/png sein)",
+      "viewDescription": "Beschreibung der Restaurantansicht:",
+      "addView": "Hinzufügen"
+    },
+    "AdminEditElementModal": {
+      "title": "Element bearbeiten:",
+      "newName": "Neuer Name:",
+      "newText": "Neuer Text:",
+      "newVideo": "Neuer Videolink:",
+      "newImage": "Neuer Bildlink:",
+      "newButtonLink": "Neuer Button-Link:",
+      "linksGroup": {
+        "newLink": "Neuer Link ",
+        "newImage-1": "Wähle neuen Link ",
+        "newImage-2": " Bildtyp aus",
+        "addLink": " Link hinzufügen"
+      },
+      "wrongElementType": "Elementtyp nicht erlaubt",
+      "editElement": "Element bearbeiten",
+      "disabledButtonText": "Gib einen Wert ein, um zu bearbeiten"
+    },
+    "ColorPicker": {
+      "colorPicked": "Ausgewählte Farbe:",
+      "setInHEX": "In HEX festlegen:",
+      "cancel": "Abbrechen",
+      "saveColor": "Farbe speichern"
+    },
+    "RestaurantEditElementModal": {
+      "title": "Element bearbeiten:",
+      "newName": "Neuer Name:",
+      "newText": "Neuer Text:",
+      "newVideo": "Neuer Videolink:",
+      "newImage": "Neuer Bildlink:",
+      "newButtonLink": "Neuer Button-Link:",
+      "linksGroup": {
+        "newLink": "Neuer Link ",
+        "newImage-1": "Wähle neuen Link ",
+        "newImage-2": " Bildtyp aus",
+        "addLink": " Link hinzufügen"
+      },
+      "wrongElementType": "Elementtyp nicht erlaubt",
+      "editElement": "Element bearbeiten",
+      "disabledButtonText": "Gib einen Wert ein, um zu bearbeiten"
+    }
+  }
+}

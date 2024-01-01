@@ -12,12 +12,21 @@ import { getColorFromUse } from "@/utils/returnUseColor";
 import { ColorUse } from "@/types/structs/colorUse";
 import { TextElement } from "@/app/[locale]//components/views/text-element";
 import { LinkGroup } from "@/app/[locale]//components/views/link-group";
+import { useLocale } from "next-intl";
+import { getTextLanguage } from "@/utils/getTextLanguageCode";
+import ISO6391 from "iso-639-1";
+import { getElementTextTranslated } from "@/utils/getElementTextTranslated";
+import { locales } from "@/utils/arrays/locales";
+import { useRouter } from "next/navigation";
 
 interface viewPageProps {
   params: { view_url: string };
 }
 
 export default function ViewPage({ params }: viewPageProps) {
+  const userLocale = useLocale();
+  const router = useRouter();
+
   const [loading, setLoading] = useState(true);
   const [view, setView] = useState<any | undefined>();
   const [viewElements, setViewElements] = useState<any | undefined>();
@@ -39,18 +48,65 @@ export default function ViewPage({ params }: viewPageProps) {
         const view = elementsResponse.data.view;
         const elements = elementsResponse.data.elements;
 
-        setView(view);
-        setMainColor(view.main_color ?? mainColor);
-        setSecondaryColor(view.secondary_color ?? secondaryColor);
-        setTextColor(view.text_color ?? textColor);
-        setViewElements(getSortedElements(elements));
-        setLoading(false);
+        const promises = elements.map((element: any) => {
+          const elementText = element.text;
+          let textLanguageCode;
+
+          if (elementText) {
+            textLanguageCode = ISO6391.getCode(getTextLanguage(elementText));
+          }
+
+          return getElementTextTranslated(
+            elementText,
+            textLanguageCode!,
+            userLocale
+          )
+            .then((translation) => {
+              if (element.text) {
+                element.text = translation;
+              }
+              return element;
+            })
+            .catch((err) => console.log(err));
+        });
+
+        return Promise.all(promises)
+          .then((translatedElements) => {
+            setView(view);
+            setMainColor(view.main_color ?? mainColor);
+            setSecondaryColor(view.secondary_color ?? secondaryColor);
+            setTextColor(view.text_color ?? textColor);
+            setViewElements(getSortedElements(translatedElements));
+            setLoading(false);
+          })
+          .catch((err) => {
+            console.log(err);
+            toast.error("Could not get elements for View");
+          });
       })
       .catch((err) => {
         console.log(err);
         toast.error("Could not get elements for View");
       });
   }, []);
+
+  const handleLanguageChange = async (locale: string) => {
+    try {
+      const changeLocaleResponse = await axios.post("/api/changeLocale", {
+        locale,
+      });
+
+      if (changeLocaleResponse.status !== 200)
+        throw new Error(changeLocaleResponse.data.message);
+
+      router.replace("/view/" + params.view_url);
+      router.refresh();
+    } catch (err) {
+      console.log(err);
+      toast.error("There was some issue changing the language...");
+    }
+  };
+
   return (
     <main>
       <Toaster />
@@ -59,6 +115,18 @@ export default function ViewPage({ params }: viewPageProps) {
           id={styles.main}
           style={{ color: view.text_color ?? getColorFromUse(ColorUse.TEXT) }}
         >
+          <div id={styles.languageSelector}>
+            {locales.map((locale: string, index: number) => {
+              return (
+                <button
+                  key={index}
+                  onClick={() => handleLanguageChange(locale)}
+                >
+                  {ISO6391.getName(locale)}
+                </button>
+              );
+            })}
+          </div>
           <Image
             id={styles.logo}
             src={view.image}
