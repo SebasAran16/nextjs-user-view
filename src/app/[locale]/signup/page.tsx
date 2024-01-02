@@ -19,7 +19,6 @@ export default function Signup() {
   async function handleSignupSubmit(e: React.FormEvent<HTMLFormElement>) {
     try {
       e.preventDefault();
-
       const form = e.currentTarget;
 
       const username = form.elements.namedItem("username") as HTMLInputElement;
@@ -54,7 +53,7 @@ export default function Signup() {
       setUserData(user);
 
       toast.success(response.data.message);
-      router.push("/verify-email");
+      // router.push("/verify-email");
     } catch (err: any) {
       console.log(err);
       toast.error(err.response.data.message);
@@ -109,6 +108,7 @@ export default function Signup() {
                 type="password"
                 name="userPasswordOne"
                 id="userPasswordOne"
+                minLength={8}
                 required
               ></input>
               <label>{t("repeatPassword")}</label>
@@ -116,6 +116,7 @@ export default function Signup() {
                 type="password"
                 name="userPasswordTwo"
                 id="userPasswordTwo"
+                minLength={8}
                 required
               ></input>
               {/* <div>

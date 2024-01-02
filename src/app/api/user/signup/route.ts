@@ -5,6 +5,7 @@ import { UserRol } from "@/types/structs/userRol.enum";
 import { getUserForVariables } from "@/utils/getUserForVariable";
 import { sendEmail } from "@/utils/mailer";
 import { NextRequest, NextResponse } from "next/server";
+import validateEmail from "deep-email-validator";
 
 export async function POST(request: NextRequest) {
   try {
@@ -18,13 +19,35 @@ export async function POST(request: NextRequest) {
       $or: [{ username }, { email }],
     });
 
-    if (existingUser)
+    const {
+      valid: validEmail,
+      reason,
+      validators,
+    } = await validateEmail(email);
+    const reasonToGive = reason as
+      | "regex"
+      | "typo"
+      | "disposable"
+      | "mx"
+      | "smtp";
+
+    if (existingUser) {
       return NextResponse.json(
         {
           message: "Username or Email already in use",
         },
         { status: 409 }
       );
+    } else if (!validEmail && reasonToGive !== "typo") {
+      const reasonMessage = validators[reasonToGive]?.reason || "Unknown";
+
+      return NextResponse.json(
+        {
+          message: "Email not valid. Reason: " + reasonMessage,
+        },
+        { status: 422 }
+      );
+    }
 
     const dateCreatedAsDate = new Date(dateCreated * 1000);
 
