@@ -8,6 +8,7 @@ import ElementTypes from "@/utils/elementsStruct";
 import { LinkGroupImageType } from "@/types/structs/linkGroupImageType";
 import { useRouter } from "next/navigation";
 import { useTranslations } from "next-intl";
+import { urlRegex } from "@/utils/inputsRegex";
 
 interface AdminEditElementModalProps {
   setVisibleModal: Function;
@@ -78,8 +79,16 @@ export function AdminEditElementModal({
           const elementButtonLink = (
             form.elements.namedItem("editElementButtonLink") as HTMLInputElement
           ).value;
-          if (elementButtonLink !== "")
+          if (elementButtonLink !== "") {
+            if (!urlRegex.test(elementButtonLink)) {
+              toast.error("URL Syntax invalid for Button Link");
+              form.reset();
+              return;
+            }
+
             editElementObject.button_link = elementButtonLink;
+          }
+
           break;
         case 5:
           const linkGroup = currentEditElement.link_group;
@@ -103,6 +112,12 @@ export function AdminEditElementModal({
               ).value ?? "";
 
             if (linkToEdit) {
+              if (!urlRegex.test(linkToEdit)) {
+                toast.error("URL Syntax invalid for Link " + customerIndex);
+                form.reset();
+                return;
+              }
+
               if (linkGroup[i]) {
                 linkGroup[i].link = linkToEdit;
               } else {

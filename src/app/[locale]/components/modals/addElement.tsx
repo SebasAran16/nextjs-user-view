@@ -11,6 +11,7 @@ import get64BaseSize from "@/utils/getBase64Size";
 import { useRouter } from "next/navigation";
 import { LinkGroupImageType } from "@/types/structs/linkGroupImageType";
 import { useTranslations } from "next-intl";
+import { urlRegex } from "@/utils/inputsRegex";
 
 interface AddElementModalProps {
   setVisibleModal: Function;
@@ -80,6 +81,13 @@ export function AddElementModal({
           const elementButtonLink = (
             form.elements.namedItem("addElementButtonLink") as HTMLInputElement
           ).value;
+
+          if (!urlRegex.test(elementButtonLink)) {
+            toast.error("URL Syntax invalid for Button Link");
+            form.reset();
+            return;
+          }
+
           addElementObject.button_link = elementButtonLink;
           break;
         case ElementTypes.LINK_GROUP:
@@ -99,6 +107,11 @@ export function AddElementModal({
 
             if (!linkGroupLinkImageType) {
               toast.error("Set image type for link " + i);
+              form.reset();
+              return;
+            } else if (!urlRegex.test(linkGroupLink)) {
+              toast.error("URL Syntax invalid for Link " + i);
+              form.reset();
               return;
             }
 

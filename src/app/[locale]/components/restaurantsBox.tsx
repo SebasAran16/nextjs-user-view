@@ -26,6 +26,7 @@ export function RestaurantsBox() {
   );
   const [restaurantViews, setRestaurantViews] = useState<undefined | any>();
 
+  console.log(restaurantViews);
   useEffect(() => {
     if (!restaurants) {
       axios
@@ -34,31 +35,32 @@ export function RestaurantsBox() {
           if (restaurantsResponse.status !== 200)
             throw new Error(restaurantsResponse.data.message);
 
-          const restaurants = restaurantsResponse.data.restaurants;
-          const rol = restaurantsResponse.data.rol;
-          const views: any = {};
+          const fetchedRestaurants = restaurantsResponse.data.restaurants;
+          const fetchedRol = restaurantsResponse.data.rol;
+          const requests = fetchedRestaurants.map((restaurant: any) => {
+            return axios.post("/api/views/find-for-restaurant", {
+              restaurantId: restaurant._id,
+            });
+          });
 
-          for (const restaurant of restaurants) {
-            const restaurantId = restaurant._id;
-
-            axios
-              .post("/api/views/find-for-restaurant", {
-                restaurantId,
-              })
-              .then((viewsResponse) => {
+          Promise.all(requests)
+            .then((viewsResponses) => {
+              const views: any = {};
+              viewsResponses.forEach((viewsResponse, index) => {
+                const restaurantId = fetchedRestaurants[index]._id;
                 if (viewsResponse.status !== 200)
                   throw new Error(viewsResponse.data.message);
 
                 views[restaurantId] = viewsResponse.data.views;
+              });
 
-                setRestaurantViews(views);
-                setRestaurants(restaurants);
-                setUserRol(rol);
-              })
-              .catch((err) => console.log(err));
-          }
+              setRestaurantViews(views);
+              setRestaurants(fetchedRestaurants);
+              setUserRol(fetchedRol);
+            })
+            .catch((err) => console.log(err));
         })
-        .catch((err: any) => {
+        .catch((err) => {
           console.log(err);
           toast.error("Could not get restaurants");
         });
@@ -104,6 +106,7 @@ export function RestaurantsBox() {
               const [starting, last] = parsePages(currentPage);
 
               if (index >= starting && index <= last) {
+                console.log(restaurantViews[restaurant._id]);
                 return (
                   <RestaurantCard
                     key={index}

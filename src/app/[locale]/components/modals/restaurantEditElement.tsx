@@ -8,6 +8,7 @@ import { useRouter } from "next/navigation";
 import ElementTypes from "@/utils/elementsStruct";
 import { LinkGroupImageType } from "@/types/structs/linkGroupImageType";
 import { useTranslations } from "next-intl";
+import { urlRegex } from "@/utils/inputsRegex";
 
 interface RestaurantEditElementModalProps {
   setVisibleModal: Function;
@@ -66,8 +67,15 @@ export function RestaurantEditElementModal({
           const elementButtonLink = (
             form.elements.namedItem("editElementButtonLink") as HTMLInputElement
           ).value;
-          if (elementButtonLink !== "")
+          if (elementButtonLink !== "") {
+            if (!urlRegex.test(elementButtonLink)) {
+              toast.error("URL Syntax invalid for Button Link");
+              form.reset();
+              return;
+            }
+
             editElementObject.button_link = elementButtonLink;
+          }
           break;
         case ElementTypes.LINK_GROUP:
           const linkGroup = element.link_group;
@@ -87,6 +95,12 @@ export function RestaurantEditElementModal({
               ).value ?? "";
 
             if (linkToEdit) {
+              if (!urlRegex.test(linkToEdit)) {
+                toast.error("URL Syntax invalid for Link " + customerIndex);
+                form.reset();
+                return;
+              }
+
               if (linkGroup[i]) {
                 linkGroup[i].link = linkToEdit;
               }
