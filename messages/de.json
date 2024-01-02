@@ -195,7 +195,8 @@
       "uploadedImage": "Bild hochgeladen!",
       "imageFormatMessage": "(Format sollte jpg/png sein)",
       "viewDescription": "Beschreibung der Restaurantansicht:",
-      "addView": "Hinzufügen"
+      "addView": "Hinzufügen",
+      "urlShowerMessage": "Das View wird sichtbar sein unter: "
     },
     "AdminEditElementModal": {
       "title": "Element bearbeiten:",

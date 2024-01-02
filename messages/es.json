@@ -195,7 +195,8 @@
       "uploadedImage": "¡Imagen subida!",
       "imageFormatMessage": "(El formato debe ser jpg/png)",
       "viewDescription": "Descripción del View:",
-      "addView": "Agregar"
+      "addView": "Agregar",
+      "urlShowerMessage": "El View estará visible en: "
     },
     "AdminEditElementModal": {
       "title": "Editar elemento:",

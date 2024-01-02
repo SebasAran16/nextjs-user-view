@@ -53,7 +53,7 @@ export default function Signup() {
       setUserData(user);
 
       toast.success(response.data.message);
-      // router.push("/verify-email");
+      router.push("/verify-email");
     } catch (err: any) {
       console.log(err);
       toast.error(err.response.data.message);

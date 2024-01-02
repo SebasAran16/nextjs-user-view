@@ -195,7 +195,8 @@
       "uploadedImage": "Image Uploaded!",
       "imageFormatMessage": "(Format should be jpg/png)",
       "viewDescription": "Restaurant Description:",
-      "addView": "Add"
+      "addView": "Add",
+      "urlShowerMessage": "View will be visible at: "
     },
     "AdminEditElementModal": {
       "title": "Edit Element:",

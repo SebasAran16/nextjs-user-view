@@ -195,7 +195,8 @@
       "uploadedImage": "Imatge pujada!",
       "imageFormatMessage": "(El format ha de ser jpg/png)",
       "viewDescription": "Descripció del View:",
-      "addView": "Afegeix"
+      "addView": "Afegeix",
+      "urlShowerMessage": "El View serà visible a: "
     },
     "AdminEditElementModal": {
       "title": "Edita l'element:",

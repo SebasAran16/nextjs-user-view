@@ -26,12 +26,13 @@ export function AddViewModal({
   const [viewImageToCreate, setViewImageToCreate] = useState<
     string | undefined
   >();
+  const [viewUrl, setViewUrl] = useState<undefined | string>();
 
   const handleCreateView = async (e: React.FormEvent<HTMLFormElement>) => {
     try {
       e.preventDefault();
-
       const form = e.currentTarget;
+      const urlRegex = /^(?!-)[a-z0-9]+(?:-[a-z0-9]+)*$(?<!-)/;
 
       const newViewName = (
         form.elements.namedItem("newViewName") as HTMLInputElement
@@ -40,8 +41,13 @@ export function AddViewModal({
         form.elements.namedItem("newViewUrl") as HTMLInputElement
       ).value;
 
-      if (!viewImageToCreate)
-        throw new Error("Please, upload view image to continue");
+      if (!viewImageToCreate) {
+        toast.error("Please, upload view image to continue");
+        return;
+      } else if (!urlRegex.test(newViewUrl)) {
+        toast.error("URL set has invalid syntax");
+        return;
+      }
 
       const createViewResponse = await axios.post("/api/views/add", {
         restaurant_id: restaurantId,
@@ -62,7 +68,11 @@ export function AddViewModal({
       toast.success(createViewResponse.data.message);
     } catch (err: any) {
       console.log(err);
-      toast.error(err.message);
+      if (axios.isAxiosError(err)) {
+        toast.error(err.response?.data.message);
+      } else {
+        toast.error(err.message);
+      }
     }
   };
 
@@ -102,8 +112,22 @@ export function AddViewModal({
           placeholder="mc-donalds"
           type="text"
           name="newViewUrl"
+          minLength={3}
+          onChange={(e) => {
+            const value = e.currentTarget.value;
+
+            if (value.length > 2) setViewUrl(value);
+            if (value.length < 3) setViewUrl(undefined);
+          }}
           required
         />
+        {viewUrl ? (
+          <p>
+            {t("urlShowerMessage") + "https://customerview.app/view/" + viewUrl}
+          </p>
+        ) : (
+          ""
+        )}
         {viewImageToCreate ? (
           <div className={styles.imageUpload}>
             <div>
