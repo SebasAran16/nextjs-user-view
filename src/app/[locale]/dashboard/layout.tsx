@@ -7,7 +7,6 @@ import axios from "axios";
 import { getUserForVariables } from "@/utils/getUserForVariable";
 import { usePathname, useRouter } from "next/navigation";
 import { dashboardSections } from "@/utils/arrays/dashboardSections";
-import { fromSerpentToReadable } from "@/utils/fromSerpentToReadable";
 import Image from "next/image";
 import { fromSerpentToUrl } from "@/utils/fromSerpentToUrl";
 import { capitalizeFirstLetter } from "@/utils/capitalizeFirstLetter";
@@ -78,11 +77,12 @@ export default function DashboardLayout({
   const goToSectionLink = (section: string) => {
     const segments = pathname.split("/");
 
-    if (segments.length === 3) {
-      router.replace("dashboard");
-    }
+    const dashboardIndex = segments.findIndex(
+      (segment) => segment === "dashboard"
+    );
+    const newSegments = segments.slice(0, dashboardIndex + 1);
 
-    router.replace(fromSerpentToUrl(section));
+    router.replace([...newSegments, fromSerpentToUrl(section)].join("/"));
   };
 
   return (
