@@ -33,14 +33,15 @@ export function AddElementModal({
   const t = useTranslations("Modals.AddElementModal");
   const router = useRouter();
   const [linkGroupCount, setLinkGroupCount] = useState(0);
-  const [linkGroupImages, setLinkGroupImages] = useState<Array<number>>([]);
+  const [newElementAsset, setNewElementAsset] = useState<undefined | File>();
 
   const handleAddElementSubmit = async (
     e: React.FormEvent<HTMLFormElement>
   ) => {
+    const form = e.currentTarget;
+
     try {
       e.preventDefault();
-      const form = e.currentTarget;
 
       const elementName = (
         form.elements.namedItem("addElementName") as HTMLInputElement
@@ -66,16 +67,24 @@ export function AddElementModal({
         case ElementTypes.TEXT:
           break;
         case ElementTypes.VIDEO:
-          const elementVideoLink = (
-            form.elements.namedItem("addElementVideoLink") as HTMLInputElement
-          ).value;
-          addElementObject.video_link = elementVideoLink;
+          if (newElementAsset && newElementAsset.type.startsWith("video")) {
+            const assetUrl = await createAmzObject(newElementAsset);
+
+            addElementObject.video_link = assetUrl;
+          } else {
+            toast.error("Please select a video before");
+            return;
+          }
           break;
         case ElementTypes.IMAGE:
-          const elementImageLink = (
-            form.elements.namedItem("addElementImageLink") as HTMLInputElement
-          ).value;
-          addElementObject.image_link = elementImageLink;
+          if (newElementAsset && newElementAsset.type.startsWith("image")) {
+            const url = await createAmzObject(newElementAsset);
+
+            addElementObject.image_link = url;
+          } else {
+            toast.error("Please select an image before");
+            return;
+          }
           break;
         case ElementTypes.LINK:
           const elementButtonLink = (
@@ -141,12 +150,70 @@ export function AddElementModal({
       console.log(err);
       toast.error("There was an issue adding the element");
     } finally {
+      form.reset();
       setAddFormType(undefined);
     }
   };
 
   const decreaseLinkGroup = () => {
     setLinkGroupCount(linkGroupCount - 1);
+  };
+
+  async function handleFileUpload(e: React.FormEvent<HTMLInputElement>) {
+    try {
+      const element = e.currentTarget;
+      const file = element.files![0] ?? "";
+      const maxSizeInBytes = 15 * 1024 * 1024; // 15MB
+
+      if (file.size > maxSizeInBytes) {
+        toast.error(
+          "Media size exceeds the maximum allowed size (15MB). Please choose a smaller one."
+        );
+        return;
+      }
+      const fileType = file.type;
+
+      if (fileType.startsWith("image") || fileType.startsWith("video")) {
+        setNewElementAsset(file);
+      } else {
+        toast.error(
+          "File type not supported. File Type Sent: " +
+            fileType +
+            " , supported only image or videos"
+        );
+      }
+    } catch (err: any) {
+      console.log(err);
+      toast.error(err.message);
+    }
+  }
+
+  const createAmzObject = async (file: File) => {
+    try {
+      const objectFormData = new FormData();
+      objectFormData.append("media", file);
+      objectFormData.append("restaurantId", view.owner_id);
+      objectFormData.append("viewUrl", view.url);
+
+      const objectUploadResponse = await axios.post(
+        "/api/aws/add-object",
+        objectFormData,
+        { headers: { "Content-Type": "multipart/form-data" } }
+      );
+
+      if (objectUploadResponse.status !== 200)
+        throw new Error(objectUploadResponse.data.message);
+
+      const assetUrl = objectUploadResponse.data.objectCDNUrl;
+      return assetUrl;
+    } catch (err) {
+      console.log(err);
+      if (axios.isAxiosError(err)) {
+        toast.error(err.response?.data.message);
+      } else {
+        toast.error("Could not upload media");
+      }
+    }
   };
 
   return (
@@ -214,21 +281,45 @@ export function AddElementModal({
             ""
           ) : addFormType === ElementTypes.VIDEO ? (
             <>
-              <label>{t("elementTypeOptions.video.label")}</label>
-              <input
-                placeholder="https://youtube.com/sdf..dsfsd"
-                type="text"
-                name="addElementVideoLink"
-              />
+              <label
+                className={styles.imageUpload}
+                htmlFor="restaurantImageUpload"
+              >
+                <div>+</div>
+                <div>
+                  <h3>Hey, upload a video</h3>
+                  <input
+                    id="restaurantImageUpload"
+                    type="file"
+                    name="newRestaurantImage"
+                    accept="video/*"
+                    onChange={handleFileUpload}
+                    required
+                  />
+                  <p>Only Accept Images</p>
+                </div>
+              </label>
             </>
           ) : addFormType === ElementTypes.IMAGE ? (
             <>
-              <label>{t("elementTypeOptions.image.label")}</label>
-              <input
-                placeholder="https://restaurant.com/gallery/1.jpg"
-                type="text"
-                name="addElementImageLink"
-              />
+              <label
+                className={styles.imageUpload}
+                htmlFor="restaurantImageUpload"
+              >
+                <div>+</div>
+                <div>
+                  <h3>Hey, upload an image</h3>
+                  <input
+                    id="restaurantImageUpload"
+                    type="file"
+                    name="newRestaurantImage"
+                    accept="image/*"
+                    onChange={handleFileUpload}
+                    required
+                  />
+                  <p>Only Accept Images</p>
+                </div>
+              </label>
             </>
           ) : addFormType === ElementTypes.LINK ? (
             <>
