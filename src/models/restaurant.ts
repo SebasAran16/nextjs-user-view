@@ -5,10 +5,7 @@ const RestaurantSchema = new Schema({
     type: String,
     required: [true, "Restaurant name required"],
   },
-  image: {
-    type: String,
-    required: [true, "Restaurant image required!"],
-  },
+  image: String,
   admin_ids: {
     type: [String],
     required: [true, "Restaurant admin list needed"],

@@ -6,6 +6,10 @@ import axios from "axios";
 import toast from "react-hot-toast";
 import { useState } from "react";
 import { useTranslations } from "next-intl";
+import { imageSourceFromBase64 } from "@/utils/imageSourceFromBase64";
+import { kbSizeFromFileSize } from "@/utils/kbSizeFromFileSize";
+import { Object } from "@/types/structs/object.enum";
+import { createAmzObject } from "@/utils/amzS3/createAmzObject";
 
 interface AddViewProps {
   setVisibleModal: Function;
@@ -24,8 +28,9 @@ export function AddViewModal({
 }: AddViewProps) {
   const t = useTranslations("Modals.AddViewModal");
   const [viewImageToCreate, setViewImageToCreate] = useState<
-    string | undefined
+    File | undefined
   >();
+  const [previewImage, setPreviewImage] = useState<undefined | string>();
   const [viewUrl, setViewUrl] = useState<undefined | string>();
 
   const handleCreateView = async (e: React.FormEvent<HTMLFormElement>) => {
@@ -53,15 +58,26 @@ export function AddViewModal({
         restaurant_id: restaurantId,
         name: newViewName,
         url: newViewUrl,
-        image: viewImageToCreate,
       });
 
       if (createViewResponse.status !== 200)
         throw new Error(createViewResponse.data.message);
 
-      const newView = createViewResponse.data.view;
+      let newView = createViewResponse.data.view;
 
-      console.log([...views, newView]);
+      const mediaFormData = new FormData();
+      mediaFormData.append("objectId", newView._id);
+      mediaFormData.append("mediaFile", viewImageToCreate!);
+      mediaFormData.append("objectType", Object.VIEW);
+      mediaFormData.append("restaurantId", restaurantId);
+      mediaFormData.append("viewUrl", newView.url);
+      const objectS3Response = await createAmzObject(mediaFormData);
+      if (!objectS3Response.success) {
+        toast.error(objectS3Response.errorMessage);
+      } else {
+        newView = objectS3Response.object;
+      }
+
       setEditingView(newView);
       setVisibleModal(false);
       setViews([...views, newView]);
@@ -87,9 +103,9 @@ export function AddViewModal({
           "Image size exceeds the maximum allowed size (15MB). Please choose a smaller image."
         );
 
-      const imageBase64 = (await convertToBase64(file)) as string;
-
-      setViewImageToCreate(imageBase64);
+      const imageBuffer = Buffer.from(await file.arrayBuffer());
+      setPreviewImage(imageBuffer.toString("base64"));
+      setViewImageToCreate(file);
     } catch (err: any) {
       console.log(err);
       toast.error(err.message);
@@ -128,11 +144,11 @@ export function AddViewModal({
         ) : (
           ""
         )}
-        {viewImageToCreate ? (
+        {viewImageToCreate && previewImage ? (
           <div className={styles.imageUpload}>
             <div>
               <Image
-                src={viewImageToCreate}
+                src={imageSourceFromBase64(previewImage)}
                 alt="Added Image"
                 width="32"
                 height="32"
@@ -140,7 +156,7 @@ export function AddViewModal({
             </div>
             <div>
               <h3>{t("uploadedImage")}</h3>
-              <p>{`Size: ${get64BaseSize(viewImageToCreate)} KB`}</p>
+              <p>{`Size: ${kbSizeFromFileSize(viewImageToCreate.size)} KB`}</p>
             </div>
           </div>
         ) : (

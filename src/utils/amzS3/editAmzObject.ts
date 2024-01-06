@@ -1,21 +1,19 @@
 import axios from "axios";
-import { getS3APIDataFromFormData } from "./getS3KeyFromFormData";
 
-export async function createAmzObject(formData: FormData) {
+export async function editAmzObject(formData: FormData) {
   try {
-    const apiFormData = getS3APIDataFromFormData(formData);
-
     const objectUploadResponse = await axios.post(
-      "/api/aws/add-object",
-      apiFormData,
+      "/api/aws/edit-object",
+      formData,
       { headers: { "Content-Type": "multipart/form-data" } }
     );
+    console.log(objectUploadResponse);
 
     if (objectUploadResponse.status !== 200)
       throw new Error(objectUploadResponse.data.message);
 
-    const object = objectUploadResponse.data.object;
-    return { object, success: true };
+    const objectCDNUrl = objectUploadResponse.data.objectCDNUrl;
+    return { objectCDNUrl, success: true };
   } catch (err) {
     console.log(err);
     if (axios.isAxiosError(err)) {

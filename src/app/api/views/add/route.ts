@@ -9,7 +9,7 @@ export async function POST(request: NextRequest) {
   try {
     await dbConnect();
 
-    const { restaurant_id, name, url, image } = await request.json();
+    const { restaurant_id, name, url } = await request.json();
 
     const userToken = cookies().get("token")?.value || "";
 
@@ -49,7 +49,6 @@ export async function POST(request: NextRequest) {
       owner_id: restaurant_id,
       name,
       url,
-      image,
       created_at: dateCreatedAsDate,
     });
 

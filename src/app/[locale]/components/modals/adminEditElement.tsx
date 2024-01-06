@@ -9,6 +9,9 @@ import { LinkGroupImageType } from "@/types/structs/linkGroupImageType";
 import { useRouter } from "next/navigation";
 import { useTranslations } from "next-intl";
 import { urlRegex } from "@/utils/inputsRegex";
+import { Object } from "@/types/structs/object.enum";
+import { editAmzObject } from "@/utils/amzS3/editAmzObject";
+import { getS3ObjectKeyFromObject } from "@/utils/amzS3/getS3ObjectKeyFromObject";
 
 interface AdminEditElementModalProps {
   setVisibleModal: Function;
@@ -33,13 +36,15 @@ export function AdminEditElementModal({
   const [additionalGroupLinks, setAdditionalGroupLinks] = useState<
     Array<number>
   >([]);
+  const [editElementAsset, setEditElementAsset] = useState<undefined | File>();
 
   const handleEditElementSubmit = async (
     e: React.FormEvent<HTMLFormElement>
   ) => {
+    const form = e.currentTarget;
+
     try {
       e.preventDefault();
-      const form = e.currentTarget;
 
       const editElementObject: IEditElement = {
         id: currentEditElement._id,
@@ -57,25 +62,36 @@ export function AdminEditElementModal({
       ).value;
       if (elementText !== "") editElementObject.text = elementText;
 
-      switch (elementType) {
-        case 1:
-          break;
-        case 2:
-          const elementVideoLink = (
-            form.elements.namedItem("editElementVideoLink") as HTMLInputElement
-          ).value;
+      const mediaFormData = new FormData();
 
-          if (elementVideoLink !== "")
-            editElementObject.video_link = elementVideoLink;
+      switch (elementType) {
+        case ElementTypes.TEXT:
           break;
-        case 3:
-          const elementImageLink = (
-            form.elements.namedItem("editElementImageLink") as HTMLInputElement
-          ).value;
-          if (elementImageLink !== "")
-            editElementObject.image_link = elementImageLink;
+        case ElementTypes.VIDEO:
+        case ElementTypes.IMAGE:
+          mediaFormData.append("mediaFile", editElementAsset!);
+          mediaFormData.append(
+            "objectKey",
+            getS3ObjectKeyFromObject(currentEditElement, Object.ELEMENT)
+          );
+
+          const editS3ObjectResponse = await editAmzObject(mediaFormData);
+
+          if (!editS3ObjectResponse.success) {
+            toast.error(editS3ObjectResponse.errorMessage);
+            return;
+          }
+
+          const newCDNUrl = editS3ObjectResponse.objectCDNUrl;
+
+          if (elementType === ElementTypes.IMAGE) {
+            editElementObject.image_link = newCDNUrl;
+          } else if (elementType === ElementTypes.VIDEO) {
+            editElementObject.video_link = newCDNUrl;
+          }
+
           break;
-        case 4:
+        case ElementTypes.LINK:
           const elementButtonLink = (
             form.elements.namedItem("editElementButtonLink") as HTMLInputElement
           ).value;
@@ -146,14 +162,45 @@ export function AdminEditElementModal({
       const indexToSwap = currentElements.indexOf(currentEditElement);
       currentElements[indexToSwap] = editResponse.data.element;
       setCurrentElements(currentElements);
-      setVisibleModal(false);
       setDisableEditButton(true);
       toast.success(editResponse.data.message);
     } catch (err) {
       console.log(err);
       toast.error("There was an issue editing the element");
+    } finally {
+      form.reset();
+      setVisibleModal(false);
     }
   };
+
+  async function handleFileUpload(e: React.FormEvent<HTMLInputElement>) {
+    try {
+      const element = e.currentTarget;
+      const file = element.files![0] ?? "";
+      const maxSizeInBytes = 15 * 1024 * 1024; // 15MB
+
+      if (file.size > maxSizeInBytes) {
+        toast.error(
+          "Media size exceeds the maximum allowed size (15MB). Please choose a smaller one."
+        );
+        return;
+      }
+      const fileType = file.type;
+
+      if (fileType.startsWith("image") || fileType.startsWith("video")) {
+        setEditElementAsset(file);
+      } else {
+        toast.error(
+          "File type not supported. File Type Sent: " +
+            fileType +
+            " , supported only image or videos"
+        );
+      }
+    } catch (err: any) {
+      console.log(err);
+      toast.error(err.message);
+    }
+  }
 
   return (
     <div className={styles.modalActionContainer}>
@@ -180,22 +227,48 @@ export function AdminEditElementModal({
           ) : currentEditElement.type === ElementTypes.VIDEO ? (
             <>
               <label>{t("newVideo")}</label>
-              <input
-                type="text"
-                name="editElementVideoLink"
-                placeholder="https://youtube.com/sdf..dsfsd"
-                onChange={() => setDisableEditButton(false)}
-              />
+              <label
+                className={styles.imageUpload}
+                htmlFor="elementVideoUpload"
+              >
+                <div>
+                  <input
+                    id="elementVideoUpload"
+                    type="file"
+                    name="newElementVideo"
+                    accept="video/*"
+                    onChange={(e) => {
+                      handleFileUpload(e);
+                      setDisableEditButton(false);
+                    }}
+                    required
+                  />
+                  <p>Only Accept Video</p>
+                </div>
+              </label>
             </>
           ) : currentEditElement.type === ElementTypes.IMAGE ? (
             <>
               <label>{t("newImage")}</label>
-              <input
-                type="text"
-                name="editElementImageLink"
-                placeholder="https://restaurant.com/gallery/1.jpg"
-                onChange={() => setDisableEditButton(false)}
-              />
+              <label
+                className={styles.imageUpload}
+                htmlFor="elementImageUpload"
+              >
+                <div>
+                  <input
+                    id="elementImageUpload"
+                    type="file"
+                    name="newElementImage"
+                    accept="image/*"
+                    onChange={(e) => {
+                      handleFileUpload(e);
+                      setDisableEditButton(false);
+                    }}
+                    required
+                  />
+                  <p>Only Accept Images</p>
+                </div>
+              </label>
             </>
           ) : currentEditElement.type === ElementTypes.LINK ? (
             <>

@@ -9,10 +9,7 @@ const ViewSchema = new Schema({
     type: String,
     required: [true, "Provide a name for the element"],
   },
-  image: {
-    type: String,
-    required: [true, "Provide an image for the element"],
-  },
+  image: String,
   url: {
     type: String,
     required: [true, "Provide a URL for the view"],

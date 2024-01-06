@@ -6,6 +6,10 @@ import { toast } from "react-hot-toast";
 import Image from "next/image";
 import get64BaseSize from "@/utils/getBase64Size";
 import { useTranslations } from "next-intl";
+import { createAmzObject } from "@/utils/amzS3/createAmzObject";
+import { Object } from "@/types/structs/object.enum";
+import { imageSourceFromBase64 } from "@/utils/imageSourceFromBase64";
+import { kbSizeFromFileSize } from "@/utils/kbSizeFromFileSize";
 
 interface AddRestaurantModalProps {
   setVisibleModal: Function;
@@ -21,10 +25,13 @@ export function AddRestaurantModal({
   const t = useTranslations("Modals.AddRestaurantModal");
 
   const [restaurantImageToCreate, setRestaurantImageToCreate] = useState<
-    string | undefined
+    File | undefined
   >();
+  const [previewImage, setPreviewImage] = useState<undefined | string>();
 
-  function handleAddNewRestaurantSubmit(e: React.FormEvent<HTMLFormElement>) {
+  async function handleAddNewRestaurantSubmit(
+    e: React.FormEvent<HTMLFormElement>
+  ) {
     try {
       e.preventDefault();
       const form = e.currentTarget;
@@ -38,27 +45,34 @@ export function AddRestaurantModal({
         ) as HTMLTextAreaElement
       ).value;
 
-      axios
-        .post("/api/restaurants/add", {
-          name,
-          image: restaurantImageToCreate,
-          description,
-        })
-        .then((newRestaurantResponse) => {
-          if (newRestaurantResponse.status !== 200)
-            throw new Error(newRestaurantResponse.data.message);
+      const newRestaurantResponse = await axios.post("/api/restaurants/add", {
+        name,
+        description,
+      });
 
-          restaurants.push(newRestaurantResponse.data.restaurant);
-          setRestaurants(restaurants);
-          toast.success(newRestaurantResponse.data.message);
-          setVisibleModal(false);
-        })
-        .catch((err) => {
-          console.log(err);
-          toast.error("Could not add restaurant");
-        });
+      if (newRestaurantResponse.status !== 200)
+        throw new Error(newRestaurantResponse.data.message);
+
+      let newRestaurant = newRestaurantResponse.data.restaurant;
+
+      const mediaFormData = new FormData();
+      mediaFormData.append("objectId", newRestaurant._id);
+      mediaFormData.append("mediaFile", restaurantImageToCreate!);
+      mediaFormData.append("objectType", Object.RESTAURANT);
+      const objectS3Response = await createAmzObject(mediaFormData);
+      if (!objectS3Response.success) {
+        toast.error(objectS3Response.errorMessage);
+      } else {
+        newRestaurant = objectS3Response.object;
+      }
+
+      restaurants.push(newRestaurant);
+      setRestaurants(restaurants);
+      toast.success(newRestaurantResponse.data.message);
+      setVisibleModal(false);
     } catch (err) {
       console.log(err);
+      toast.error("Could not add restaurant");
     }
   }
 
@@ -73,9 +87,9 @@ export function AddRestaurantModal({
           "Image size exceeds the maximum allowed size (15MB). Please choose a smaller image."
         );
 
-      const imageBase64 = (await convertToBase64(file)) as string;
-
-      setRestaurantImageToCreate(imageBase64);
+      const imageBuffer = Buffer.from(await file.arrayBuffer());
+      setPreviewImage(imageBuffer.toString("base64"));
+      setRestaurantImageToCreate(file);
     } catch (err: any) {
       console.log(err);
       toast.error(err.message);
@@ -93,11 +107,11 @@ export function AddRestaurantModal({
           placeholder="my new restaurant"
           required
         />
-        {restaurantImageToCreate ? (
+        {restaurantImageToCreate && previewImage ? (
           <div className={styles.imageUpload}>
             <div>
               <Image
-                src={restaurantImageToCreate}
+                src={imageSourceFromBase64(previewImage)}
                 alt="Added Image"
                 width="32"
                 height="32"
@@ -105,7 +119,9 @@ export function AddRestaurantModal({
             </div>
             <div>
               <h3>{t("uploadedImage")}</h3>
-              <p>{`Size: ${get64BaseSize(restaurantImageToCreate)} KB`}</p>
+              <p>{`Size: ${kbSizeFromFileSize(
+                restaurantImageToCreate.size
+              )} KB`}</p>
             </div>
           </div>
         ) : (

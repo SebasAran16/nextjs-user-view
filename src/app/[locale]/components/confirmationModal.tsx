@@ -47,7 +47,7 @@ export function ConfirmationModal({
       if (removeResponse.status !== 200)
         throw new Error(removeResponse.data.message);
 
-      // see if we should delete objects3
+      // TODO see if we should delete objects3
       const deleteS3ObjectResponse = await deleteAmazonObject(
         getS3ObjectKeyFromObject(object, objectType!)
       );

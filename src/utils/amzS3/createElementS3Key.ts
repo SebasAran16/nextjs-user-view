@@ -5,5 +5,5 @@ export function createElementS3Key(
   elementId: string,
   extension: string
 ) {
-  return `${restaurantId}/${viewUrl}/${objectType}-${elementId}${extension}`;
+  return `${restaurantId}/${viewUrl}/elements/${objectType}-${elementId}_v1${extension}`;
 }

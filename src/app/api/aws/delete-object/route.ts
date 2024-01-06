@@ -7,21 +7,21 @@ export async function POST(request: NextRequest) {
     const { objectKey } = await request.json();
 
     const input = {
-      Bucket: "customer-view",
+      Bucket: process.env.CUSTOMER_VIEW_BUCKET,
       Key: objectKey,
     };
 
     const command = new DeleteObjectCommand(input);
     const deleteResponse = await awsClient.send(command);
 
-    const creationStatusCode = deleteResponse.$metadata.httpStatusCode;
-    if (creationStatusCode > 299)
+    const deleteStatusCode = deleteResponse.$metadata.httpStatusCode;
+    if (deleteStatusCode > 299)
       return NextResponse.json(
         {
-          message: "Delete failed with status: " + creationStatusCode,
+          message: "Delete failed with status: " + deleteStatusCode,
           success: false,
         },
-        { status: creationStatusCode }
+        { status: deleteStatusCode }
       );
 
     return NextResponse.json(

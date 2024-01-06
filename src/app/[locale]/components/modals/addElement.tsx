@@ -145,7 +145,7 @@ export function AddElementModal({
         elementType === ElementTypes.IMAGE ||
         elementType === ElementTypes.VIDEO
       ) {
-        mediaFormData.append("elementId", elementCreated._id);
+        mediaFormData.append("objectId", elementCreated._id);
         mediaFormData.append("objectType", Object.ELEMENT);
         const objectS3Response = await createAmzObject(mediaFormData);
         if (!objectS3Response.success) {
@@ -268,20 +268,20 @@ export function AddElementModal({
             <>
               <label
                 className={styles.imageUpload}
-                htmlFor="restaurantImageUpload"
+                htmlFor="elementVideoUpload"
               >
                 <div>+</div>
                 <div>
                   <h3>Hey, upload a video</h3>
                   <input
-                    id="restaurantImageUpload"
+                    id="elementVideoUpload"
                     type="file"
-                    name="newRestaurantImage"
+                    name="newElementVideo"
                     accept="video/*"
                     onChange={handleFileUpload}
                     required
                   />
-                  <p>Only Accept Images</p>
+                  <p>Only Accept Video</p>
                 </div>
               </label>
             </>
@@ -289,15 +289,15 @@ export function AddElementModal({
             <>
               <label
                 className={styles.imageUpload}
-                htmlFor="restaurantImageUpload"
+                htmlFor="elementImageUpload"
               >
                 <div>+</div>
                 <div>
                   <h3>Hey, upload an image</h3>
                   <input
-                    id="restaurantImageUpload"
+                    id="elementImageUpload"
                     type="file"
-                    name="newRestaurantImage"
+                    name="newElementImage"
                     accept="image/*"
                     onChange={handleFileUpload}
                     required

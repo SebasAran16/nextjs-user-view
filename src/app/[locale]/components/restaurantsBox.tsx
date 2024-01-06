@@ -26,7 +26,6 @@ export function RestaurantsBox() {
   );
   const [restaurantViews, setRestaurantViews] = useState<undefined | any>();
 
-  console.log(restaurantViews);
   useEffect(() => {
     if (!restaurants) {
       axios
@@ -106,7 +105,6 @@ export function RestaurantsBox() {
               const [starting, last] = parsePages(currentPage);
 
               if (index >= starting && index <= last) {
-                console.log(restaurantViews[restaurant._id]);
                 return (
                   <RestaurantCard
                     key={index}
