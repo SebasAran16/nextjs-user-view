@@ -2,23 +2,32 @@ import { PutObjectCommand } from "@aws-sdk/client-s3";
 import { awsClient } from "@/lib/amazonClient";
 import { NextRequest, NextResponse } from "next/server";
 import { capitalizeFirstLetter } from "@/utils/capitalizeFirstLetter";
+import { createElementS3Key } from "@/utils/amzS3/createElementS3Key";
+import { Object } from "@/types/structs/object.enum";
+import { getObjectId } from "@/utils/getObjectId";
+import axios from "axios";
 
 export async function POST(request: NextRequest) {
   try {
     const data = await request.formData();
-    const fileData = data.get("media") as File;
+    const fileData = data.get("mediaFile") as File;
     const restaurantId = data.get("restaurantId") as string;
     const viewUrl = data.get("viewUrl") as string;
+    const objectType = data.get("objectType") as Object;
+    const objectId = getObjectId(data, objectType);
 
-    const mediaType = fileData.type.split("/")[0];
+    const buffer = Buffer.from(await fileData.arrayBuffer());
 
-    const arrayBuffer = await fileData.arrayBuffer();
-    const buffer = Buffer.from(arrayBuffer);
-
-    let objectType = capitalizeFirstLetter(mediaType);
+    const objectMediaType = capitalizeFirstLetter(fileData.type.split("/")[0]);
     const extension = "." + fileData.name.split(".").pop();
 
-    const objectKey = `${restaurantId}/${viewUrl}/${objectType}${extension}`;
+    const objectKey = createElementS3Key(
+      restaurantId,
+      viewUrl,
+      objectMediaType,
+      objectId,
+      extension
+    );
 
     const input = {
       Body: buffer,
@@ -36,26 +45,61 @@ export async function POST(request: NextRequest) {
         {
           message:
             objectType + " upload failed with status: " + creationStatusCode,
-          objectCDNUrl: "",
+          success: false,
         },
         { status: creationStatusCode }
       );
 
+    const objectCDNUrl = process.env.CDN_DOMAIN + "/" + objectKey;
+    const domain = process.env.DOMAIN;
+
+    let editedObject;
+    if (objectType === Object.ELEMENT) {
+      const elementMediaKey =
+        objectMediaType === "Image" ? "image_link" : "video_link";
+      const editObject = {
+        id: objectId,
+        [elementMediaKey]: objectCDNUrl,
+      };
+      const elementMediaEditResponse = await axios.post(
+        domain + "/api/elements/edit",
+        editObject
+      );
+
+      if (elementMediaEditResponse.status !== 200)
+        throw new Error("Could not update element media link");
+
+      editedObject = elementMediaEditResponse.data.element;
+    } else if (objectType === Object.RESTAURANT) {
+    } else if (objectType === Object.VIEW) {
+    }
+
     return NextResponse.json(
       {
         message: objectType + " added successfully!",
-        objectCDNUrl: process.env.CDN_DOMAIN + "/" + objectKey,
+        object: editedObject,
+        success: true,
       },
       { status: 200 }
     );
   } catch (err: any) {
     console.log(err);
-    return NextResponse.json(
-      {
-        success: false,
-        message: err.message,
-      },
-      { status: 500 }
-    );
+    if (axios.isAxiosError(err)) {
+      return NextResponse.json(
+        {
+          success: false,
+          message: err.response?.data.message,
+        },
+        { status: err.response?.status }
+      );
+    } else {
+      return NextResponse.json(
+        {
+          success: false,
+          message: err.message,
+        },
+        { status: 500 }
+      );
+    }
   }
 }

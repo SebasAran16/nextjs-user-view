@@ -12,6 +12,8 @@ import { useRouter } from "next/navigation";
 import { LinkGroupImageType } from "@/types/structs/linkGroupImageType";
 import { useTranslations } from "next-intl";
 import { urlRegex } from "@/utils/inputsRegex";
+import { Object } from "@/types/structs/object.enum";
+import { createAmzObject } from "@/utils/amzS3/createAmzObject";
 
 interface AddElementModalProps {
   setVisibleModal: Function;
@@ -63,26 +65,21 @@ export function AddElementModal({
         addElementObject.text = elementText;
       }
 
+      const mediaFormData = new FormData();
+
       switch (elementType) {
         case ElementTypes.TEXT:
           break;
         case ElementTypes.VIDEO:
-          if (newElementAsset && newElementAsset.type.startsWith("video")) {
-            const assetUrl = await createAmzObject(newElementAsset);
-
-            addElementObject.video_link = assetUrl;
-          } else {
-            toast.error("Please select a video before");
-            return;
-          }
-          break;
         case ElementTypes.IMAGE:
-          if (newElementAsset && newElementAsset.type.startsWith("image")) {
-            const url = await createAmzObject(newElementAsset);
-
-            addElementObject.image_link = url;
+          if (newElementAsset) {
+            mediaFormData.append("mediaFile", newElementAsset);
+            mediaFormData.append("restaurantId", view.owner_id);
+            mediaFormData.append("viewUrl", view.url);
           } else {
-            toast.error("Please select an image before");
+            const asset =
+              elementType === ElementTypes.VIDEO ? " video" : "n image";
+            toast.error("Please select a" + asset + " before");
             return;
           }
           break;
@@ -142,7 +139,23 @@ export function AddElementModal({
 
       if (addResponse.status !== 200) throw new Error(addResponse.data.message);
 
-      currentElements.push(addResponse.data.element);
+      let elementCreated = addResponse.data.element;
+
+      if (
+        elementType === ElementTypes.IMAGE ||
+        elementType === ElementTypes.VIDEO
+      ) {
+        mediaFormData.append("elementId", elementCreated._id);
+        mediaFormData.append("objectType", Object.ELEMENT);
+        const objectS3Response = await createAmzObject(mediaFormData);
+        if (!objectS3Response.success) {
+          toast.error(objectS3Response.errorMessage);
+        } else {
+          elementCreated = objectS3Response.object;
+        }
+      }
+
+      currentElements.push(elementCreated);
       setCurrentElements(currentElements);
       setVisibleModal(false);
       toast.success(addResponse.data.message);
@@ -187,34 +200,6 @@ export function AddElementModal({
       toast.error(err.message);
     }
   }
-
-  const createAmzObject = async (file: File) => {
-    try {
-      const objectFormData = new FormData();
-      objectFormData.append("media", file);
-      objectFormData.append("restaurantId", view.owner_id);
-      objectFormData.append("viewUrl", view.url);
-
-      const objectUploadResponse = await axios.post(
-        "/api/aws/add-object",
-        objectFormData,
-        { headers: { "Content-Type": "multipart/form-data" } }
-      );
-
-      if (objectUploadResponse.status !== 200)
-        throw new Error(objectUploadResponse.data.message);
-
-      const assetUrl = objectUploadResponse.data.objectCDNUrl;
-      return assetUrl;
-    } catch (err) {
-      console.log(err);
-      if (axios.isAxiosError(err)) {
-        toast.error(err.response?.data.message);
-      } else {
-        toast.error("Could not upload media");
-      }
-    }
-  };
 
   return (
     <>

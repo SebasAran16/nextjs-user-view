@@ -3,8 +3,9 @@ export default interface INewElement {
   name: string;
   type: number;
   text?: string;
-  video_link?: string;
-  image_link?: string;
+  media_file?: File;
   button_link?: string;
   link_group?: Object[];
+  view_url?: string;
+  restaurant_id?: string;
 }
