@@ -1,9 +1,17 @@
 {
   "Landing": {
     "title": "¡Bienvenido a CustomerView de OwnTheBlock Solutions!",
-    "authButtons": {
-      "login": "Iniciar sesión",
-      "signup": "Registrarse"
+    "mainHeader": {
+      "companyName": "CustomerView",
+      "navigations": {
+        "dashboard": "Mi Dashboard",
+        "products": "Productos",
+        "support": "Soporte"
+      },
+      "authButtons": {
+        "login": "Inicia la sessió",
+        "signup": "Registra't"
+      }
     }
   },
   "AuthFlow": {

@@ -3,6 +3,7 @@ import "@/styles/variables.module.sass";
 import type { Metadata } from "next";
 import { NextIntlClientProvider, useMessages } from "next-intl";
 import { SpeedInsights } from "@vercel/speed-insights/next";
+import MainHeader from "./components/headers/mainHeader";
 
 export const metadata: Metadata = {
   title: "CustomerView",
@@ -31,8 +32,9 @@ export default function RootLayout({
     <html lang={locale}>
       <body>
         <NextIntlClientProvider messages={messages}>
-          {children}
           <SpeedInsights />
+          <MainHeader />
+          {children}
         </NextIntlClientProvider>
       </body>
     </html>

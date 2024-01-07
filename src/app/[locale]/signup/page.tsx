@@ -64,17 +64,6 @@ export default function Signup() {
     <main id={styles.signUpView}>
       <section id={styles.formSection}>
         <Toaster />
-        <div id={styles.logoPart}>
-          <Link href="/" id={styles.logoAnchor}>
-            <Image
-              src="/icons/user-view-logo.png"
-              alt="Logo"
-              width="31"
-              height="31"
-            />
-            <p>{t("headerCompanyName")}</p>
-          </Link>
-        </div>
         <div id={styles.formPart}>
           <div>
             <h2>{t("title")}</h2>
@@ -119,7 +108,7 @@ export default function Signup() {
                 minLength={8}
                 required
               ></input>
-              {/* <div>
+              <div>
                 <label>
                   <input
                     type="checkbox"
@@ -130,7 +119,7 @@ export default function Signup() {
                   I am agreeing with <Link href="/">Privacy Policy</Link> and{" "}
                   <Link href="/">Terms & Conditions</Link>.
                 </label>
-              </div> */}
+              </div>
               <button type="submit">{t("registerButton")}</button>
             </form>
             <div id={styles.alreadyMemberDiv}>

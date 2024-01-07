@@ -34,17 +34,6 @@ export default function ForgotPassword() {
     <main id={styles.signUpView}>
       <section id={styles.formSection}>
         <Toaster />
-        <div id={styles.logoPart}>
-          <Link href="/" id={styles.logoAnchor}>
-            <Image
-              src="/icons/user-view-logo.png"
-              alt="Logo"
-              width="31"
-              height="31"
-            />
-            <p>{t("headerCompanyName")}</p>
-          </Link>
-        </div>
         <div id={styles.formPart}>
           <div>
             <h2>{t("title")}</h2>
