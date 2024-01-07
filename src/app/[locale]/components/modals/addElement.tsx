@@ -266,13 +266,12 @@ export function AddElementModal({
             ""
           ) : addFormType === ElementTypes.VIDEO ? (
             <>
+              <label>{t("elementTypeOptions.video.label")}</label>
               <label
                 className={styles.imageUpload}
                 htmlFor="elementVideoUpload"
               >
-                <div>+</div>
                 <div>
-                  <h3>Hey, upload a video</h3>
                   <input
                     id="elementVideoUpload"
                     type="file"
@@ -287,13 +286,12 @@ export function AddElementModal({
             </>
           ) : addFormType === ElementTypes.IMAGE ? (
             <>
+              <label>{t("elementTypeOptions.image.label")}</label>
               <label
                 className={styles.imageUpload}
                 htmlFor="elementImageUpload"
               >
-                <div>+</div>
                 <div>
-                  <h3>Hey, upload an image</h3>
                   <input
                     id="elementImageUpload"
                     type="file"

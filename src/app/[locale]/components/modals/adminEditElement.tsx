@@ -62,13 +62,13 @@ export function AdminEditElementModal({
       ).value;
       if (elementText !== "") editElementObject.text = elementText;
 
-      const mediaFormData = new FormData();
-
       switch (elementType) {
         case ElementTypes.TEXT:
           break;
         case ElementTypes.VIDEO:
         case ElementTypes.IMAGE:
+          const mediaFormData = new FormData();
+
           mediaFormData.append("mediaFile", editElementAsset!);
           mediaFormData.append(
             "objectKey",

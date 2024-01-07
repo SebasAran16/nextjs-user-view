@@ -53,7 +53,6 @@ export async function POST(request: NextRequest) {
       );
 
     const objectCDNUrl = process.env.CDN_DOMAIN + "/" + newVersionKey;
-    console.log(objectCDNUrl);
 
     return NextResponse.json(
       {

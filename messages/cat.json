@@ -140,11 +140,11 @@
         },
         "video": {
           "option": "Vídeo",
-          "label": "Enllaç del vídeo:"
+          "label": "Vídeo:"
         },
         "image": {
           "option": "Imatge",
-          "label": "Enllaç de la imatge"
+          "label": "Imatge"
         },
         "link_button": {
           "option": "Botó d'enllaç",
@@ -225,8 +225,8 @@
       "title": "Edita l'element:",
       "newName": "Nou nom:",
       "newText": "Nou text:",
-      "newVideo": "Nou URL del vídeo:",
-      "newImage": "Nou URL de la imatge:",
+      "newVideo": "Nou vídeo:",
+      "newImage": "Nova imatge:",
       "newButtonLink": "Nou enllaç del botó:",
       "linksGroup": {
         "newLink": "Nou enllaç ",

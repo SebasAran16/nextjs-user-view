@@ -7,7 +7,6 @@ export async function editAmzObject(formData: FormData) {
       formData,
       { headers: { "Content-Type": "multipart/form-data" } }
     );
-    console.log(objectUploadResponse);
 
     if (objectUploadResponse.status !== 200)
       throw new Error(objectUploadResponse.data.message);

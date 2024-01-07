@@ -140,11 +140,11 @@
         },
         "video": {
           "option": "Video",
-          "label": "Enlace de video:"
+          "label": "Video:"
         },
         "image": {
           "option": "Imagen",
-          "label": "Enlace de imagen"
+          "label": "Imagen:"
         },
         "link_button": {
           "option": "Botón de enlace",
@@ -225,8 +225,8 @@
       "title": "Editar elemento:",
       "newName": "Nuevo nombre:",
       "newText": "Nuevo texto:",
-      "newVideo": "Nuevo URL de video:",
-      "newImage": "Nuevo URL de imagen:",
+      "newVideo": "Nuevo video:",
+      "newImage": "Nueva imagen:",
       "newButtonLink": "Nuevo enlace del botón:",
       "linksGroup": {
         "newLink": "Nuevo enlace ",
