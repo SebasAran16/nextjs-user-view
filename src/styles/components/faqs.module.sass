@@ -1,0 +1,52 @@
+@import "@/styles/variables.module"
+
+#faqsContainer
+    display: flex
+    flex-direction: column
+    justify-content: space-around
+    align-items: center
+
+#formFaqs
+    display: flex
+    flex-direction: column
+    justify-content: space-around
+    margin-top: 1rem
+    width: 45%
+
+.faq
+    display: flex
+    flex-direction: column
+    background-color: rgba(255,255,255,0.9)
+    color: black
+    margin: 0.5rem 0
+    border-radius: 1rem
+    transition: 0.15s all
+    div
+        display: flex
+        justify-content: space-between
+        align-items: center
+        padding: $content-padding
+        img
+            transition: 0.3s all
+
+    &:hover
+        background-color: #F3F3F3
+        cursor: pointer
+
+.faqOpened
+    background-color: #F3F3F3
+    max-width: none
+    div
+        img
+            transform: rotate(540deg) !important
+
+.faqAnswer
+    background-color: $main-color
+    border-bottom-left-radius: 1rem
+    border-bottom-right-radius: 1rem
+    padding: 1.5rem
+    display: none
+
+.faqAnswerShown
+    display: block
+    position: inherit
