@@ -12,6 +12,7 @@ import { urlRegex } from "@/utils/inputsRegex";
 import { getS3ObjectKeyFromObject } from "@/utils/amzS3/getS3ObjectKeyFromObject";
 import { editAmzObject } from "@/utils/amzS3/editAmzObject";
 import { Object } from "@/types/structs/object.enum";
+import BlobReduce from "image-blob-reduce";
 
 interface RestaurantEditElementModalProps {
   setVisibleModal: Function;
@@ -145,16 +146,26 @@ export function RestaurantEditElementModal({
       const element = e.currentTarget;
       const file = element.files![0] ?? "";
       const maxSizeInBytes = 15 * 1024 * 1024; // 15MB
+      const maxWidth = 1200;
 
-      if (file.size > maxSizeInBytes) {
-        toast.error(
-          "Media size exceeds the maximum allowed size (15MB). Please choose a smaller one."
-        );
-        return;
-      }
       const fileType = file.type;
 
-      if (fileType.startsWith("image") || fileType.startsWith("video")) {
+      if (fileType.startsWith("image")) {
+        const reducer = new BlobReduce();
+        const resizedFileBlob = await reducer.toBlob(file, { max: maxWidth });
+
+        if (resizedFileBlob.size > maxSizeInBytes) {
+          toast.error("Resized image exceeds the maximum allowed size (15MB).");
+          return;
+        }
+
+        const resizedFile = new File([resizedFileBlob], file.name, {
+          type: resizedFileBlob.type,
+          lastModified: Date.now(),
+        });
+
+        setEditElementAsset(resizedFile);
+      } else if (fileType.startsWith("video")) {
         setEditElementAsset(file);
       } else {
         toast.error(

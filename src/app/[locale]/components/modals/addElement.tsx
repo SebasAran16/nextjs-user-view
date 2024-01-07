@@ -1,19 +1,17 @@
 import styles from "@/styles/components/modals/element.module.sass";
 import imageInputStyles from "@/styles/image-input.module.sass";
 import INewElement from "@/types/newElement.interface";
-import convertToBase64 from "@/utils/convertToBase64";
 import ElementTypes from "@/utils/elementsStruct";
 import axios from "axios";
 import { useState } from "react";
 import toast from "react-hot-toast";
-import Image from "next/image";
-import get64BaseSize from "@/utils/getBase64Size";
 import { useRouter } from "next/navigation";
 import { LinkGroupImageType } from "@/types/structs/linkGroupImageType";
 import { useTranslations } from "next-intl";
 import { urlRegex } from "@/utils/inputsRegex";
 import { Object } from "@/types/structs/object.enum";
 import { createAmzObject } from "@/utils/amzS3/createAmzObject";
+import BlobReduce from "image-blob-reduce";
 
 interface AddElementModalProps {
   setVisibleModal: Function;
@@ -177,16 +175,26 @@ export function AddElementModal({
       const element = e.currentTarget;
       const file = element.files![0] ?? "";
       const maxSizeInBytes = 15 * 1024 * 1024; // 15MB
+      const maxWidth = 1200;
 
-      if (file.size > maxSizeInBytes) {
-        toast.error(
-          "Media size exceeds the maximum allowed size (15MB). Please choose a smaller one."
-        );
-        return;
-      }
       const fileType = file.type;
 
-      if (fileType.startsWith("image") || fileType.startsWith("video")) {
+      if (fileType.startsWith("image")) {
+        const reducer = new BlobReduce();
+        const resizedFileBlob = await reducer.toBlob(file, { max: maxWidth });
+
+        if (resizedFileBlob.size > maxSizeInBytes) {
+          toast.error("Resized image exceeds the maximum allowed size (15MB).");
+          return;
+        }
+
+        const resizedFile = new File([resizedFileBlob], file.name, {
+          type: resizedFileBlob.type,
+          lastModified: Date.now(),
+        });
+
+        setNewElementAsset(resizedFile);
+      } else if (fileType.startsWith("video")) {
         setNewElementAsset(file);
       } else {
         toast.error(

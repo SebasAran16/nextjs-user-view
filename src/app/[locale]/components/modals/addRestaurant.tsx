@@ -4,12 +4,12 @@ import axios from "axios";
 import React, { useState } from "react";
 import { toast } from "react-hot-toast";
 import Image from "next/image";
-import get64BaseSize from "@/utils/getBase64Size";
 import { useTranslations } from "next-intl";
 import { createAmzObject } from "@/utils/amzS3/createAmzObject";
 import { Object } from "@/types/structs/object.enum";
 import { imageSourceFromBase64 } from "@/utils/imageSourceFromBase64";
 import { kbSizeFromFileSize } from "@/utils/kbSizeFromFileSize";
+import BlobReduce from "image-blob-reduce";
 
 interface AddRestaurantModalProps {
   setVisibleModal: Function;
@@ -81,15 +81,24 @@ export function AddRestaurantModal({
       const element = e.currentTarget;
       const file = element.files![0] ?? "";
       const maxSizeInBytes = 15 * 1024 * 1024; // 15MB
+      const maxWidth = 800;
 
-      if (file.size > maxSizeInBytes)
-        throw new Error(
-          "Image size exceeds the maximum allowed size (15MB). Please choose a smaller image."
-        );
+      const reducer = new BlobReduce();
+      const resizedFileBlob = await reducer.toBlob(file, { max: maxWidth });
 
-      const imageBuffer = Buffer.from(await file.arrayBuffer());
+      if (resizedFileBlob.size > maxSizeInBytes) {
+        toast.error("Resized image exceeds the maximum allowed size (15MB).");
+        return;
+      }
+
+      const resizedFile = new File([resizedFileBlob], file.name, {
+        type: resizedFileBlob.type,
+        lastModified: Date.now(),
+      });
+
+      const imageBuffer = Buffer.from(await resizedFile.arrayBuffer());
       setPreviewImage(imageBuffer.toString("base64"));
-      setRestaurantImageToCreate(file);
+      setRestaurantImageToCreate(resizedFile);
     } catch (err: any) {
       console.log(err);
       toast.error(err.message);

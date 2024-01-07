@@ -10,6 +10,7 @@ import { imageSourceFromBase64 } from "@/utils/imageSourceFromBase64";
 import { kbSizeFromFileSize } from "@/utils/kbSizeFromFileSize";
 import { Object } from "@/types/structs/object.enum";
 import { createAmzObject } from "@/utils/amzS3/createAmzObject";
+import BlobReduce from "image-blob-reduce";
 
 interface AddViewProps {
   setVisibleModal: Function;
@@ -97,15 +98,24 @@ export function AddViewModal({
       const element = e.currentTarget;
       const file = element.files![0] ?? "";
       const maxSizeInBytes = 15 * 1024 * 1024; // 15MB
+      const maxWidth = 800;
 
-      if (file.size > maxSizeInBytes)
-        throw new Error(
-          "Image size exceeds the maximum allowed size (15MB). Please choose a smaller image."
-        );
+      const reducer = new BlobReduce();
+      const resizedFileBlob = await reducer.toBlob(file, { max: maxWidth });
 
-      const imageBuffer = Buffer.from(await file.arrayBuffer());
+      if (resizedFileBlob.size > maxSizeInBytes) {
+        toast.error("Resized image exceeds the maximum allowed size (15MB).");
+        return;
+      }
+
+      const resizedFile = new File([resizedFileBlob], file.name, {
+        type: resizedFileBlob.type,
+        lastModified: Date.now(),
+      });
+
+      const imageBuffer = Buffer.from(await resizedFile.arrayBuffer());
       setPreviewImage(imageBuffer.toString("base64"));
-      setViewImageToCreate(file);
+      setViewImageToCreate(resizedFile);
     } catch (err: any) {
       console.log(err);
       toast.error(err.message);
