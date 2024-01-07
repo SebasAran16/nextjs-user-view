@@ -26,29 +26,31 @@ export function RestaurantCard({
   const [visibleConfirmation, setVisibleConfirmation] = useState(false);
 
   return (
-    <section className={styles.restaurantCardContainer}>
-      <div>
-        <Image
-          src={restaurant.image}
-          alt="Restaurant Image"
-          width="100"
-          height="100"
-        />
-        <p className={styles.views}>
-          <span>Views:</span> {views}
-        </p>
-      </div>
-      <h3>{restaurant.name}</h3>
-      <p>{restaurant.description}</p>
+    <>
+      <section className={styles.restaurantCardContainer}>
+        <div>
+          <Image
+            src={restaurant.image}
+            alt="Restaurant Image"
+            width="100"
+            height="100"
+          />
+          <p className={styles.views}>
+            <span>Views:</span> {views}
+          </p>
+        </div>
+        <h3>{restaurant.name}</h3>
+        <p>{restaurant.description}</p>
 
-      <div>
-        <Link href={pathname + "/" + restaurant._id}>
-          <button>{t("manage")}</button>
-        </Link>
-        <button onClick={() => setVisibleConfirmation(true)}>
-          {t("eliminate")}
-        </button>
-      </div>
+        <div>
+          <Link href={pathname + "/" + restaurant._id}>
+            <button>{t("manage")}</button>
+          </Link>
+          <button onClick={() => setVisibleConfirmation(true)}>
+            {t("eliminate")}
+          </button>
+        </div>
+      </section>
       <ConfirmationModal
         object={restaurant}
         objectType={Object.RESTAURANT}
@@ -57,6 +59,6 @@ export function RestaurantCard({
         setObjects={setRestaurants}
         pastObjects={restaurants}
       />
-    </section>
+    </>
   );
 }
