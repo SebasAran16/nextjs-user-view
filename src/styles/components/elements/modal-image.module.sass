@@ -24,7 +24,12 @@
             &:active
                 transform: none
         &:last-of-type
+            flex-grow: 1
             margin: auto
+            width: auto
+            height: auto
+            max-width: 80%
+            max-height: 80%
 
 @media screen and (min-width: 768px)
     #modalContainer
@@ -32,9 +37,6 @@
             &:first-of-type
                 width: 28px
                 height: 28px
-            &:last-of-type
-                width: 400px
-                height: 600px
 
 @media screen and (min-width: 992px)
     #modalContainer
@@ -42,13 +44,5 @@
             &:first-of-type
                 width: 32px
                 height: 32px
-            &:last-of-type
-                width: 500px
-                height: 700px
 
 @media screen and (min-width: 1200px)
-    #modalContainer
-        >img
-            &:last-of-type
-                width: 550px
-                height: 750px

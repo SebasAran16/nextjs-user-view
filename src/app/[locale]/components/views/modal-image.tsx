@@ -45,7 +45,7 @@ export function ModalImage({
               setHiddenModal(!hiddenModal);
             }}
           />
-          <Image src={url ?? ""} alt="Display Image" width="320" height="460" />
+          <img src={url ?? ""} alt="Display Image" width="320" height="460" />
         </article>
       ) : (
         ""
